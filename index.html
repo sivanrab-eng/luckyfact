@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>צופן המזל - החדר הסודי</title>
+  <style>
+    :root {
+      --bg-1: #07111f;
+      --bg-2: #0d1b31;
+      --panel: rgba(10, 20, 38, 0.82);
+      --panel-border: rgba(120, 181, 255, 0.18);
+      --text: #f4f7fb;
+      --muted: #8ea8c7;
+      --accent: #4db8ff;
+      --danger: #ff5c7a;
+      --success: #68e0b3;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(77, 184, 255, 0.18), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(233, 69, 96, 0.15), transparent 30%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 85%);
+      opacity: 0.45;
+    }
+
+    #game-container {
+      width: min(100%, 560px);
+      padding: 28px;
+      border-radius: 24px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #game-container::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(77,184,255,0.12), transparent 45%, rgba(233,69,96,0.12));
+      opacity: 0.9;
+      mix-blend-mode: screen;
+    }
+
+    .stats {
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+      color: var(--accent);
+      position: relative;
+      z-index: 1;
+    }
+
+    .stats > div {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      padding: 10px 14px;
+    }
+
+    .stage-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stage-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .stage-pill strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .luck-meter {
+      height: 12px;
+      background: rgba(15, 52, 96, 0.95);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #luck-bar {
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(90deg, var(--danger), var(--accent), var(--success));
+      border-radius: inherit;
+      transition: width 0.45s ease;
+    }
+
+    .hint {
+      margin: 0 0 20px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .story-line {
+      margin: 0 0 8px;
+      font-size: 0.98rem;
+      letter-spacing: 0.01em;
+      color: rgba(244, 247, 251, 0.9);
+      position: relative;
+      z-index: 1;
+    }
+
+    .question {
+      min-height: 132px;
+      font-size: clamp(1.2rem, 3vw, 1.45rem);
+      line-height: 1.7;
+      margin: 0 0 26px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #question-box.question-swap {
+      animation: questionSwap 720ms ease;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      min-width: 138px;
+      padding: 14px 24px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      box-shadow: none;
+    }
+
+    .btn-truth {
+      background: linear-gradient(180deg, #123a67, #0f3460);
+      border: 1px solid rgba(77, 184, 255, 0.7);
+    }
+
+    .btn-lie {
+      background: linear-gradient(180deg, #482036, #34101f);
+      border: 1px solid rgba(233, 69, 96, 0.7);
+    }
+
+    #feedback {
+      margin-top: 18px;
+      min-height: 54px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    #feedback.success {
+      color: var(--success);
+    }
+
+    #feedback.error {
+      color: var(--danger);
+    }
+
+    #feedback.neutral {
+      color: var(--muted);
+    }
+
+    .end-state {
+      color: var(--accent);
+      font-size: 1.15rem;
+    }
+
+    .hint-box {
+      min-height: 26px;
+      margin-top: 12px;
+      font-size: 0.92rem;
+      color: rgba(142, 168, 199, 0.95);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hint-box.is-fresh {
+      color: rgba(104, 224, 179, 0.95);
+    }
+
+    #game-container.stage-flash {
+      animation: stageFlash 760ms ease;
+    }
+
+    .stage-pill.stage-bump {
+      animation: stageBump 760ms ease;
+    }
+
+    @keyframes questionSwap {
+      0% { transform: translateY(8px); opacity: 0.2; }
+      35% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes stageFlash {
+      0% { box-shadow: var(--shadow); }
+      35% { box-shadow: 0 0 0 1px rgba(77, 184, 255, 0.18), 0 0 42px rgba(77, 184, 255, 0.12), var(--shadow); }
+      100% { box-shadow: var(--shadow); }
+    }
+
+    @keyframes stageBump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 520px) {
+      #game-container {
+        padding: 22px 18px;
+        border-radius: 20px;
+      }
+
+      .stats {
+        justify-content: center;
+      }
+
+      button {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div class="stats">
+      <div>מפתחות: <span id="score">500</span></div>
+      <div>אנרגיית מזל: <span id="luck-level">בינונית</span></div>
+    </div>
+
+    <div id="stage-row" class="stage-row">
+      <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>3</strong> · <span id="stage-name">המסדרון</span></div>
+    </div>
+
+    <div class="luck-meter" aria-hidden="true">
+      <div id="luck-bar"></div>
+    </div>
+    <p class="story-line">הדלת הבאה נפתחת רק אם תפענח את הסימן.</p>
+    <p class="hint">המזל עוזר, אבל הוא לא מגלה את הסימן לבד.</p>
+
+    <p id="question-box" class="question">מכין את הקלף הראשון...</p>
+
+    <div class="buttons">
+      <button id="truth-btn" class="btn-truth" type="button">זה נכון</button>
+      <button id="lie-btn" class="btn-lie" type="button">זה לא נכון</button>
+    </div>
+
+    <div id="feedback" class="neutral"></div>
+    <div id="hint-box" class="hint-box"></div>
+  </div>
+
+  <script>
+    const facts = [
+      { text: "בירח כמעט אין אוויר.", isTrue: true },
+      { text: "פילים יכולים לקפוץ גבוה כמו חתול.", isTrue: false },
+      { text: "לתמנון יש שלושה לבבות.", isTrue: true },
+      { text: "יום על נוגה קצר יותר משנה על נוגה.", isTrue: false },
+      { text: "דבש נשמר הרבה זמן.", isTrue: true },
+      { text: "פינגווין יכול לעוף.", isTrue: false },
+      { text: "ברק חם מאוד.", isTrue: true },
+      { text: "כריש הוא יונק.", isTrue: false },
+      { text: "הירח נראה באותו גודל תמיד.", isTrue: false },
+      { text: "לנמר יש פסים ייחודיים.", isTrue: true },
+      { text: "מים קופאים ב-0 מעלות.", isTrue: true },
+      { text: "יש יותר כוכבים מאשר גרגרי חול.", isTrue: true },
+      { text: "לג'ירפה יש לשון כחולה.", isTrue: true },
+      { text: "כלב רואה את כל הצבעים כמו בן אדם.", isTrue: false },
+      { text: "אפשר לראות בחושך מוחלט.", isTrue: false },
+      { text: "את החומה הסינית אפשר לראות מהירח בעין רגילה.", isTrue: false },
+      { text: "חתולים ישנים הרבה.", isTrue: true },
+      { text: "אסטרונאוטים חוזרים קצת נמוכים יותר.", isTrue: true },
+      { text: "עכביש הוא חרק.", isTrue: false },
+      { text: "לכדור הארץ לוקח בערך 24 שעות להסתובב.", isTrue: true },
+      { text: "קיווי הוא גם פרי וגם ציפור.", isTrue: true },
+      { text: "אור נע מהר יותר מקול.", isTrue: true },
+      { text: "במבוק יכול לגדול מהר מאוד.", isTrue: true },
+      { text: "דולפין הוא דג.", isTrue: false },
+      { text: "יש רק מדינה אחת שדוברת ספרדית.", isTrue: false },
+      { text: "לבני אדם יש חמש אצבעות בכל יד.", isTrue: true },
+      { text: "נייר נהיה חזק יותר כשהוא נרטב.", isTrue: false },
+      { text: "כל חתול אוהב מים.", isTrue: false },
+      { text: "קשת בענן נוצרת מטיפות מים ואור.", isTrue: true },
+      { text: "אפשר לשמוע קול בלי אוויר.", isTrue: false }
+    ];
+
+    const elements = {
+      gameContainer: document.getElementById("game-container"),
+      score: document.getElementById("score"),
+      luckLevel: document.getElementById("luck-level"),
+      luckBar: document.getElementById("luck-bar"),
+      stageLabel: document.getElementById("stage-label"),
+      stageName: document.getElementById("stage-name"),
+      stageRow: document.getElementById("stage-row"),
+      questionBox: document.getElementById("question-box"),
+      feedback: document.getElementById("feedback"),
+      hintBox: document.getElementById("hint-box"),
+      truthBtn: document.getElementById("truth-btn"),
+      lieBtn: document.getElementById("lie-btn")
+    };
+
+    const state = {
+      score: 500,
+      index: 0,
+      stage: 0,
+      locked: false,
+      timerId: null,
+      audioContext: null
+    };
+
+    const stages = [
+      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה.", hint: "רמז שלב: קרא מילה אחרי מילה." },
+      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר.", hint: "רמז שלב: חפש את המילה שמפתיעה אותך." },
+      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עכשיו כדאי לעצור רגע לפני הבחירה.", hint: "רמז שלב: עוד מבט קצר יכול להפוך את כל התמונה." }
+    ];
+
+    const answerHints = {
+      success: [
+        "רמז קטן: כשאתה בטוח, שווה לבדוק פעם נוספת.",
+        "רמז קטן: עין חדה תופסת מהר את הפרט החשוב.",
+        "רמז קטן: משפט קצר עדיין יכול להסתיר הפתעה."
+      ],
+      miss: [
+        "רמז קטן: נסה לעצור על המילה האחרונה במשפט.",
+        "רמז קטן: הפעם המערכת בלבלה אותך. בסיבוב הבא קרא לאט יותר.",
+        "רמז קטן: מילה אחת יכולה לשנות את הכול."
+      ]
+    };
+
+    function setButtonsEnabled(enabled) {
+      elements.truthBtn.disabled = !enabled;
+      elements.lieBtn.disabled = !enabled;
+    }
+
+    function showHint(message, fresh = false) {
+      elements.hintBox.textContent = message;
+      elements.hintBox.classList.toggle("is-fresh", fresh);
+    }
+
+    function restartAnimation(element, className) {
+      element.classList.remove(className);
+      void element.offsetWidth;
+      element.classList.add(className);
+      window.setTimeout(() => element.classList.remove(className), 820);
+    }
+
+    function playStageTone() {
+      const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextCtor) {
+        return;
+      }
+
+      if (!state.audioContext) {
+        state.audioContext = new AudioContextCtor();
+      }
+
+      const ctx = state.audioContext;
+      if (ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+      }
+
+      const now = ctx.currentTime;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.045, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      gain.connect(ctx.destination);
+
+      const oscillatorA = ctx.createOscillator();
+      oscillatorA.type = "sine";
+      oscillatorA.frequency.setValueAtTime(392, now);
+      oscillatorA.frequency.exponentialRampToValueAtTime(523.25, now + 0.2);
+      oscillatorA.connect(gain);
+
+      const oscillatorB = ctx.createOscillator();
+      oscillatorB.type = "triangle";
+      oscillatorB.frequency.setValueAtTime(587.33, now);
+      oscillatorB.frequency.exponentialRampToValueAtTime(659.25, now + 0.2);
+      oscillatorB.connect(gain);
+
+      oscillatorA.start(now);
+      oscillatorB.start(now);
+      oscillatorA.stop(now + 0.48);
+      oscillatorB.stop(now + 0.48);
+    }
+
+    function updateStats() {
+      elements.score.textContent = state.score;
+
+      if (state.score > 700) {
+        elements.luckBar.style.width = "90%";
+        elements.luckLevel.textContent = "גבוהה מאוד";
+      } else if (state.score < 400) {
+        elements.luckBar.style.width = "20%";
+        elements.luckLevel.textContent = "חלשה כרגע";
+      } else {
+        elements.luckBar.style.width = "50%";
+        elements.luckLevel.textContent = "בינונית";
+      }
+    }
+
+    function getHint(isCorrect) {
+      const bank = isCorrect ? answerHints.success : answerHints.miss;
+      return bank[state.index % bank.length];
+    }
+
+    function enterStage(stageIndex) {
+      state.stage = stageIndex;
+      const stage = stages[stageIndex];
+
+      elements.stageLabel.textContent = String(stageIndex + 1);
+      elements.stageName.textContent = stage.name;
+      elements.questionBox.textContent = stage.intro;
+      showFeedback("", "neutral");
+      showHint(stage.hint, true);
+      setButtonsEnabled(false);
+      state.locked = true;
+
+      restartAnimation(elements.gameContainer, "stage-flash");
+      restartAnimation(elements.stageRow.firstElementChild, "stage-bump");
+      restartAnimation(elements.questionBox, "question-swap");
+      playStageTone();
+
+      clearTimeout(state.timerId);
+      state.timerId = setTimeout(() => {
+        state.locked = false;
+        loadFact();
+      }, 1200);
+
+      return true;
+    }
+
+    function updateStage() {
+      const nextStage = stages.findIndex((stage) => state.index >= stage.start && state.index <= stage.end);
+      if (nextStage !== -1) {
+        elements.stageLabel.textContent = String(nextStage + 1);
+        elements.stageName.textContent = stages[nextStage].name;
+      }
+
+      if (nextStage !== -1 && nextStage !== state.stage) {
+        return enterStage(nextStage);
+      }
+
+      return false;
+    }
+
+    function showFeedback(message, kind) {
+      elements.feedback.textContent = message;
+      elements.feedback.className = kind;
+    }
+
+    function finishGame() {
+      elements.questionBox.textContent = `המסלול נסגר. צברת ${state.score} מפתחות.`;
+      showFeedback("החדר נסגר. אפשר לפתוח מחדש את המסע עם רענון.", "end-state");
+      showHint("רמז אחרון: אפשר להתחיל מחדש מתי שרוצים.", false);
+      setButtonsEnabled(false);
+      state.locked = true;
+    }
+
+    function loadFact() {
+      state.locked = false;
+      clearTimeout(state.timerId);
+
+      if (state.index >= facts.length) {
+        finishGame();
+        return;
+      }
+
+      if (updateStage()) {
+        return;
+      }
+
+      elements.questionBox.textContent = facts[state.index].text;
+      showFeedback("", "neutral");
+      if (!elements.hintBox.textContent) {
+        showHint(stages[state.stage].hint, false);
+      }
+      setButtonsEnabled(true);
+    }
+
+    function checkAnswer(userChoice) {
+      if (state.locked || state.index >= facts.length) {
+        return;
+      }
+
+      state.locked = true;
+      setButtonsEnabled(false);
+
+      const correct = facts[state.index].isTrue;
+      const isCorrect = userChoice === correct;
+
+      if (isCorrect) {
+        state.score += 100;
+        showFeedback("יפה. פענחת את הסימן ופתחת את המנעול.", "success");
+      } else {
+        state.score -= 50;
+        showFeedback("המנעול נשאר סגור. בסיבוב הבא תוכל לנסות כיוון אחר.", "error");
+      }
+
+      showHint(getHint(isCorrect), true);
+      updateStats();
+      state.index += 1;
+      state.timerId = setTimeout(loadFact, 1800);
+    }
+
+    elements.truthBtn.addEventListener("click", () => checkAnswer(true));
+    elements.lieBtn.addEventListener("click", () => checkAnswer(false));
+
+    updateStats();
+    showHint("רמז קטן: לפעמים מילה אחת משנה הכול.", true);
+    loadFact();
+  </script>
+</body>
+</html>
