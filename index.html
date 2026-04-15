@@ -284,6 +284,7 @@
       position: relative;
       z-index: 1;
       text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+      white-space: pre-line;
     }
 
     #question-box.question-swap {
@@ -872,22 +873,141 @@
       { text: "עיתונאי יכול לדווח על חדשות.", isTrue: true },
       { text: "ספר מטפל רק בספרים ולא בשיער.", isTrue: false }
     ];
+    const stageTwoFacts = [
+      {
+        text: "בכל רגע נתון, יש בעולם מיליון נמלים חיים\nעל כל בן אדם אחד שחי על כדור הארץ.",
+        isTrue: true
+      },
+      {
+        text: "הסופרת ג'יי קיי רולינג נדחתה על ידי 12 הוצאות ספרים\nלפני שמישהו הסכים להדפיס את הארי פוטר.",
+        isTrue: true
+      },
+      {
+        text: "לכל חתול בעולם יש תבנית חריצים ייחודית על האף,\nבדיוק כמו שטביעת אצבע של אדם היא חד פעמית.",
+        isTrue: true
+      },
+      {
+        text: "בגלל שאין רוח על הירח, טביעות הרגל של האסטרונאוטים\nיישארו שם ללא שינוי לפחות עוד 100 מיליון שנה.",
+        isTrue: true
+      },
+      {
+        text: "בסין המציאו את הגלידה הראשונה בהיסטוריה\nעל ידי ערבוב של חלב, אורז ושלג מההרים.",
+        isTrue: true
+      },
+      {
+        text: "חתולים הם היונקים היחידים בטבע שלא מסוגלים\nלהרגיש טעם מתוק, גם אם יאכלו הר של סוכר.",
+        isTrue: true
+      },
+      {
+        text: "החומה הסינית היא המבנה היחיד שניתן לראות בבירור\nמהירח בעין רגילה ללא עזרת טלסקופ.",
+        isTrue: false
+      },
+      {
+        text: "יום אחד על כוכב הלכת נוגה נמשך זמן רב יותר\nמאשר שנה שלמה על אותו כוכב לכת.",
+        isTrue: true
+      },
+      {
+        text: "אסטרונאוטים שחוזרים מהחלל הופכים לנמוכים יותר\nבגלל שהכבידה דוחסת את עמוד השדרה שלהם.",
+        isTrue: false
+      },
+      {
+        text: "בסין נמצא קבר ענק ובו 8,000 פסלי חיילים מחימר\nשלכל אחד מהם יש פנים שונות לחלוטין.",
+        isTrue: true
+      },
+      {
+        text: "חתולים מגרגרים רק כשהם מרגישים שמחה וביטחון,\nוהם לעולם לא יגרגרו כשהם לחוצים או פצועים.",
+        isTrue: false
+      },
+      {
+        text: "מים חמים הופכים לקרח מהר יותר מאשר מים קרים\nבתהליך מדעי מוזר שנקרא אפקט מפמבה.",
+        isTrue: true
+      },
+      {
+        text: "בתוך האטומים שמרכיבים אותנו יש כל כך הרבה ריק,\nשכל האנושות יכולה להיכנס בתוך קוביית סוכר.",
+        isTrue: true
+      },
+      {
+        text: "הקיסר קליגולה כל כך אהב את הסוס האישי שלו,\nשהוא מינה אותו לתפקיד שר בכיר בממשלה.",
+        isTrue: true
+      },
+      {
+        text: "השם של המשחק קווידיץ' הומצא אחרי שרולינג כתבה\n5 עמודים של מילים אקראיות שמתחילות באות Q.",
+        isTrue: true
+      }
+    ];
+    const contextFacts = [
+      "אוויר נכנס לגוף דרך האף או הפה.",
+      "הריאות עוזרות לגוף לקבל חמצן.",
+      "נשימה מהירה יכולה לקרות אחרי ריצה.",
+      "באסטמה דרכי הנשימה יכולות להיות רגישות.",
+      "משאף הוא כלי רפואי שחלק מהאנשים משתמשים בו.",
+      "שיעול יכול להופיע כשדרכי הנשימה מגורות.",
+      "רופא יכול לתת הנחיות להתמודדות עם אסטמה.",
+      "אבק ועשן יכולים להפריע לנשימה אצל חלק מהאנשים.",
+      "גיימרים משתמשים במסך, שלט, מקלדת או טלפון.",
+      "במשחקים רבים יש שלבים וניקוד.",
+      "ריכוז עוזר לקבל החלטות מהר יותר.",
+      "הפסקה קצרה יכולה לעזור לעיניים אחרי מסך.",
+      "רשתות חברתיות מאפשרות לשתף תמונות וסרטונים.",
+      "לא כל מידע ברשת מגיע ממקור אמין.",
+      "חשבון דיגיטלי יכול להכיל מידע אישי.",
+      "תגובה ברשת יכולה להשפיע על מי שקורא אותה.",
+      "קישור באינטרנט יכול להוביל לאתר אחר.",
+      "פרופיל ברשת יכול לכלול שם ותמונה.",
+      "שינה עוזרת לגוף להתאושש.",
+      "שתיית מים חשובה במיוחד ביום חם.",
+      "פעילות גופנית יכולה לחזק את הגוף.",
+      "מוח האדם משתמש במידע כדי לקבל החלטות.",
+      "זיכרון עוזר לנו להשתמש במה שלמדנו.",
+      "שאלה קצרה יכולה לדרוש תשומת לב.",
+      "מילה אחת יכולה לשנות משמעות של משפט.",
+      "קריאה שקטה יכולה להיות מהירה מאוד.",
+      "עובדה היא משפט שאפשר לבדוק.",
+      "טעות במשחק לא עוצרת את כל ההתקדמות.",
+      "ניקוד גבוה נבנה מהרבה תשובות נכונות.",
+      "רצף תשובות יכול לתת בונוס במשחק.",
+      "שלב חדש מתחיל אחרי סיום השלב הקודם.",
+      "שעון מודד זמן.",
+      "מספרים עוזרים למדוד כמות.",
+      "מפה עוזרת להבין איפה מקומות נמצאים.",
+      "מזג אוויר יכול להשתנות במהלך היום.",
+      "אור עוזר לעיניים לראות.",
+      "קול עובר דרך אוויר.",
+      "מים יכולים להיות נוזל, קרח או אדים.",
+      "צמחים משתמשים באור כדי לגדול.",
+      "בעלי חיים שונים חיים בסביבות שונות.",
+      "עיר יכולה לכלול רחובות, בתים וחנויות.",
+      "ים מכיל הרבה מים מלוחים.",
+      "ספורט דורש תנועה, חוקים ואימון.",
+      "קבוצה עובדת טוב יותר כשיש שיתוף פעולה.",
+      "מוזיקה בנויה מצלילים וקצב.",
+      "תמונה יכולה להעביר מידע בלי מילים.",
+      "ספר יכול לכלול דמויות, מקום ועלילה.",
+      "מדע בודק שאלות בעזרת תצפיות וניסויים.",
+      "טכנולוגיה עוזרת לאנשים לבצע פעולות.",
+      "בטיחות עוזרת למנוע פגיעה."
+    ];
 
     function buildDeck() {
       const deck = [];
       const requiredQuestions = TOTAL_STAGES * QUESTIONS_PER_STAGE;
       const shuffledFacts = shuffleFacts(facts);
+      const shuffledContextFacts = shuffleFacts(contextFacts);
       if (shuffledFacts.length < requiredQuestions) {
         throw new Error(`Score Dash needs ${requiredQuestions} unique questions.`);
       }
       for (let stageIndex = 0; stageIndex < TOTAL_STAGES; stageIndex += 1) {
         const start = stageIndex * QUESTIONS_PER_STAGE;
-        const stageFacts = shuffledFacts.slice(start, start + QUESTIONS_PER_STAGE);
-        stageFacts.forEach((fact) => {
+        const stageFacts = stageIndex === 1
+          ? stageTwoFacts
+          : shuffledFacts.slice(start, start + QUESTIONS_PER_STAGE);
+        stageFacts.forEach((fact, questionIndex) => {
+          const contextIndex = ((stageIndex - 1) * QUESTIONS_PER_STAGE + questionIndex) % shuffledContextFacts.length;
           deck.push({
             text: fact.text,
             isTrue: fact.isTrue,
-            stageIndex
+            stageIndex,
+            context: stageIndex > 1 ? shuffledContextFacts[contextIndex] : ""
           });
         });
       }
@@ -1068,6 +1188,18 @@
       return bank[(state.index + state.streak) % bank.length];
     }
 
+    function formatQuestion(card) {
+      if (card.stageIndex === 0) {
+        return card.text;
+      }
+
+      if (card.text.includes("\n")) {
+        return card.text;
+      }
+
+      return card.context ? `${card.context}\n${card.text}` : card.text;
+    }
+
     function getStageReward() {
       if (state.stageMistakes === 0) {
         return {
@@ -1108,7 +1240,7 @@
       setReplayVisible(false);
       setShareVisible(false);
       updateStats();
-      elements.questionBox.textContent = state.deck[state.index].text;
+      elements.questionBox.textContent = formatQuestion(state.deck[state.index]);
       showFeedback("", "neutral");
       setButtonsEnabled(true);
     }
