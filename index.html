@@ -120,6 +120,10 @@
       color: #f8fbff;
     }
 
+    .stats.is-transition-hidden {
+      display: none;
+    }
+
     .progress-wrap {
       position: relative;
       z-index: 1;
@@ -226,6 +230,22 @@
       pointer-events: none;
       height: 0;
       overflow: hidden;
+    }
+
+    .main-ui.is-transition-mode {
+      min-height: 520px;
+      display: grid;
+      align-content: center;
+    }
+
+    .main-ui.is-transition-mode .stage-row,
+    .main-ui.is-transition-mode .progress-wrap,
+    .main-ui.is-transition-mode .question,
+    .main-ui.is-transition-mode .buttons,
+    .main-ui.is-transition-mode #feedback,
+    .main-ui.is-transition-mode .replay-row,
+    .main-ui.is-transition-mode > .share-panel {
+      display: none !important;
     }
 
     .stage-row {
@@ -438,6 +458,16 @@
       display: grid;
     }
 
+    .main-ui.is-transition-mode .transition-panel {
+      margin-top: 0;
+    }
+
+    .transition-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
     .transition-title {
       margin: 0;
       font-size: 1.12rem;
@@ -622,7 +652,8 @@
         <p id="transition-kicker" class="transition-kicker">Stage clear</p>
         <p id="transition-title" class="transition-title">+250</p>
         <p class="transition-copy" id="transition-copy">בונוס שלב · קפיצה במיקום</p>
-        <div class="start-actions">
+        <div class="transition-actions">
+          <button id="transition-share-btn" class="btn-share" type="button" hidden>שתף ב-WhatsApp</button>
           <button id="next-stage-btn" class="btn-share" type="button">המשך לשלב הבא</button>
         </div>
       </div>
@@ -636,6 +667,7 @@
     const PERFECT_STAGE_BONUS = 400;
     const HOT_STREAK_STAGE_BONUS = 325;
     const SHARE_URL = "https://sivanrab-eng.github.io/luckyfact/";
+    const scoreFormatter = new Intl.NumberFormat("en-US");
     const stageNames = [
       "התחלה",
       "קצב",
@@ -1524,6 +1556,7 @@
       shareTitle: document.getElementById("share-title"),
       shareCopy: document.getElementById("share-copy"),
       shareBtn: document.getElementById("share-btn"),
+      transitionShareBtn: document.getElementById("transition-share-btn"),
       nextStageBtn: document.getElementById("next-stage-btn"),
       transitionPanel: document.getElementById("transition-panel"),
       transitionTitle: document.getElementById("transition-title"),
@@ -1589,8 +1622,25 @@
       elements.transitionPanel.classList.toggle("is-visible", visible);
     }
 
+    function setTransitionMode(visible) {
+      elements.mainUI.classList.toggle("is-transition-mode", visible);
+      elements.stats.classList.toggle("is-transition-hidden", visible);
+    }
+
     function setNextStageVisible(visible) {
       elements.nextStageBtn.hidden = !visible;
+    }
+
+    function setTransitionShareVisible(visible) {
+      elements.transitionShareBtn.hidden = !visible;
+    }
+
+    function formatScore(value) {
+      return scoreFormatter.format(value);
+    }
+
+    function getShareText() {
+      return elements.shareCopy.textContent;
     }
 
     function setShareMessage(title, copy) {
@@ -1651,7 +1701,7 @@
     }
 
     function updateStats() {
-      elements.score.textContent = state.score;
+      elements.score.textContent = formatScore(state.score);
       const stageIndex = Math.min(Math.floor(state.index / QUESTIONS_PER_STAGE), TOTAL_STAGES - 1);
       const questionNumberInStage = state.index >= state.deck.length
         ? QUESTIONS_PER_STAGE
@@ -1777,10 +1827,12 @@
       }
 
       state.locked = false;
+      setTransitionMode(false);
       setTransitionVisible(false);
       setReplayVisible(false);
       setShareVisible(false);
       setNextStageVisible(false);
+      setTransitionShareVisible(false);
       updateStats();
       elements.questionBox.textContent = formatQuestion(state.deck[state.index]);
       showFeedback("", "neutral");
@@ -1795,18 +1847,20 @@
       setButtonsEnabled(false);
       state.locked = true;
       state.awaitingStageContinue = true;
+      setTransitionMode(true);
       setTransitionVisible(true);
       setNextStageVisible(true);
+      setTransitionShareVisible(true);
       elements.transitionKicker.textContent = reward.label;
       elements.transitionTitle.textContent = reward.title;
       elements.transitionCopy.textContent = `${reward.copy} · הבא: ${nextStageName}`;
       setShareMessage(
         `שלב ${completedStageIndex + 1} נפתח`,
-        `עברתי את שלב ${completedStageIndex + 1} ב-Score Dash עם ${state.score} נקודות. תצליחו לעקוף אותי?`
+        `עברתי את שלב ${completedStageIndex + 1} ב-Score Dash עם ${formatScore(state.score)} נקודות. תצליחו לעקוף אותי?`
       );
       elements.questionBox.textContent = `שלב ${completedStageIndex + 1} הושלם`;
       showFeedback(reward.copy, "hot");
-      setShareVisible(true);
+      setShareVisible(false);
 
       restartAnimation(elements.gameContainer, "stage-flash");
       restartAnimation(elements.stageRow.firstElementChild, "stage-bump");
@@ -1832,14 +1886,15 @@
 
       setTransitionVisible(true);
       setNextStageVisible(false);
-      elements.questionBox.textContent = `כל השלבים הושלמו. צברת ${state.score} נקודות.`;
+      setTransitionShareVisible(false);
+      elements.questionBox.textContent = `כל השלבים הושלמו. צברת ${formatScore(state.score)} נקודות.`;
       showFeedback("Dash מלא. אפשר להתחיל סיבוב חדש.", "end-state");
       elements.transitionKicker.textContent = finalReward ? finalReward.label : "Stage clear";
       elements.transitionTitle.textContent = finalReward ? finalReward.title : "כל 15 השלבים הושלמו";
-      elements.transitionCopy.textContent = `כל 15 השלבים הושלמו · ${state.score} נקודות`;
+      elements.transitionCopy.textContent = `כל 15 השלבים הושלמו · ${formatScore(state.score)} נקודות`;
       setShareMessage(
         "סיימת Dash מלא.",
-        `סיימתי את Score Dash עם ${state.score} נקודות. מי רוצה לנסות לעקוף אותי?`
+        `סיימתי את Score Dash עם ${formatScore(state.score)} נקודות. מי רוצה לנסות לעקוף אותי?`
       );
       setButtonsEnabled(false);
       setReplayVisible(true);
@@ -1859,6 +1914,7 @@
       state.finalRewardClaimed = false;
       state.locked = false;
       state.awaitingStageContinue = false;
+      setTransitionMode(false);
       state.deck = buildDeck();
       setTransitionVisible(false);
 
@@ -1921,9 +1977,12 @@
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
     elements.replayBtn.addEventListener("click", resetGame);
     elements.shareBtn.addEventListener("click", async () => {
-      const text = elements.shareCopy.textContent;
+      const text = getShareText();
       openWhatsAppShare(text);
       showFeedback("פותח WhatsApp לשיתוף.", "success");
+    });
+    elements.transitionShareBtn.addEventListener("click", async () => {
+      openWhatsAppShare(getShareText());
     });
     elements.nextStageBtn.addEventListener("click", () => {
       if (!state.awaitingStageContinue) {
