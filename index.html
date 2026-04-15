@@ -2157,6 +2157,9 @@
       const isCorrect = userChoice === correct;
 
       if (isCorrect) {
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
         state.score += 100;
         state.streak += 1;
         const boost = state.streak >= 3 ? 25 : 0;
@@ -2169,6 +2172,9 @@
           showFeedback(`${getEncouragement("correct")} +100`, "success");
         }
       } else {
+        if (navigator.vibrate) {
+          navigator.vibrate([100, 50, 100]);
+        }
         state.score -= 50;
         state.streak = 0;
         state.stageMistakes += 1;
