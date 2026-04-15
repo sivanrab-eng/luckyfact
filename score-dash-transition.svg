@@ -95,9 +95,9 @@
       <circle r="205" fill="none" stroke="rgba(255,255,255,0.52)" stroke-width="7" stroke-dasharray="34 22"/>
       <circle r="152" fill="rgba(5,20,85,0.54)" stroke="rgba(117,247,255,0.66)" stroke-width="3"/>
 
-      <text y="-116" font-size="38" font-weight="900" letter-spacing="0" fill="#dffbff" filter="url(#textGlow)">Stage clear</text>
-      <text y="18" font-size="124" font-weight="1000" letter-spacing="0" fill="#ffffff" filter="url(#textGlow)">+250</text>
-      <text y="92" font-size="50" font-weight="1000" letter-spacing="0" fill="#72ffda">בונוס שלב</text>
+      <text y="-116" font-size="38" font-weight="900" letter-spacing="0" fill="#dffbff" filter="url(#textGlow)">Hot streak</text>
+      <text y="18" font-size="124" font-weight="1000" letter-spacing="0" fill="#ffffff" filter="url(#textGlow)">+325</text>
+      <text y="92" font-size="50" font-weight="1000" letter-spacing="0" fill="#72ffda">בונוס רצף</text>
 
       <g transform="translate(-201 148)">
         <rect width="402" height="74" rx="37" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.24)" stroke-width="2"/>

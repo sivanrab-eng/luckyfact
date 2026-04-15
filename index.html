@@ -356,6 +356,11 @@
       color: rgba(240, 247, 255, 0.78);
     }
 
+    #feedback.hot {
+      color: #ffe16a;
+      text-shadow: 0 0 18px rgba(255, 225, 106, 0.34);
+    }
+
     .end-state {
       color: var(--gold);
       font-size: 1.15rem;
@@ -565,7 +570,7 @@
   <div id="game-container">
     <div id="stats" class="stats">
       <div>נקודות: <span id="score">500</span></div>
-      <div>רצף: <span id="luck-level">0</span></div>
+      <div>Combo x<span id="luck-level">0</span></div>
     </div>
 
     <section id="start-screen" class="start-screen">
@@ -579,14 +584,14 @@
 
     <div id="main-ui" class="main-ui is-hidden">
       <div id="stage-row" class="stage-row">
-        <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>10</strong></div>
+        <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>10</strong> · <span id="stage-name">התחלה</span></div>
       </div>
 
       <div class="progress-wrap">
         <div class="progress-head">
           <span>התקדמות במסלול</span>
           <strong id="progress-text">0/15</strong>
-          <span>נותרו <strong id="remaining-text">15</strong></span>
+          <span id="remaining-copy">עוד <strong id="remaining-text">15</strong> לשלב הבא</span>
         </div>
         <div class="progress-meter" aria-hidden="true">
           <div id="progress-bar"></div>
@@ -624,18 +629,20 @@
     const TOTAL_STAGES = 10;
     const QUESTIONS_PER_STAGE = 15;
     const STAGE_BONUS = 250;
+    const PERFECT_STAGE_BONUS = 400;
+    const HOT_STREAK_STAGE_BONUS = 325;
     const STAGE_TRANSITION_MS = 3200;
     const stageNames = [
-      "שלב 1",
-      "שלב 2",
-      "שלב 3",
-      "שלב 4",
-      "שלב 5",
-      "שלב 6",
-      "שלב 7",
-      "שלב 8",
-      "שלב 9",
-      "שלב 10"
+      "התחלה",
+      "קצב",
+      "טורבו",
+      "אש",
+      "ניצוץ",
+      "ריצה",
+      "עלייה",
+      "מאסטר",
+      "סופר",
+      "פיניש"
     ];
     const facts = [
       { text: "בירח כמעט אין אוויר.", isTrue: true },
@@ -906,8 +913,10 @@
       luckLevel: document.getElementById("luck-level"),
       progressText: document.getElementById("progress-text"),
       remainingText: document.getElementById("remaining-text"),
+      remainingCopy: document.getElementById("remaining-copy"),
       progressBar: document.getElementById("progress-bar"),
       stageLabel: document.getElementById("stage-label"),
+      stageName: document.getElementById("stage-name"),
       stageRow: document.getElementById("stage-row"),
       questionBox: document.getElementById("question-box"),
       feedback: document.getElementById("feedback"),
@@ -928,6 +937,8 @@
       index: 0,
       stage: 0,
       streak: 0,
+      stageMistakes: 0,
+      finalRewardClaimed: false,
       locked: false,
       timerId: null,
       audioContext: null,
@@ -937,19 +948,19 @@
 
     const encouragements = {
       correct: [
-        "טוב.",
-        "יפה.",
-        "נכון."
+        "נכון. Combo עולה.",
+        "יפה. עוד נקודות.",
+        "מדויק. ממשיכים."
       ],
       streak: [
-        "מצוין, יש רצף.",
-        "עוד תשובה טובה.",
-        "אתה מתקדם יפה."
+        "Combo x3. עכשיו זה מתחמם.",
+        "Combo x4. לא לעצור.",
+        "רצף חזק. עוד אחת."
       ],
       gentle: [
-        "לא נורא.",
-        "תמשיך.",
-        "נסה שוב."
+        "כמעט. הרצף נשבר, אבל השלב ממשיך.",
+        "לא נורא. עוד שאלה אחת ואתה חוזר לקצב.",
+        "פספוס קטן. ממשיכים לדאש."
       ]
     };
 
@@ -1033,9 +1044,21 @@
 
       state.stage = stageIndex;
       elements.stageLabel.textContent = `${stageIndex + 1}`;
+      elements.stageName.textContent = stageNames[stageIndex];
       elements.progressText.textContent = `${questionNumberInStage}/${QUESTIONS_PER_STAGE}`;
       elements.remainingText.textContent = String(remainingInStage);
       elements.progressBar.style.width = `${Math.min((questionNumberInStage / QUESTIONS_PER_STAGE) * 100, 100)}%`;
+
+      if (remainingInStage <= 1) {
+        elements.remainingCopy.innerHTML = `עוד <strong id="remaining-text">${remainingInStage}</strong> ופותחים שלב`;
+        elements.remainingText = document.getElementById("remaining-text");
+      } else if (remainingInStage <= 3) {
+        elements.remainingCopy.innerHTML = `עוד <strong id="remaining-text">${remainingInStage}</strong> לבונוס`;
+        elements.remainingText = document.getElementById("remaining-text");
+      } else {
+        elements.remainingCopy.innerHTML = `עוד <strong id="remaining-text">${remainingInStage}</strong> לשלב הבא`;
+        elements.remainingText = document.getElementById("remaining-text");
+      }
 
       elements.luckLevel.textContent = `${state.streak}`;
     }
@@ -1043,6 +1066,33 @@
     function getEncouragement(kind) {
       const bank = encouragements[kind];
       return bank[(state.index + state.streak) % bank.length];
+    }
+
+    function getStageReward() {
+      if (state.stageMistakes === 0) {
+        return {
+          points: PERFECT_STAGE_BONUS,
+          title: `+${PERFECT_STAGE_BONUS}`,
+          label: "Perfect stage",
+          copy: "שלב מושלם · קפיצה גדולה במיקום"
+        };
+      }
+
+      if (state.streak >= 5) {
+        return {
+          points: HOT_STREAK_STAGE_BONUS,
+          title: `+${HOT_STREAK_STAGE_BONUS}`,
+          label: "Hot streak",
+          copy: "רצף חזק · קפיצה במיקום"
+        };
+      }
+
+      return {
+        points: STAGE_BONUS,
+        title: `+${STAGE_BONUS}`,
+        label: "Stage clear",
+        copy: "בונוס שלב · קפיצה במיקום"
+      };
     }
 
     function renderQuestion() {
@@ -1065,16 +1115,17 @@
 
     function showStageTransition(completedStageIndex) {
       const nextStageName = stageNames[completedStageIndex + 1] || stageNames[stageNames.length - 1];
-      state.score += STAGE_BONUS;
+      const reward = getStageReward();
+      state.score += reward.points;
       updateStats();
       setButtonsEnabled(false);
       state.locked = true;
       setTransitionVisible(true);
-      elements.transitionKicker.textContent = "Stage clear";
-      elements.transitionTitle.textContent = `+${STAGE_BONUS}`;
-      elements.transitionCopy.textContent = `בונוס שלב · קפיצה במיקום · הבא: ${nextStageName}`;
+      elements.transitionKicker.textContent = reward.label;
+      elements.transitionTitle.textContent = reward.title;
+      elements.transitionCopy.textContent = `${reward.copy} · הבא: ${nextStageName}`;
       elements.questionBox.textContent = `שלב ${completedStageIndex + 1} הושלם`;
-      showFeedback("קפיצה במיקום.", "success");
+      showFeedback(reward.copy, "hot");
 
       restartAnimation(elements.gameContainer, "stage-flash");
       restartAnimation(elements.stageRow.firstElementChild, "stage-bump");
@@ -1084,6 +1135,7 @@
       clearTimeout(state.timerId);
       state.timerId = setTimeout(() => {
         state.locked = false;
+        state.stageMistakes = 0;
         renderQuestion();
       }, STAGE_TRANSITION_MS);
     }
@@ -1094,12 +1146,20 @@
     }
 
     function finishGame() {
+      let finalReward = null;
+      if (!state.finalRewardClaimed) {
+        finalReward = getStageReward();
+        state.score += finalReward.points;
+        state.finalRewardClaimed = true;
+        updateStats();
+      }
+
       setTransitionVisible(true);
       elements.questionBox.textContent = `כל השלבים הושלמו. צברת ${state.score} נקודות.`;
       showFeedback("Dash מלא. אפשר להתחיל סיבוב חדש.", "end-state");
-      elements.transitionKicker.textContent = "Stage clear";
-      elements.transitionTitle.textContent = "כל 10 השלבים הושלמו";
-      elements.transitionCopy.textContent = `צברת ${state.score} נקודות ב-${TOTAL_STAGES} שלבים.`;
+      elements.transitionKicker.textContent = finalReward ? finalReward.label : "Stage clear";
+      elements.transitionTitle.textContent = finalReward ? finalReward.title : "כל 10 השלבים הושלמו";
+      elements.transitionCopy.textContent = `כל 10 השלבים הושלמו · ${state.score} נקודות`;
       elements.shareCopy.textContent = `סיימתי את Score Dash עם ${state.score} נקודות. מי רוצה לנסות?`;
       setButtonsEnabled(false);
       setReplayVisible(true);
@@ -1114,6 +1174,8 @@
       state.index = 0;
       state.stage = 0;
       state.streak = 0;
+      state.stageMistakes = 0;
+      state.finalRewardClaimed = false;
       state.locked = false;
       state.deck = buildDeck();
       setTransitionVisible(false);
@@ -1146,10 +1208,15 @@
         if (boost > 0) {
           state.score += boost;
         }
-        showFeedback(getEncouragement("correct"), "success");
+        if (state.streak >= 3) {
+          showFeedback(`${getEncouragement("streak")} +${100 + boost}`, "hot");
+        } else {
+          showFeedback(`${getEncouragement("correct")} +100`, "success");
+        }
       } else {
         state.score -= 50;
         state.streak = 0;
+        state.stageMistakes += 1;
         showFeedback(getEncouragement("gentle"), "error");
       }
       updateStats();

@@ -92,7 +92,7 @@
 
     <g transform="translate(144 1500)" filter="url(#shadow)">
       <rect width="792" height="128" rx="64" fill="rgba(8,18,76,0.58)" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
-      <text x="396" y="78" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle">רצף 3 · +25</text>
+      <text x="396" y="78" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle">Combo x3 · +125</text>
     </g>
 
     <g transform="translate(208 1690)" opacity="0.95">

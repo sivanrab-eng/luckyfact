@@ -105,7 +105,7 @@
       <rect x="260" y="790" width="178" height="76" rx="36" fill="url(#violetButton)" stroke="rgba(255,255,255,0.34)" stroke-width="2"/>
       <text x="349" y="838" font-size="28">שקר</text>
       <rect x="70" y="922" width="360" height="72" rx="36" fill="rgba(7,18,77,0.52)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-      <text x="250" y="967" font-size="23">רצף 3 · +25</text>
+      <text x="250" y="967" font-size="23">Combo x3 · +125</text>
       <text x="250" y="1040" font-size="19" fill="#cfe1ff">מסך שאלה</text>
     </g>
 
@@ -125,9 +125,9 @@
         <circle r="154" fill="none" stroke="#7ff8ff" stroke-width="8" opacity="0.36" filter="url(#blur14)"/>
         <circle r="126" fill="url(#glass)" stroke="rgba(255,255,255,0.34)" stroke-width="2"/>
         <circle r="94" fill="none" stroke="rgba(255,255,255,0.48)" stroke-width="4" stroke-dasharray="18 13"/>
-        <text y="-58" font-size="22" fill="#dffbff">Stage clear</text>
-        <text y="16" font-size="70" font-weight="1000" filter="url(#textGlow)">+250</text>
-        <text y="62" font-size="31" fill="#72ffda">בונוס שלב</text>
+        <text y="-58" font-size="22" fill="#dffbff">Hot streak</text>
+        <text y="16" font-size="70" font-weight="1000" filter="url(#textGlow)">+325</text>
+        <text y="62" font-size="31" fill="#72ffda">בונוס רצף</text>
       </g>
 
       <rect x="66" y="638" width="368" height="112" rx="48" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
