@@ -1,157 +1,145 @@
-<svg width="1920" height="1280" viewBox="0 0 1920 1280" xmlns="http://www.w3.org/2000/svg">
+<svg width="1920" height="1280" viewBox="0 0 1920 1280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Score Dash three screen mockup board">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#095bff"/>
-      <stop offset="48%" stop-color="#4a67ff"/>
-      <stop offset="100%" stop-color="#d66cff"/>
+      <stop offset="0%" stop-color="#061a68"/>
+      <stop offset="45%" stop-color="#2248d8"/>
+      <stop offset="78%" stop-color="#7d34df"/>
+      <stop offset="100%" stop-color="#12cfe8"/>
     </linearGradient>
-    <radialGradient id="glowTop" cx="50%" cy="22%" r="46%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52"/>
-      <stop offset="70%" stop-color="#7cf4ff" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0"/>
+    <radialGradient id="glow" cx="50%" cy="28%" r="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.58"/>
+      <stop offset="34%" stop-color="#64f5ff" stop-opacity="0.22"/>
+      <stop offset="76%" stop-color="#784cff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#081451" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="glowBottom" cx="50%" cy="78%" r="44%">
-      <stop offset="0%" stop-color="#ffd3ff" stop-opacity="0.45"/>
-      <stop offset="100%" stop-color="#ffd3ff" stop-opacity="0"/>
-    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#132275" stop-opacity="0.62"/>
+    </linearGradient>
     <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#f9fcff"/>
-      <stop offset="100%" stop-color="#dfe9ff"/>
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dcecff"/>
     </linearGradient>
-    <linearGradient id="panelDark" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#2b35d7"/>
-      <stop offset="100%" stop-color="#182266"/>
+    <linearGradient id="aqua" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60f7ff"/>
+      <stop offset="100%" stop-color="#20ffa7"/>
     </linearGradient>
-    <linearGradient id="btnBlue" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#33a9ff"/>
-      <stop offset="100%" stop-color="#1560ff"/>
+    <linearGradient id="button" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4ff7ff"/>
+      <stop offset="42%" stop-color="#2878ff"/>
+      <stop offset="100%" stop-color="#173fce"/>
     </linearGradient>
-    <linearGradient id="btnPink" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ff86b2"/>
-      <stop offset="100%" stop-color="#ff4372"/>
+    <linearGradient id="violetButton" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b98aff"/>
+      <stop offset="46%" stop-color="#7d4cff"/>
+      <stop offset="100%" stop-color="#4726c9"/>
     </linearGradient>
-    <linearGradient id="good" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#66f7ff"/>
-      <stop offset="100%" stop-color="#70ffb5"/>
-    </linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+    <filter id="blur14" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="14"/>
     </filter>
-    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6"/>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#02104c" flood-opacity="0.44"/>
+    </filter>
+    <filter id="textGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#72f8ff" flood-opacity="0.66"/>
     </filter>
   </defs>
 
   <rect width="1920" height="1280" fill="url(#bg)"/>
-  <rect width="1920" height="1280" fill="url(#glowTop)"/>
-  <rect width="1920" height="1280" fill="url(#glowBottom)"/>
+  <rect width="1920" height="1280" fill="url(#glow)"/>
+  <path d="M-130 260 C220 88 540 186 830 16 C1150 -170 1580 22 2050 -148" fill="none" stroke="#66f7ff" stroke-width="30" stroke-linecap="round" opacity="0.14" filter="url(#blur14)"/>
+  <path d="M-170 1168 C250 986 512 1082 820 916 C1168 728 1514 868 2040 668" fill="none" stroke="#c78cff" stroke-width="28" stroke-linecap="round" opacity="0.14" filter="url(#blur14)"/>
 
-  <g opacity="0.95">
-    <circle cx="120" cy="140" r="18" fill="#7cf4ff"/>
-    <circle cx="154" cy="170" r="12" fill="#ff86b2"/>
-    <circle cx="1780" cy="160" r="20" fill="#70ffb5"/>
-    <circle cx="1820" cy="196" r="12" fill="#ffe16a"/>
-    <circle cx="1540" cy="1080" r="18" fill="#70ffb5"/>
-    <circle cx="1590" cy="1040" r="12" fill="#7cf4ff"/>
-  </g>
+  <g font-family="'Rubik', 'Fredoka', Arial, sans-serif" font-weight="800" fill="#ffffff" text-anchor="middle">
+    <text x="360" y="54" font-size="30">פתיחה</text>
+    <text x="960" y="54" font-size="30">שאלה</text>
+    <text x="1560" y="54" font-size="30">מעבר שלב</text>
 
-  <g font-family="Arial, sans-serif" font-weight="700" fill="#ffffff" text-anchor="middle">
-    <!-- SCREEN 1 -->
     <g transform="translate(120 90)">
-      <rect x="0" y="0" width="500" height="1100" rx="58" fill="rgba(8,15,58,0.32)" filter="url(#shadow)"/>
-      <rect x="0" y="0" width="500" height="1100" rx="58" fill="#1c2477" opacity="0.28" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
-      <rect x="26" y="24" width="448" height="1052" rx="48" fill="rgba(255,255,255,0.08)"/>
-      <rect x="48" y="58" width="404" height="90" rx="28" fill="rgba(255,255,255,0.15)"/>
-      <text x="250" y="115" font-size="34">Score Dash</text>
-      <circle cx="106" cy="270" r="168" fill="none" stroke="#ffffff" stroke-width="5" opacity="0.85"/>
-      <circle cx="250" cy="280" r="182" fill="none" stroke="#7cf4ff" stroke-width="12" opacity="0.42" filter="url(#soft)"/>
-      <text x="250" y="245" font-size="82" fill="#ffffff">Score Dash</text>
-      <text x="250" y="320" font-size="34" fill="#f3fbff" font-weight="600">המזל ישחק לך היום?</text>
-      <text x="250" y="365" font-size="22" fill="#dfeaff" font-weight="600">10 שלבים · 150 שאלות · בילבורד חי</text>
-      <rect x="126" y="452" width="248" height="76" rx="28" fill="url(#btnBlue)" filter="url(#soft)"/>
-      <text x="250" y="501" font-size="34">התחל</text>
-      <rect x="156" y="560" width="188" height="48" rx="20" fill="rgba(255,255,255,0.12)"/>
-      <text x="250" y="593" font-size="22" font-weight="600">מזל · מהירות · דירוג</text>
-      <g opacity="0.95">
-        <ellipse cx="68" cy="172" rx="36" ry="22" fill="#ff5c8c"/>
-        <ellipse cx="452" cy="202" rx="44" ry="26" fill="#70ffb5"/>
-        <ellipse cx="420" cy="760" rx="56" ry="34" fill="#ffe16a"/>
-        <ellipse cx="74" cy="790" rx="44" ry="26" fill="#7cf4ff"/>
-        <ellipse cx="404" cy="980" rx="58" ry="30" fill="#ff86b2"/>
+      <rect width="500" height="1100" rx="58" fill="rgba(7,18,77,0.44)" stroke="rgba(255,255,255,0.18)" stroke-width="2" filter="url(#shadow)"/>
+      <rect x="26" y="24" width="448" height="1052" rx="48" fill="rgba(255,255,255,0.07)"/>
+
+      <g transform="translate(250 470)">
+        <ellipse cx="0" cy="210" rx="188" ry="32" fill="#03124d" opacity="0.24" filter="url(#blur14)"/>
+        <circle r="190" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+        <circle r="166" fill="none" stroke="#7ff8ff" stroke-width="9" opacity="0.36" filter="url(#blur14)"/>
+        <circle r="134" fill="url(#glass)" stroke="rgba(255,255,255,0.34)" stroke-width="2"/>
+        <circle r="104" fill="none" stroke="rgba(255,255,255,0.48)" stroke-width="4" stroke-dasharray="18 13"/>
+        <text y="-36" font-size="54" font-weight="1000" filter="url(#textGlow)">Score Dash</text>
+        <text y="22" font-size="23">אתגר מהיר עד השלב הבא</text>
+        <text y="66" font-size="18" fill="#dffbff">10 שלבים · 15 שאלות בכל שלב</text>
       </g>
-      <text x="250" y="1040" font-size="20" fill="#cfe1ff">מסך פתיחה</text>
+
+      <rect x="80" y="740" width="340" height="72" rx="36" fill="rgba(7,18,77,0.58)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      <text x="250" y="785" font-size="19">ענה מהר · אסוף בונוסים · קפוץ במיקום</text>
+      <rect x="96" y="858" width="308" height="76" rx="38" fill="url(#button)" stroke="rgba(255,255,255,0.42)" stroke-width="2"/>
+      <text x="250" y="906" font-size="28">התחל</text>
+      <text x="250" y="1040" font-size="19" fill="#cfe1ff">מסך פתיחה</text>
     </g>
 
-    <!-- SCREEN 2 -->
     <g transform="translate(710 90)">
-      <rect x="0" y="0" width="500" height="1100" rx="58" fill="rgba(8,15,58,0.32)" filter="url(#shadow)"/>
-      <rect x="0" y="0" width="500" height="1100" rx="58" fill="#1c2477" opacity="0.28" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
-      <rect x="26" y="24" width="448" height="1052" rx="48" fill="rgba(255,255,255,0.08)"/>
-      <rect x="48" y="56" width="404" height="84" rx="26" fill="rgba(255,255,255,0.14)"/>
-      <text x="126" y="108" font-size="26" text-anchor="start">מפתחות: 1,420</text>
-      <text x="394" y="108" font-size="26" text-anchor="end">במקום 8</text>
+      <rect width="500" height="1100" rx="58" fill="rgba(7,18,77,0.44)" stroke="rgba(255,255,255,0.18)" stroke-width="2" filter="url(#shadow)"/>
+      <rect x="26" y="24" width="448" height="1052" rx="48" fill="rgba(255,255,255,0.07)"/>
 
-      <rect x="48" y="168" width="404" height="88" rx="28" fill="rgba(255,255,255,0.14)"/>
-      <text x="100" y="223" font-size="24" text-anchor="start">שלב 6 מתוך 10</text>
-      <text x="392" y="223" font-size="24" text-anchor="end">9/15</text>
-      <rect x="74" y="246" width="352" height="16" rx="8" fill="#0c1a64"/>
-      <rect x="74" y="246" width="196" height="16" rx="8" fill="url(#good)"/>
+      <rect x="48" y="56" width="404" height="88" rx="44" fill="rgba(7,18,77,0.58)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      <text x="92" y="109" font-size="22" text-anchor="start">שלב 6/10</text>
+      <text x="408" y="109" font-size="22" text-anchor="end">שאלה 9/15</text>
+      <rect x="76" y="126" width="348" height="10" rx="5" fill="rgba(255,255,255,0.18)"/>
+      <rect x="76" y="126" width="209" height="10" rx="5" fill="url(#aqua)"/>
 
-      <circle cx="250" cy="390" r="170" fill="none" stroke="#ffffff" stroke-width="5" opacity="0.86"/>
-      <circle cx="250" cy="390" r="184" fill="none" stroke="#7cf4ff" stroke-width="12" opacity="0.35" filter="url(#soft)"/>
-      <text x="250" y="360" font-size="56">שאלה 9</text>
-      <text x="250" y="432" font-size="72">תפוס את הרגע</text>
-      <text x="250" y="480" font-size="22" fill="#dfeaff">כל תשובה מזיזה אותך קדימה בבילבורד</text>
-
-      <rect x="50" y="548" width="400" height="250" rx="34" fill="url(#panel)"/>
-      <text x="250" y="620" font-size="34" fill="#1a2744">האם פינגווין יכול לעוף?</text>
-      <text x="250" y="670" font-size="20" fill="#5c6c92">בחר אמת או שקר כדי להמשיך</text>
-      <rect x="82" y="716" width="150" height="58" rx="24" fill="url(#btnBlue)"/>
-      <text x="157" y="753" font-size="24">אמת</text>
-      <rect x="268" y="716" width="150" height="58" rx="24" fill="url(#btnPink)"/>
-      <text x="343" y="753" font-size="24">שקר</text>
-
-      <rect x="50" y="832" width="400" height="160" rx="34" fill="rgba(255,255,255,0.12)"/>
-      <text x="82" y="884" font-size="24" text-anchor="start">בילבורד חי</text>
-      <text x="418" y="884" font-size="24" text-anchor="end">#8</text>
-      <g font-size="18" font-weight="700" text-anchor="start" fill="#ffffff">
-        <text x="86" y="932">נועה</text><text x="414" y="932" text-anchor="end">16,980</text>
-        <text x="86" y="964">דני</text><text x="414" y="964" text-anchor="end">16,420</text>
-        <text x="86" y="996">את/ה</text><text x="414" y="996" text-anchor="end">15,760</text>
+      <g transform="translate(250 315)">
+        <circle r="102" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+        <circle r="84" fill="none" stroke="#7ff8ff" stroke-width="7" opacity="0.36" filter="url(#blur14)"/>
+        <circle r="62" fill="url(#glass)" stroke="rgba(255,255,255,0.34)" stroke-width="2"/>
+        <text y="-10" font-size="20" fill="#dffbff">Score Dash</text>
+        <text y="34" font-size="36" font-weight="1000">שאלה 9</text>
       </g>
-      <text x="250" y="1040" font-size="20" fill="#cfe1ff">מסך שאלה</text>
+
+      <rect x="50" y="500" width="400" height="244" rx="34" fill="url(#panel)"/>
+      <text x="250" y="578" font-size="22" fill="#3153a8">אמת או שקר</text>
+      <text x="250" y="642" font-size="32" fill="#101f58">האם פינגווין יכול לעוף?</text>
+      <text x="250" y="690" font-size="18" fill="#52679b">בחר תשובה כדי להמשיך בדאש</text>
+
+      <rect x="62" y="790" width="178" height="76" rx="36" fill="url(#button)" stroke="rgba(255,255,255,0.38)" stroke-width="2"/>
+      <text x="151" y="838" font-size="28">אמת</text>
+      <rect x="260" y="790" width="178" height="76" rx="36" fill="url(#violetButton)" stroke="rgba(255,255,255,0.34)" stroke-width="2"/>
+      <text x="349" y="838" font-size="28">שקר</text>
+      <rect x="70" y="922" width="360" height="72" rx="36" fill="rgba(7,18,77,0.52)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      <text x="250" y="967" font-size="23">רצף 3 · +25</text>
+      <text x="250" y="1040" font-size="19" fill="#cfe1ff">מסך שאלה</text>
     </g>
 
-    <!-- SCREEN 3 -->
     <g transform="translate(1300 90)">
-      <rect x="0" y="0" width="500" height="1100" rx="58" fill="rgba(8,15,58,0.32)" filter="url(#shadow)"/>
-      <rect x="0" y="0" width="500" height="1100" rx="58" fill="#1c2477" opacity="0.28" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
-      <rect x="26" y="24" width="448" height="1052" rx="48" fill="rgba(255,255,255,0.08)"/>
-      <circle cx="250" cy="300" r="190" fill="none" stroke="#ffffff" stroke-width="5" opacity="0.85"/>
-      <circle cx="250" cy="300" r="206" fill="none" stroke="#7cf4ff" stroke-width="12" opacity="0.38" filter="url(#soft)"/>
-      <text x="250" y="252" font-size="26" fill="#dfeaff">Stage clear</text>
-      <text x="250" y="342" font-size="86">+250</text>
-      <text x="250" y="404" font-size="42">בונוס שלב</text>
-      <text x="250" y="454" font-size="22" fill="#dfeaff">המסלול הבא נפתח עכשיו</text>
+      <rect width="500" height="1100" rx="58" fill="rgba(7,18,77,0.44)" stroke="rgba(255,255,255,0.18)" stroke-width="2" filter="url(#shadow)"/>
+      <rect x="26" y="24" width="448" height="1052" rx="48" fill="rgba(255,255,255,0.07)"/>
 
-      <rect x="60" y="560" width="380" height="250" rx="34" fill="url(#panel)"/>
-      <text x="250" y="632" font-size="30" fill="#1a2744">המסלול הושלם</text>
-      <text x="250" y="684" font-size="20" fill="#5c6c92">הדירוג שלך קפץ לשלב הבא</text>
-      <rect x="100" y="740" width="300" height="14" rx="7" fill="#0c1a64"/>
-      <rect x="100" y="740" width="212" height="14" rx="7" fill="url(#good)"/>
-      <text x="250" y="786" font-size="22" fill="#1a2744">מיקום בבילבורד: 5</text>
+      <rect x="48" y="56" width="404" height="88" rx="44" fill="rgba(7,18,77,0.58)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      <text x="92" y="109" font-size="22" text-anchor="start">שלב 4/10</text>
+      <text x="408" y="109" font-size="22" text-anchor="end">15/15 שאלות</text>
+      <rect x="76" y="126" width="348" height="10" rx="5" fill="rgba(255,255,255,0.18)"/>
+      <rect x="76" y="126" width="139" height="10" rx="5" fill="url(#aqua)"/>
 
-      <rect x="78" y="852" width="344" height="68" rx="26" fill="url(#btnBlue)"/>
-      <text x="250" y="895" font-size="24">המשך לשלב הבא</text>
-      <rect x="96" y="950" width="308" height="54" rx="22" fill="rgba(255,255,255,0.12)"/>
-      <text x="250" y="984" font-size="18">שיתוף ל-WhatsApp יופיע רק בסוף</text>
-      <text x="250" y="1040" font-size="20" fill="#cfe1ff">מסך מעבר שלב</text>
+      <g transform="translate(250 360)">
+        <ellipse cx="0" cy="204" rx="178" ry="28" fill="#03124d" opacity="0.24" filter="url(#blur14)"/>
+        <circle r="176" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+        <circle r="154" fill="none" stroke="#7ff8ff" stroke-width="8" opacity="0.36" filter="url(#blur14)"/>
+        <circle r="126" fill="url(#glass)" stroke="rgba(255,255,255,0.34)" stroke-width="2"/>
+        <circle r="94" fill="none" stroke="rgba(255,255,255,0.48)" stroke-width="4" stroke-dasharray="18 13"/>
+        <text y="-58" font-size="22" fill="#dffbff">Stage clear</text>
+        <text y="16" font-size="70" font-weight="1000" filter="url(#textGlow)">+250</text>
+        <text y="62" font-size="31" fill="#72ffda">בונוס שלב</text>
+      </g>
+
+      <rect x="66" y="638" width="368" height="112" rx="48" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+      <text x="250" y="706" font-size="25">קפיצה במיקום</text>
+
+      <rect x="60" y="802" width="380" height="118" rx="44" fill="url(#panel)"/>
+      <text x="250" y="850" font-size="19" fill="#3153a8">התקדמות השלב</text>
+      <text x="250" y="892" font-size="26" fill="#101f58">10 שלבים · 15 שאלות</text>
+
+      <rect x="78" y="958" width="344" height="72" rx="36" fill="url(#button)" stroke="rgba(255,255,255,0.42)" stroke-width="2"/>
+      <text x="250" y="1003" font-size="24">המשך לשלב הבא</text>
+      <text x="250" y="1040" font-size="19" fill="#cfe1ff">מסך מעבר שלב</text>
     </g>
-  </g>
-
-  <g font-family="Arial, sans-serif" fill="#ffffff" text-anchor="middle" font-weight="700">
-    <text x="360" y="48" font-size="30">פתיחה</text>
-    <text x="950" y="48" font-size="30">שאלה</text>
-    <text x="1540" y="48" font-size="30">מעבר שלב</text>
   </g>
 </svg>
