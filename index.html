@@ -179,48 +179,6 @@
       margin-top: 8px;
     }
 
-    .character-line {
-      margin: 16px 0 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      color: var(--text);
-      position: relative;
-      z-index: 1;
-      min-height: 42px;
-    }
-
-    .character-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: inline-grid;
-      place-items: center;
-      background: linear-gradient(145deg, rgba(77,184,255,0.95), rgba(104,224,179,0.9));
-      color: #0b1322;
-      font-weight: 800;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 16px rgba(77,184,255,0.18);
-      flex: 0 0 28px;
-    }
-
-    .character-label {
-      color: var(--accent);
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-inline-start: 2px;
-    }
-
-    .character-text {
-      color: var(--text);
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
     .btn-start {
       min-width: 180px;
       background: linear-gradient(180deg, #1d4b72, #15334d);
@@ -281,14 +239,6 @@
       background: linear-gradient(90deg, var(--danger), var(--accent), var(--success));
       border-radius: inherit;
       transition: width 0.45s ease;
-    }
-
-    .hint {
-      margin: 0 0 20px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      position: relative;
-      z-index: 1;
     }
 
     .story-line {
@@ -380,15 +330,6 @@
     .end-state {
       color: var(--accent);
       font-size: 1.15rem;
-    }
-
-    .hint-box {
-      min-height: 22px;
-      margin-top: 10px;
-      font-size: 0.92rem;
-      color: rgba(142, 168, 199, 0.95);
-      position: relative;
-      z-index: 1;
     }
 
     .replay-row {
@@ -584,19 +525,11 @@
     <section id="start-screen" class="start-screen">
       <p class="start-kicker">LuckyFact</p>
       <h1 class="start-title">החדר הסודי</h1>
-      <p class="start-copy">שלושה שערים, הרבה מזל, והרבה הפתעות.</p>
+      <p class="start-copy">30 קלפים. כל בחירה מקרבת אותך לשער האחרון.</p>
       <div class="start-actions">
         <button id="start-btn" class="btn-start" type="button">התחל מסע</button>
       </div>
     </section>
-
-    <div id="character-line" class="character-line" aria-live="polite">
-      <span class="character-avatar" aria-hidden="true">ש</span>
-      <div>
-        <div class="character-label">השומר</div>
-        <div id="character-text" class="character-text">מוכן לפתוח את השער הראשון.</div>
-      </div>
-    </div>
 
     <div id="main-ui" class="main-ui is-hidden">
       <div id="stage-row" class="stage-row">
@@ -607,13 +540,14 @@
         <div class="progress-head">
           <span>התקדמות במסלול</span>
           <strong id="progress-text">0/30</strong>
+          <span>נותרו <strong id="remaining-text">30</strong></span>
         </div>
         <div class="progress-meter" aria-hidden="true">
           <div id="progress-bar"></div>
         </div>
       </div>
 
-      <p class="story-line">הדלת נפתחת רק אם תפענח את הסימן.</p>
+      <p class="story-line">כל תשובה מזיזה את המסלול קדימה.</p>
 
       <p id="question-box" class="question">מכין את הקלף הראשון...</p>
 
@@ -694,14 +628,13 @@
       score: document.getElementById("score"),
       luckLevel: document.getElementById("luck-level"),
       progressText: document.getElementById("progress-text"),
+      remainingText: document.getElementById("remaining-text"),
       progressBar: document.getElementById("progress-bar"),
       stageLabel: document.getElementById("stage-label"),
       stageName: document.getElementById("stage-name"),
       stageRow: document.getElementById("stage-row"),
       questionBox: document.getElementById("question-box"),
       feedback: document.getElementById("feedback"),
-      characterLine: document.getElementById("character-line"),
-      characterText: document.getElementById("character-text"),
       replayBtn: document.getElementById("replay-btn"),
       sharePanel: document.getElementById("share-panel"),
       shareCopy: document.getElementById("share-copy"),
@@ -725,9 +658,9 @@
     };
 
     const stages = [
-      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה." },
-      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר." },
-      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עוד מבט קטן לפני הבחירה." }
+      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון פתוח. מתחילים לצבור מפתחות." },
+      { name: "חדר הצל", start: 10, end: 19, intro: "המסלול מתהדק. כל בחירה חשובה." },
+      { name: "שער הסיום", start: 20, end: 29, intro: "הסוף קרוב. שומרים על הקצב." }
     ];
 
     const encouragements = {
@@ -751,10 +684,6 @@
     function setButtonsEnabled(enabled) {
       elements.truthBtn.disabled = !enabled;
       elements.lieBtn.disabled = !enabled;
-    }
-
-    function speakCharacter(message) {
-      elements.characterText.textContent = message;
     }
 
     function showMainUI(visible) {
@@ -826,8 +755,11 @@
       elements.score.textContent = state.score;
       elements.stageLabel.textContent = `${state.stage + 1}`;
       elements.stageName.textContent = stages[state.stage].name;
-      elements.progressText.textContent = `${Math.min(state.index, state.deck.length)}/${state.deck.length}`;
-      elements.progressBar.style.width = `${Math.min((state.index / state.deck.length) * 100, 100)}%`;
+      const completed = Math.min(state.index, state.deck.length);
+      const remaining = Math.max(state.deck.length - completed, 0);
+      elements.progressText.textContent = `${completed}/${state.deck.length}`;
+      elements.remainingText.textContent = String(remaining);
+      elements.progressBar.style.width = `${Math.min((completed / state.deck.length) * 100, 100)}%`;
 
       if (state.score > 700) {
         elements.luckLevel.textContent = "גבוהה מאוד";
@@ -850,7 +782,6 @@
       elements.stageLabel.textContent = String(stageIndex + 1);
       elements.stageName.textContent = stage.name;
       elements.questionBox.textContent = stage.intro;
-      speakCharacter("המסלול משתנה. תמשיך.");
       showFeedback("", "neutral");
       setButtonsEnabled(false);
       state.locked = true;
@@ -893,7 +824,6 @@
       showFeedback("שער אחרון נפתח. אפשר לנסות שוב מהתחלה.", "end-state");
       elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות?`;
       elements.transitionCopy.textContent = `המסלול נגמר. עכשיו אפשר לפתוח אותו שוב מההתחלה.`;
-      speakCharacter("המסלול הושלם. אפשר להתחיל מחדש.");
       setButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
@@ -915,7 +845,6 @@
       elements.stageLabel.textContent = "1";
       elements.stageName.textContent = stages[0].name;
       elements.questionBox.textContent = "מכין את הקלף הראשון...";
-      speakCharacter("פותח מחדש את המסלול.");
       showFeedback("", "neutral");
       updateStats();
       setButtonsEnabled(true);
@@ -939,7 +868,6 @@
       }
 
       elements.questionBox.textContent = state.deck[state.index].text;
-      speakCharacter("תורך.");
       showFeedback("", "neutral");
       setButtonsEnabled(true);
     }
@@ -963,12 +891,10 @@
           state.score += boost;
         }
         showFeedback(getEncouragement("correct"), "success");
-        speakCharacter("יפה. השער נפתח.");
       } else {
         state.score -= 50;
         state.streak = 0;
         showFeedback(getEncouragement("gentle"), "error");
-        speakCharacter("עוד ניסיון.");
       }
       updateStats();
       state.index += 1;
@@ -995,7 +921,6 @@
     updateStats();
     showMainUI(false);
     setReplayVisible(false);
-    speakCharacter("מוכן לפתוח את השער הראשון.");
   </script>
 </body>
 </html>
