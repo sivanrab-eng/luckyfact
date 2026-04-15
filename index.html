@@ -179,6 +179,48 @@
       margin-top: 8px;
     }
 
+    .character-line {
+      margin: 16px 0 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+      min-height: 42px;
+    }
+
+    .character-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(77,184,255,0.95), rgba(104,224,179,0.9));
+      color: #0b1322;
+      font-weight: 800;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 16px rgba(77,184,255,0.18);
+      flex: 0 0 28px;
+    }
+
+    .character-label {
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-inline-start: 2px;
+    }
+
+    .character-text {
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
     .btn-start {
       min-width: 180px;
       background: linear-gradient(180deg, #1d4b72, #15334d);
@@ -548,6 +590,14 @@
       </div>
     </section>
 
+    <div id="character-line" class="character-line" aria-live="polite">
+      <span class="character-avatar" aria-hidden="true">ש</span>
+      <div>
+        <div class="character-label">השומר</div>
+        <div id="character-text" class="character-text">מוכן לפתוח את השער הראשון.</div>
+      </div>
+    </div>
+
     <div id="main-ui" class="main-ui is-hidden">
       <div id="stage-row" class="stage-row">
         <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>3</strong> · <span id="stage-name">המסדרון</span></div>
@@ -650,6 +700,8 @@
       stageRow: document.getElementById("stage-row"),
       questionBox: document.getElementById("question-box"),
       feedback: document.getElementById("feedback"),
+      characterLine: document.getElementById("character-line"),
+      characterText: document.getElementById("character-text"),
       replayBtn: document.getElementById("replay-btn"),
       sharePanel: document.getElementById("share-panel"),
       shareCopy: document.getElementById("share-copy"),
@@ -699,6 +751,10 @@
     function setButtonsEnabled(enabled) {
       elements.truthBtn.disabled = !enabled;
       elements.lieBtn.disabled = !enabled;
+    }
+
+    function speakCharacter(message) {
+      elements.characterText.textContent = message;
     }
 
     function showMainUI(visible) {
@@ -794,6 +850,7 @@
       elements.stageLabel.textContent = String(stageIndex + 1);
       elements.stageName.textContent = stage.name;
       elements.questionBox.textContent = stage.intro;
+      speakCharacter("המסלול משתנה. תמשיך.");
       showFeedback("", "neutral");
       setButtonsEnabled(false);
       state.locked = true;
@@ -836,6 +893,7 @@
       showFeedback("שער אחרון נפתח. אפשר לנסות שוב מהתחלה.", "end-state");
       elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות?`;
       elements.transitionCopy.textContent = `המסלול נגמר. עכשיו אפשר לפתוח אותו שוב מההתחלה.`;
+      speakCharacter("המסלול הושלם. אפשר להתחיל מחדש.");
       setButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
@@ -857,6 +915,7 @@
       elements.stageLabel.textContent = "1";
       elements.stageName.textContent = stages[0].name;
       elements.questionBox.textContent = "מכין את הקלף הראשון...";
+      speakCharacter("פותח מחדש את המסלול.");
       showFeedback("", "neutral");
       updateStats();
       setButtonsEnabled(true);
@@ -880,6 +939,7 @@
       }
 
       elements.questionBox.textContent = state.deck[state.index].text;
+      speakCharacter("תורך.");
       showFeedback("", "neutral");
       setButtonsEnabled(true);
     }
@@ -903,10 +963,12 @@
           state.score += boost;
         }
         showFeedback(getEncouragement("correct"), "success");
+        speakCharacter("יפה. השער נפתח.");
       } else {
         state.score -= 50;
         state.streak = 0;
         showFeedback(getEncouragement("gentle"), "error");
+        speakCharacter("עוד ניסיון.");
       }
       updateStats();
       state.index += 1;
@@ -933,6 +995,7 @@
     updateStats();
     showMainUI(false);
     setReplayVisible(false);
+    speakCharacter("מוכן לפתוח את השער הראשון.");
   </script>
 </body>
 </html>
