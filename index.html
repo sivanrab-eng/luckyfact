@@ -144,6 +144,54 @@
       margin-top: 8px;
     }
 
+    .guide-line {
+      margin: 16px 0 0;
+      min-height: 28px;
+      color: rgba(104, 224, 179, 0.95);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .guide-line.is-muted {
+      color: rgba(142, 168, 199, 0.95);
+    }
+
+    .guide-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex: 0 0 24px;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(255,255,255,0.1) 42%, transparent 44%),
+        radial-gradient(circle at 50% 50%, rgba(77,184,255,0.95), rgba(77,184,255,0.42) 52%, rgba(8,18,34,0.02) 68%),
+        linear-gradient(145deg, rgba(104,224,179,0.9), rgba(77,184,255,0.35));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 18px rgba(77,184,255,0.22);
+      position: relative;
+    }
+
+    .guide-avatar::after {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,0.18);
+      opacity: 0.7;
+    }
+
+    .guide-text {
+      flex: 1 1 auto;
+    }
+
     .btn-start {
       min-width: 180px;
       background: linear-gradient(180deg, #1d4b72, #15334d);
@@ -363,6 +411,68 @@
       min-width: 180px;
     }
 
+    .transition-panel {
+      margin-top: 18px;
+      padding: 18px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(77, 184, 255, 0.2);
+      background:
+        radial-gradient(circle at top left, rgba(77,184,255,0.18), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(104,224,179,0.12), transparent 35%),
+        rgba(8, 18, 34, 0.84);
+      position: relative;
+      z-index: 1;
+      display: none;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .transition-panel.is-visible {
+      display: grid;
+    }
+
+    .transition-title {
+      margin: 0;
+      font-size: 1.12rem;
+      color: var(--text);
+    }
+
+    .transition-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .transition-orbit {
+      position: absolute;
+      inset: -30% -10% auto auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 1px solid rgba(77,184,255,0.18);
+      box-shadow: inset 0 0 24px rgba(77,184,255,0.1);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .transition-orbit::before {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border-radius: 50%;
+      border: 1px dashed rgba(104,224,179,0.2);
+      animation: slowSpin 9s linear infinite;
+    }
+
+    .transition-kicker {
+      margin: 0;
+      color: var(--accent);
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+
     .hint-box.is-fresh {
       color: rgba(104, 224, 179, 0.95);
     }
@@ -391,6 +501,11 @@
       0% { transform: scale(1); }
       40% { transform: scale(1.04); }
       100% { transform: scale(1); }
+    }
+
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     @media (max-width: 520px) {
@@ -441,6 +556,11 @@
       <div>אנרגיית מזל: <span id="luck-level">בינונית</span></div>
     </div>
 
+    <p id="guide-line" class="guide-line is-muted">
+      <span class="guide-avatar" aria-hidden="true"></span>
+      <span class="guide-text">אני כאן אם תרצה רמז. מתחילים בקטן.</span>
+    </p>
+
     <section id="start-screen" class="start-screen">
       <p class="start-kicker">LuckyFact</p>
       <h1 class="start-title">החדר הסודי</h1>
@@ -468,18 +588,24 @@
         <button id="lie-btn" class="btn-lie" type="button">זה לא נכון</button>
       </div>
 
-    <div id="feedback" class="neutral"></div>
-    <div id="hint-box" class="hint-box"></div>
-    <div class="replay-row">
-      <button id="replay-btn" class="btn-replay" type="button" hidden>שחק שוב</button>
-    </div>
-    <div id="share-panel" class="share-panel">
-      <p class="share-title">נפתח אצלך מסלול חדש.</p>
-      <p class="share-copy" id="share-copy">צברת 0 מפתחות והגעת לשער האחרון.</p>
-      <div class="start-actions">
-        <button id="share-btn" class="btn-share" type="button">העתק טקסט לשיתוף</button>
+      <div id="feedback" class="neutral"></div>
+      <div id="hint-box" class="hint-box"></div>
+      <div class="replay-row">
+        <button id="replay-btn" class="btn-replay" type="button" hidden>שחק שוב</button>
       </div>
-    </div>
+      <div id="share-panel" class="share-panel">
+        <p class="share-title">נפתח אצלך מסלול חדש.</p>
+        <p class="share-copy" id="share-copy">צברת 0 מפתחות והגעת לשער האחרון.</p>
+        <div class="start-actions">
+          <button id="share-btn" class="btn-share" type="button">העתק טקסט לשיתוף</button>
+        </div>
+      </div>
+      <div id="transition-panel" class="transition-panel">
+        <div class="transition-orbit" aria-hidden="true"></div>
+        <p class="transition-kicker">New route unlocked</p>
+        <p class="transition-title">מסלול חדש נפתח.</p>
+        <p class="transition-copy" id="transition-copy">המסע ממשיך עם אותם שערים, אבל עם סדר חדש.</p>
+      </div>
     </div>
   </div>
 
@@ -517,6 +643,15 @@
       { text: "אפשר לשמוע קול בלי אוויר.", isTrue: false }
     ];
 
+    function shuffleFacts(source) {
+      const copy = source.slice();
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
     const elements = {
       gameContainer: document.getElementById("game-container"),
       startScreen: document.getElementById("start-screen"),
@@ -532,10 +667,14 @@
       questionBox: document.getElementById("question-box"),
       feedback: document.getElementById("feedback"),
       hintBox: document.getElementById("hint-box"),
+      guideLine: document.getElementById("guide-line"),
+      guideText: document.querySelector("#guide-line .guide-text"),
       replayBtn: document.getElementById("replay-btn"),
       sharePanel: document.getElementById("share-panel"),
       shareCopy: document.getElementById("share-copy"),
       shareBtn: document.getElementById("share-btn"),
+      transitionPanel: document.getElementById("transition-panel"),
+      transitionCopy: document.getElementById("transition-copy"),
       truthBtn: document.getElementById("truth-btn"),
       lieBtn: document.getElementById("lie-btn")
     };
@@ -544,10 +683,13 @@
       score: 500,
       index: 0,
       stage: 0,
+      cycle: 1,
+      streak: 0,
       locked: false,
       timerId: null,
       audioContext: null,
-      started: false
+      started: false,
+      deck: shuffleFacts(facts)
     };
 
     const stages = [
@@ -566,6 +708,24 @@
         "רמז קטן: נסה לעצור על המילה האחרונה במשפט.",
         "רמז קטן: הפעם המערכת בלבלה אותך. בסיבוב הבא קרא לאט יותר.",
         "רמז קטן: מילה אחת יכולה לשנות את הכול."
+      ]
+    };
+
+    const encouragements = {
+      correct: [
+        "יפה. אתה קורא מדויק יותר ויותר.",
+        "טוב מאוד. נשארת עם הטקסט עד הסוף.",
+        "מצוין. תפסת את הפרט שעושה את ההבדל."
+      ],
+      streak: [
+        "רצף יפה. אתה נשאר חד.",
+        "עוד צעד קטן, ואתה שולט במסלול.",
+        "הקצב שלך טוב. תמשיך ככה."
+      ],
+      gentle: [
+        "לא נורא. אתה עדיין בתוך המסע.",
+        "בסדר גמור. קורה. ממשיכים הלאה.",
+        "המערכת ניסתה לבלבל. בפעם הבאה אתה תופס אותה מוקדם יותר."
       ]
     };
 
@@ -588,9 +748,18 @@
       elements.sharePanel.classList.toggle("is-visible", visible);
     }
 
+    function setTransitionVisible(visible) {
+      elements.transitionPanel.classList.toggle("is-visible", visible);
+    }
+
     function showHint(message, fresh = false) {
       elements.hintBox.textContent = message;
       elements.hintBox.classList.toggle("is-fresh", fresh);
+    }
+
+    function speakGuide(message, muted = false) {
+      elements.guideText.textContent = message;
+      elements.guideLine.classList.toggle("is-muted", muted);
     }
 
     function restartAnimation(element, className) {
@@ -642,6 +811,8 @@
 
     function updateStats() {
       elements.score.textContent = state.score;
+      elements.stageLabel.textContent = `${state.stage + 1}`;
+      elements.stageName.textContent = `${stages[state.stage].name} · מחזור ${state.cycle}`;
 
       if (state.score > 700) {
         elements.luckBar.style.width = "90%";
@@ -657,7 +828,12 @@
 
     function getHint(isCorrect) {
       const bank = isCorrect ? answerHints.success : answerHints.miss;
-      return bank[state.index % bank.length];
+      return bank[(state.index + state.cycle) % bank.length];
+    }
+
+    function getEncouragement(kind) {
+      const bank = encouragements[kind];
+      return bank[(state.index + state.cycle + state.streak) % bank.length];
     }
 
     function enterStage(stageIndex) {
@@ -665,7 +841,7 @@
       const stage = stages[stageIndex];
 
       elements.stageLabel.textContent = String(stageIndex + 1);
-      elements.stageName.textContent = stage.name;
+      elements.stageName.textContent = `${stage.name} · מחזור ${state.cycle}`;
       elements.questionBox.textContent = stage.intro;
       showFeedback("", "neutral");
       showHint(stage.hint, true);
@@ -690,7 +866,7 @@
       const nextStage = stages.findIndex((stage) => state.index >= stage.start && state.index <= stage.end);
       if (nextStage !== -1) {
         elements.stageLabel.textContent = String(nextStage + 1);
-        elements.stageName.textContent = stages[nextStage].name;
+        elements.stageName.textContent = `${stages[nextStage].name} · מחזור ${state.cycle}`;
       }
 
       if (nextStage !== -1 && nextStage !== state.stage) {
@@ -706,28 +882,42 @@
     }
 
     function finishGame() {
-      elements.questionBox.textContent = `המסלול נסגר. צברת ${state.score} מפתחות.`;
-      showFeedback("המסע נגמר. אפשר להתחיל שוב.", "end-state");
-      showHint("רמז אחרון: אפשר להתחיל מחדש מתי שרוצים.", false);
-      elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות את שער הסיום?`;
+      elements.questionBox.textContent = `מחזור ${state.cycle} הושלם. צברת ${state.score} מפתחות.`;
+      showFeedback("שער חדש נפתח. אפשר להמשיך למחזור הבא.", "end-state");
+      showHint("רמז אחרון: המחזור הבא מתחיל אחרת.", false);
+      elements.shareCopy.textContent = `סיימתי את LuckyFact במחזור ${state.cycle} עם ${state.score} מפתחות. מי רוצה לנסות?`;
+      elements.transitionCopy.textContent = `מחזור ${state.cycle} מאחוריך. מחזור ${state.cycle + 1} ייפתח עם סדר חדש.`;
       setButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
+      setTransitionVisible(true);
+      speakGuide("הצלחת לפתוח מסלול חדש. ממשיכים הלאה.", false);
       state.locked = true;
+      elements.replayBtn.textContent = "המשך למחזור הבא";
     }
 
-    function resetGame() {
+    function resetGame(nextCycle = false) {
       clearTimeout(state.timerId);
-      state.score = 500;
+      if (!nextCycle) {
+        state.score = 500;
+        state.cycle = 1;
+      } else {
+        state.cycle += 1;
+        state.score += 150;
+      }
       state.index = 0;
       state.stage = 0;
+      state.streak = 0;
       state.locked = false;
+      state.deck = shuffleFacts(facts);
+      setTransitionVisible(false);
 
       elements.stageLabel.textContent = "1";
-      elements.stageName.textContent = stages[0].name;
-      elements.questionBox.textContent = "מכין את הקלף הראשון...";
+      elements.stageName.textContent = `${stages[0].name} · מחזור ${state.cycle}`;
+      elements.questionBox.textContent = nextCycle ? "פותח את המחזור הבא..." : "מכין את הקלף הראשון...";
       showFeedback("", "neutral");
-      showHint("רמז קטן: לפעמים מילה אחת משנה הכול.", true);
+      showHint(nextCycle ? "רמז קטן: המחזור הבא קצת יותר מהיר." : "רמז קטן: לפעמים מילה אחת משנה הכול.", true);
+      speakGuide(nextCycle ? "מחזור חדש. אתה כבר מכיר את הדרך." : "בוא נבדוק כמה רחוק תגיע.", false);
       updateStats();
       setButtonsEnabled(true);
       setReplayVisible(false);
@@ -740,7 +930,7 @@
       state.locked = false;
       clearTimeout(state.timerId);
 
-      if (state.index >= facts.length) {
+      if (state.index >= state.deck.length) {
         finishGame();
         return;
       }
@@ -749,7 +939,7 @@
         return;
       }
 
-      elements.questionBox.textContent = facts[state.index].text;
+      elements.questionBox.textContent = state.deck[state.index].text;
       showFeedback("", "neutral");
       if (!elements.hintBox.textContent) {
         showHint(stages[state.stage].hint, false);
@@ -758,33 +948,46 @@
     }
 
     function checkAnswer(userChoice) {
-      if (state.locked || state.index >= facts.length) {
+      if (state.locked || state.index >= state.deck.length) {
         return;
       }
 
       state.locked = true;
       setButtonsEnabled(false);
 
-      const correct = facts[state.index].isTrue;
+      const correct = state.deck[state.index].isTrue;
       const isCorrect = userChoice === correct;
 
       if (isCorrect) {
         state.score += 100;
-        showFeedback("יפה. פענחת את הסימן ופתחת את המנעול.", "success");
+        state.streak += 1;
+        const boost = state.streak >= 3 ? 25 : 0;
+        if (boost > 0) {
+          state.score += boost;
+        }
+        showFeedback(getEncouragement("correct"), "success");
+        if (boost > 0) {
+          showHint(`רצף חזק! קיבלת בונוס של ${boost} מפתחות. · ${getHint(true)}`, true);
+        } else {
+          showHint(`${getEncouragement("streak")} · ${getHint(true)}`, true);
+        }
+        speakGuide(getEncouragement("correct"), false);
       } else {
         state.score -= 50;
-        showFeedback("המנעול נשאר סגור. בסיבוב הבא תוכל לנסות כיוון אחר.", "error");
+        state.streak = 0;
+        showFeedback(getEncouragement("gentle"), "error");
+        showHint("רמז קטן: נסה לסמן מילה אחת שמרגישה מוזרה.", true);
+        speakGuide(getEncouragement("gentle"), true);
       }
-
-      showHint(getHint(isCorrect), true);
       updateStats();
       state.index += 1;
-      state.timerId = setTimeout(loadFact, 1800);
+      const delay = Math.max(1150, 1850 - ((state.cycle - 1) * 120));
+      state.timerId = setTimeout(loadFact, delay);
     }
 
     elements.truthBtn.addEventListener("click", () => checkAnswer(true));
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
-    elements.replayBtn.addEventListener("click", resetGame);
+    elements.replayBtn.addEventListener("click", () => resetGame(true));
     elements.shareBtn.addEventListener("click", async () => {
       const text = elements.shareCopy.textContent;
       try {
@@ -796,11 +999,12 @@
     });
     elements.startBtn.addEventListener("click", () => {
       state.started = true;
-      resetGame();
+      resetGame(false);
     });
 
     updateStats();
     showHint("רמז קטן: לפעמים מילה אחת משנה הכול.", true);
+    speakGuide("אני כאן אם תרצה רמז. מתחילים בקטן.", true);
     showMainUI(false);
     setReplayVisible(false);
   </script>
