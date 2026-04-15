@@ -97,6 +97,72 @@
       padding: 10px 14px;
     }
 
+    .is-hidden {
+      display: none !important;
+    }
+
+    .start-screen {
+      position: relative;
+      z-index: 1;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      gap: 14px;
+      padding: 20px 8px 10px;
+      text-align: center;
+    }
+
+    .start-screen.is-hidden {
+      display: none;
+    }
+
+    .start-kicker {
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin: 0;
+    }
+
+    .start-title {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.05;
+    }
+
+    .start-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1rem;
+      max-width: 30ch;
+    }
+
+    .start-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .btn-start {
+      min-width: 180px;
+      background: linear-gradient(180deg, #1d4b72, #15334d);
+      border: 1px solid rgba(77, 184, 255, 0.45);
+    }
+
+    .main-ui {
+      display: block;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+
+    .main-ui.is-hidden {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      height: 0;
+      overflow: hidden;
+    }
+
     .stage-row {
       display: flex;
       justify-content: center;
@@ -158,10 +224,10 @@
     }
 
     .question {
-      min-height: 132px;
+      min-height: 112px;
       font-size: clamp(1.2rem, 3vw, 1.45rem);
-      line-height: 1.7;
-      margin: 0 0 26px;
+      line-height: 1.6;
+      margin: 0 0 20px;
       position: relative;
       z-index: 1;
     }
@@ -240,12 +306,26 @@
     }
 
     .hint-box {
-      min-height: 26px;
-      margin-top: 12px;
+      min-height: 22px;
+      margin-top: 10px;
       font-size: 0.92rem;
       color: rgba(142, 168, 199, 0.95);
       position: relative;
       z-index: 1;
+    }
+
+    .replay-row {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-replay {
+      background: linear-gradient(180deg, #1d4b72, #163b58);
+      border: 1px solid rgba(104, 224, 179, 0.4);
+      min-width: 168px;
     }
 
     .hint-box.is-fresh {
@@ -280,12 +360,36 @@
 
     @media (max-width: 520px) {
       #game-container {
-        padding: 22px 18px;
+        padding: 18px 16px;
         border-radius: 20px;
       }
 
       .stats {
         justify-content: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .stage-row {
+        margin-bottom: 8px;
+      }
+
+      .stage-pill {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+      }
+
+      .luck-meter {
+        margin: 6px 0 10px;
+      }
+
+      .story-line {
+        margin-bottom: 6px;
+      }
+
+      .question {
+        min-height: 92px;
+        margin-bottom: 16px;
       }
 
       button {
@@ -297,11 +401,21 @@
 </head>
 <body>
   <div id="game-container">
-    <div class="stats">
+    <div id="stats" class="stats">
       <div>מפתחות: <span id="score">500</span></div>
       <div>אנרגיית מזל: <span id="luck-level">בינונית</span></div>
     </div>
 
+    <section id="start-screen" class="start-screen">
+      <p class="start-kicker">LuckyFact</p>
+      <h1 class="start-title">החדר הסודי</h1>
+      <p class="start-copy">אורח אחד, שלושה שערים, והמון רמזים. בחר נכון כדי להמשיך הלאה.</p>
+      <div class="start-actions">
+        <button id="start-btn" class="btn-start" type="button">התחל מסע</button>
+      </div>
+    </section>
+
+    <div id="main-ui" class="main-ui is-hidden">
     <div id="stage-row" class="stage-row">
       <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>3</strong> · <span id="stage-name">המסדרון</span></div>
     </div>
@@ -321,6 +435,10 @@
 
     <div id="feedback" class="neutral"></div>
     <div id="hint-box" class="hint-box"></div>
+    <div class="replay-row">
+      <button id="replay-btn" class="btn-replay" type="button" hidden>שחק שוב</button>
+    </div>
+    </div>
   </div>
 
   <script>
@@ -359,6 +477,10 @@
 
     const elements = {
       gameContainer: document.getElementById("game-container"),
+      startScreen: document.getElementById("start-screen"),
+      startBtn: document.getElementById("start-btn"),
+      mainUI: document.getElementById("main-ui"),
+      stats: document.getElementById("stats"),
       score: document.getElementById("score"),
       luckLevel: document.getElementById("luck-level"),
       luckBar: document.getElementById("luck-bar"),
@@ -368,6 +490,7 @@
       questionBox: document.getElementById("question-box"),
       feedback: document.getElementById("feedback"),
       hintBox: document.getElementById("hint-box"),
+      replayBtn: document.getElementById("replay-btn"),
       truthBtn: document.getElementById("truth-btn"),
       lieBtn: document.getElementById("lie-btn")
     };
@@ -378,13 +501,14 @@
       stage: 0,
       locked: false,
       timerId: null,
-      audioContext: null
+      audioContext: null,
+      started: false
     };
 
     const stages = [
-      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה.", hint: "רמז שלב: קרא מילה אחרי מילה." },
-      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר.", hint: "רמז שלב: חפש את המילה שמפתיעה אותך." },
-      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עכשיו כדאי לעצור רגע לפני הבחירה.", hint: "רמז שלב: עוד מבט קצר יכול להפוך את כל התמונה." }
+      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה.", hint: "רמז שלב: קרא לאט, מילה אחרי מילה." },
+      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר.", hint: "רמז שלב: חפש את המילה שמזיזה את הכול." },
+      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עוד מבט קטן לפני הבחירה.", hint: "רמז שלב: לפעמים פרט קטן משנה את כל הסיפור." }
     ];
 
     const answerHints = {
@@ -403,6 +527,16 @@
     function setButtonsEnabled(enabled) {
       elements.truthBtn.disabled = !enabled;
       elements.lieBtn.disabled = !enabled;
+    }
+
+    function showMainUI(visible) {
+      elements.startScreen.classList.toggle("is-hidden", visible);
+      elements.mainUI.classList.toggle("is-hidden", !visible);
+      elements.stats.classList.toggle("is-hidden", !visible);
+    }
+
+    function setReplayVisible(visible) {
+      elements.replayBtn.hidden = !visible;
     }
 
     function showHint(message, fresh = false) {
@@ -524,10 +658,30 @@
 
     function finishGame() {
       elements.questionBox.textContent = `המסלול נסגר. צברת ${state.score} מפתחות.`;
-      showFeedback("החדר נסגר. אפשר לפתוח מחדש את המסע עם רענון.", "end-state");
+      showFeedback("המסע נגמר. אפשר להתחיל שוב.", "end-state");
       showHint("רמז אחרון: אפשר להתחיל מחדש מתי שרוצים.", false);
       setButtonsEnabled(false);
+      setReplayVisible(true);
       state.locked = true;
+    }
+
+    function resetGame() {
+      clearTimeout(state.timerId);
+      state.score = 500;
+      state.index = 0;
+      state.stage = 0;
+      state.locked = false;
+
+      elements.stageLabel.textContent = "1";
+      elements.stageName.textContent = stages[0].name;
+      elements.questionBox.textContent = "מכין את הקלף הראשון...";
+      showFeedback("", "neutral");
+      showHint("רמז קטן: לפעמים מילה אחת משנה הכול.", true);
+      updateStats();
+      setButtonsEnabled(true);
+      setReplayVisible(false);
+      showMainUI(true);
+      loadFact();
     }
 
     function loadFact() {
@@ -578,10 +732,16 @@
 
     elements.truthBtn.addEventListener("click", () => checkAnswer(true));
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
+    elements.replayBtn.addEventListener("click", resetGame);
+    elements.startBtn.addEventListener("click", () => {
+      state.started = true;
+      resetGame();
+    });
 
     updateStats();
     showHint("רמז קטן: לפעמים מילה אחת משנה הכול.", true);
-    loadFact();
+    showMainUI(false);
+    setReplayVisible(false);
   </script>
 </body>
 </html>
