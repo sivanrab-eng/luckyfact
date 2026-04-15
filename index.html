@@ -611,10 +611,10 @@
         <button id="replay-btn" class="btn-replay" type="button" hidden>שחק שוב</button>
       </div>
       <div id="share-panel" class="share-panel">
-        <p class="share-title">סיימת Dash מלא.</p>
+        <p class="share-title" id="share-title">סיימת Dash מלא.</p>
         <p class="share-copy" id="share-copy">צברת 0 נקודות והגעת לשער האחרון.</p>
         <div class="start-actions">
-          <button id="share-btn" class="btn-share" type="button">העתק מסר לשיתוף</button>
+          <button id="share-btn" class="btn-share" type="button">שתף ב-WhatsApp</button>
         </div>
       </div>
       <div id="transition-panel" class="transition-panel">
@@ -1042,6 +1042,7 @@
       feedback: document.getElementById("feedback"),
       replayBtn: document.getElementById("replay-btn"),
       sharePanel: document.getElementById("share-panel"),
+      shareTitle: document.getElementById("share-title"),
       shareCopy: document.getElementById("share-copy"),
       shareBtn: document.getElementById("share-btn"),
       transitionPanel: document.getElementById("transition-panel"),
@@ -1105,6 +1106,16 @@
 
     function setTransitionVisible(visible) {
       elements.transitionPanel.classList.toggle("is-visible", visible);
+    }
+
+    function setShareMessage(title, copy) {
+      elements.shareTitle.textContent = title;
+      elements.shareCopy.textContent = copy;
+    }
+
+    function openWhatsAppShare(text) {
+      const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
     }
 
     function restartAnimation(element, className) {
@@ -1256,8 +1267,13 @@
       elements.transitionKicker.textContent = reward.label;
       elements.transitionTitle.textContent = reward.title;
       elements.transitionCopy.textContent = `${reward.copy} · הבא: ${nextStageName}`;
+      setShareMessage(
+        `שלב ${completedStageIndex + 1} נפתח`,
+        `עברתי את שלב ${completedStageIndex + 1} ב-Score Dash עם ${state.score} נקודות. תצליחו לעקוף אותי?`
+      );
       elements.questionBox.textContent = `שלב ${completedStageIndex + 1} הושלם`;
       showFeedback(reward.copy, "hot");
+      setShareVisible(true);
 
       restartAnimation(elements.gameContainer, "stage-flash");
       restartAnimation(elements.stageRow.firstElementChild, "stage-bump");
@@ -1292,7 +1308,10 @@
       elements.transitionKicker.textContent = finalReward ? finalReward.label : "Stage clear";
       elements.transitionTitle.textContent = finalReward ? finalReward.title : "כל 10 השלבים הושלמו";
       elements.transitionCopy.textContent = `כל 10 השלבים הושלמו · ${state.score} נקודות`;
-      elements.shareCopy.textContent = `סיימתי את Score Dash עם ${state.score} נקודות. מי רוצה לנסות?`;
+      setShareMessage(
+        "סיימת Dash מלא.",
+        `סיימתי את Score Dash עם ${state.score} נקודות. מי רוצה לנסות לעקוף אותי?`
+      );
       setButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
@@ -1372,12 +1391,8 @@
     elements.replayBtn.addEventListener("click", resetGame);
     elements.shareBtn.addEventListener("click", async () => {
       const text = elements.shareCopy.textContent;
-      try {
-        await navigator.clipboard.writeText(text);
-        showFeedback("המסר הועתק לשיתוף.", "success");
-      } catch {
-        showFeedback("ההעתקה לא עבדה כאן, אבל אפשר לסמן ידנית.", "error");
-      }
+      openWhatsAppShare(text);
+      showFeedback("פותח WhatsApp לשיתוף.", "success");
     });
     elements.startBtn.addEventListener("click", () => {
       state.started = true;

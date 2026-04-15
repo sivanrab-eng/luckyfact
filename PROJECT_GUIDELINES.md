@@ -61,9 +61,10 @@
 - Progress and scoring must remain consistent across the run.
 
 ## Sharing
-- WhatsApp/share appears only at the end.
+- WhatsApp/share may appear at stage end and game end.
 - Share text should be short, competitive, and invite others to compete.
-- Sharing is external, not mid-game noise.
+- Sharing must not appear inside the question flow.
+- Sharing is external and should feel like part of the reward moment, not mid-game noise.
 
 ## Core Rule
 Every code/design decision must answer:
