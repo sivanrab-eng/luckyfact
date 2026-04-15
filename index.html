@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#0f2bc0">
   <title>Score Dash</title>
   <link rel="manifest" href="manifest.webmanifest">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
       --bg-1: #061a68;
@@ -265,6 +266,36 @@
     .main-ui {
       display: block;
       transition: opacity 260ms ease, transform 260ms ease;
+    }
+
+    .collection-shelf {
+      margin-bottom: 12px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      overflow-x: auto;
+      min-height: 50px;
+    }
+
+    .sticker-grid {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .sticker {
+      font-size: 1.5rem;
+      background: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .main-ui.is-hidden {
@@ -581,6 +612,11 @@
       100% { transform: scale(1); }
     }
 
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
     @keyframes slowSpin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -650,7 +686,7 @@
     <section id="start-screen" class="start-screen">
       <p class="start-kicker">Fast arcade challenge</p>
       <h1 class="start-title">Score Dash</h1>
-      <p class="start-copy">ענה מהר, אסוף בונוסים וקפוץ במיקום.</p>
+      <p class="start-copy">בניתי משחק שבו אוספים חיות ומתנות. מעניין אם תצליחי להשיג את החד-קרן בשלב 2.</p>
       <div id="resume-panel" class="resume-panel" hidden>
         <p id="resume-copy">להמשיך מהשלב שבו הפסקת?</p>
         <div class="resume-actions">
@@ -665,6 +701,10 @@
       </div>
       <p id="install-note" class="install-note"></p>
     </section>
+
+    <div id="collection-shelf" class="collection-shelf">
+      <div id="sticker-grid" class="sticker-grid"></div>
+    </div>
 
     <div id="main-ui" class="main-ui is-hidden">
       <div id="stage-row" class="stage-row">
@@ -721,6 +761,8 @@
     const HOT_STREAK_STAGE_BONUS = 325;
     const SHARE_URL = "https://sivanrab-eng.github.io/luckyfact/";
     const GAME_SAVE_KEY = "scoreDashSaveV2";
+    const INVENTORY_KEY = "luckyfact_inventory";
+    const GIFTS = ["🐱", "🦄", "🍦", "🌈", "🍭", "🎨", "💎", "🌸", "🍕", "🎬", "🎸", "🐼", "🍓", "👑", "🚀"];
     const scoreFormatter = new Intl.NumberFormat("en-US");
     let deferredInstallPrompt = null;
     const stageNames = [
@@ -970,6 +1012,26 @@
     ];
     const suppliedTwoLineFacts = [
       {
+        text: "אם תדגדגו חולדה, היא תצחק בקול גבוה\nשאוזן של בן אדם בכלל לא יכולה לשמוע.",
+        isTrue: true
+      },
+      {
+        text: "בכל פעם שאתה רואה פנדה בסין, שתדע לך\nשהיא שייכת בטאבו למלך של ארצות הברית.",
+        isTrue: false
+      },
+      {
+        text: "לווייתנים כחולים כל כך ענקיים, שהלשון שלהם\nשוקלת בדיוק כמו פיל אפריקאי שלם ומבוגר.",
+        isTrue: true
+      },
+      {
+        text: "לפני המון שנים, אנשים השתמשו בלחם רך\nכדי למחוק טעויות שהם כתבו בעיפרון על נייר.",
+        isTrue: true
+      },
+      {
+        text: "אם תשימו כתר על ראש של תרנגולת, היא\nתחשוב שהיא מלכה ותפסיק להטיל ביצים לתמיד.",
+        isTrue: false
+      },
+      {
         text: "בכל רגע נתון, יש בעולם מיליון נמלים חיים\nעל כל בן אדם אחד שחי על כדור הארץ.",
         isTrue: true
       },
@@ -1170,7 +1232,27 @@
         isTrue: false
       }
     ];
-        const suppliedFourLineFacts = [
+    const suppliedFourLineFacts = [
+      {
+        text: "היפופוטמים נראים כמו חיות רגועות שאוהבות רק לרבוץ במים,\nאבל כשהם מתעצבנים או נלחצים הם מזיעים נוזל בצבע אדום,\nשנראה ממש כמו דם אבל הוא בעצם סוג של קרם הגנה טבעי\nששומר על העור הרגיש שלהם מפני השמש החזקה והשורפת.",
+        isTrue: true
+      },
+      {
+        text: "אם תנסו להוציא את הלשון שלכם ולנשום מהר דרך האף,\nהמוח שלכם יחשוב שאתם כלבלבים קטנים ויתחיל לשלוח\nפקודות מוזרות לידיים שלכם כדי שתתחילו לגרד באוזן,\nוזאת הסיבה שאסור לעשות את זה ליד אנשים שאתם לא מכירים.",
+        isTrue: false
+      },
+      {
+        text: "דובי קוטב נראים לבנים מאוד כשהם הולכים על השלג,\nאבל מתחת לפרווה הבהירה שלהם העור דווקא שחור לגמרי,\nוהצבע הכהה עוזר להם לקלוט יותר חום מהשמש החלשה,\nכמו מעיל סודי שמסתתר מתחת לתחפושת של שלג.",
+        isTrue: true
+      },
+      {
+        text: "כוכב נוגה מסתובב בכיוון הפוך מרוב כוכבי הלכת,\nולכן אם הייתם עומדים שם בתוך חליפה דמיונית וחזקה,\nהייתם רואים את השמש זורחת בצד אחד לגמרי מוזר\nושוקעת בכיוון שלא מרגיש כמו יום רגיל בכדור הארץ.",
+        isTrue: true
+      },
+      {
+        text: "באי קטן באמצע האוקיינוס יש מכונה ענקית שמייצרת קשתות,\nוכל בוקר היא צובעת את העננים בעזרת מברשות סודיות,\nאבל אם המכונה מתעייפת, כל הצבעים חוזרים לתוך הים,\nולכן ביום גשום אסור לדבר בקול רם ליד שלוליות.",
+        isTrue: false
+      },
       {
         text: "אם היית מנסה לנהוג במכונית רגילה לכיוון מעלה במהירות של מאה קמ\"ש,\nהיה לוקח לך בערך שעה אחת בלבד כדי להגיע לקצה האטמוספירה\nולהיכנס באופן רשמי אל המרחב האינסופי והשחור של החלל החיצון,\nכי הגבול של החלל נמצא רק 100 קילומטרים מעל הראש שלנו כרגע.",
         isTrue: true
@@ -1333,6 +1415,26 @@
       }
     ];
     const suppliedThreeLineFacts = [
+      {
+        text: "בסקוטלנד מאמינים שחד-קרן הוא חיה אמיתית לגמרי,\nוהוא אפילו נבחר להיות החיה הלאומית הרשמית של המדינה,\nלמרות שאיש מעולם לא ראה אחד כזה ביער.",
+        isTrue: true
+      },
+      {
+        text: "בני אדם הם היצורים היחידים בעולם שיכולים להסמיק,\nוזה קורה בגלל שהגוף שולח דם לפנים כשאנחנו נבוכים,\nאבל חתולים וכלבים לעולם לא יסמיקו, גם אם יתבלבלו.",
+        isTrue: true
+      },
+      {
+        text: "בממתק 'מרשמלו' אין בכלל סוכר או אוויר בתוך הבצק,\nוהוא עשוי למעשה מעננים קטנים שנאספו בבוקר קר\nעל ידי מכונות מיוחדות שטסות גבוה מאוד בשמיים.",
+        isTrue: false
+      },
+      {
+        text: "תמנון יכול להחליף צבע וצורה במהירות מדהימה,\nוכך הוא מתחבא מסכנות או מתגנב ליד טרף קטן,\nכאילו הוא לובש תחפושת חדשה מתחת למים.",
+        isTrue: true
+      },
+      {
+        text: "אם שמים גלידה ליד מצפן, המחט מתחילה לרקוד,\nכי הסוכר שבתוך הגביע שולח גלים מגנטיים מתוקים,\nוזאת הסיבה שגלידריות תמיד בנויות ליד הקוטב הצפוני.",
+        isTrue: false
+      },
       {
         text: "באסטמה דרכי הנשימה עלולות להיות רגישות יותר לעשן ולאבק.\nבזמן התקף, האוויר מתקשה לעבור פנימה והחוצה.\nלכן חלק מהאנשים משתמשים במשאף לפי הנחיית רופא.",
         isTrue: true
@@ -1599,6 +1701,7 @@
       installBtn: document.getElementById("install-btn"),
       startShareBtn: document.getElementById("start-share-btn"),
       installNote: document.getElementById("install-note"),
+      stickerGrid: document.getElementById("sticker-grid"),
       mainUI: document.getElementById("main-ui"),
       stats: document.getElementById("stats"),
       score: document.getElementById("score"),
@@ -1641,6 +1744,7 @@
       started: false,
       awaitingStageContinue: false,
       lastTransition: null,
+      inventory: getSavedInventory(),
       deck: buildDeck()
     };
 
@@ -1702,8 +1806,64 @@
       return scoreFormatter.format(value);
     }
 
+    function getSavedInventory() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(INVENTORY_KEY) || "[]");
+        if (!Array.isArray(saved)) {
+          return [];
+        }
+
+        return saved.filter((item) => GIFTS.includes(item));
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveInventory() {
+      try {
+        localStorage.setItem(INVENTORY_KEY, JSON.stringify(state.inventory));
+      } catch (error) {}
+    }
+
+    function updateInventoryUI() {
+      elements.stickerGrid.innerHTML = "";
+      state.inventory.forEach((item) => {
+        const sticker = document.createElement("span");
+        sticker.className = "sticker";
+        sticker.textContent = item;
+        elements.stickerGrid.appendChild(sticker);
+      });
+    }
+
+    function celebrateGiftUnlock() {
+      if (typeof confetti !== "function") {
+        return;
+      }
+
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#ff7eb9", "#7afcff", "#feff9c"]
+      });
+    }
+
+    function collectStageGift(completedStageIndex) {
+      const newGift = GIFTS[completedStageIndex];
+      if (!newGift || state.inventory.includes(newGift)) {
+        return;
+      }
+
+      state.inventory.push(newGift);
+      saveInventory();
+      updateInventoryUI();
+      celebrateGiftUnlock();
+    }
+
     function getShareText() {
-      return elements.shareCopy.textContent;
+      const stickerCount = state.inventory.length;
+      const stars = "⭐".repeat(Math.min(state.stage + 1, 5));
+      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nאספתי כבר ${stickerCount} מדבקות נדירות! 🏆\nמי מצליח לעקוף אותי? 👇\n${SHARE_URL}`;
     }
 
     function setShareMessage(title, copy) {
@@ -2078,6 +2238,7 @@
       restartAnimation(elements.stageRow.firstElementChild, "stage-bump");
       restartAnimation(elements.questionBox, "question-swap");
       playStageTone();
+      collectStageGift(completedStageIndex);
 
       clearTimeout(state.timerId);
       saveGame();
@@ -2264,6 +2425,7 @@
     }
 
     updateStats();
+    updateInventoryUI();
     setResumePrompt();
     showMainUI(false);
     setReplayVisible(false);
