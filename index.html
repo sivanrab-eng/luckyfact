@@ -635,6 +635,7 @@
     const STAGE_BONUS = 250;
     const PERFECT_STAGE_BONUS = 400;
     const HOT_STREAK_STAGE_BONUS = 325;
+    const SHARE_URL = "https://sivanrab-eng.github.io/luckyfact/";
     const stageNames = [
       "התחלה",
       "קצב",
@@ -1594,7 +1595,7 @@
 
     function setShareMessage(title, copy) {
       elements.shareTitle.textContent = title;
-      elements.shareCopy.textContent = copy;
+      elements.shareCopy.textContent = `${copy} ${SHARE_URL}`;
     }
 
     function openWhatsAppShare(text) {
