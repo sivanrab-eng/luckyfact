@@ -328,6 +328,41 @@
       min-width: 168px;
     }
 
+    .share-panel {
+      margin-top: 18px;
+      padding: 16px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      position: relative;
+      z-index: 1;
+      display: none;
+      gap: 10px;
+    }
+
+    .share-panel.is-visible {
+      display: grid;
+    }
+
+    .share-title {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .share-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .btn-share {
+      background: linear-gradient(180deg, #224f74, #19354d);
+      border: 1px solid rgba(77, 184, 255, 0.45);
+      min-width: 180px;
+    }
+
     .hint-box.is-fresh {
       color: rgba(104, 224, 179, 0.95);
     }
@@ -409,34 +444,41 @@
     <section id="start-screen" class="start-screen">
       <p class="start-kicker">LuckyFact</p>
       <h1 class="start-title">החדר הסודי</h1>
-      <p class="start-copy">אורח אחד, שלושה שערים, והמון רמזים. בחר נכון כדי להמשיך הלאה.</p>
+      <p class="start-copy">שלושה שערים, רמזים קצרים, והרבה מזל שמתחזה ליד הגורל.</p>
       <div class="start-actions">
         <button id="start-btn" class="btn-start" type="button">התחל מסע</button>
       </div>
     </section>
 
     <div id="main-ui" class="main-ui is-hidden">
-    <div id="stage-row" class="stage-row">
-      <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>3</strong> · <span id="stage-name">המסדרון</span></div>
-    </div>
+      <div id="stage-row" class="stage-row">
+        <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>3</strong> · <span id="stage-name">המסדרון</span></div>
+      </div>
 
-    <div class="luck-meter" aria-hidden="true">
-      <div id="luck-bar"></div>
-    </div>
-    <p class="story-line">הדלת הבאה נפתחת רק אם תפענח את הסימן.</p>
-    <p class="hint">המזל עוזר, אבל הוא לא מגלה את הסימן לבד.</p>
+      <div class="luck-meter" aria-hidden="true">
+        <div id="luck-bar"></div>
+      </div>
+      <p class="story-line">הדלת נפתחת רק אם תפענח את הסימן.</p>
+      <p class="hint">המזל עוזר, אבל לא פותר לבדו.</p>
 
-    <p id="question-box" class="question">מכין את הקלף הראשון...</p>
+      <p id="question-box" class="question">מכין את הקלף הראשון...</p>
 
-    <div class="buttons">
-      <button id="truth-btn" class="btn-truth" type="button">זה נכון</button>
-      <button id="lie-btn" class="btn-lie" type="button">זה לא נכון</button>
-    </div>
+      <div class="buttons">
+        <button id="truth-btn" class="btn-truth" type="button">זה נכון</button>
+        <button id="lie-btn" class="btn-lie" type="button">זה לא נכון</button>
+      </div>
 
     <div id="feedback" class="neutral"></div>
     <div id="hint-box" class="hint-box"></div>
     <div class="replay-row">
       <button id="replay-btn" class="btn-replay" type="button" hidden>שחק שוב</button>
+    </div>
+    <div id="share-panel" class="share-panel">
+      <p class="share-title">נפתח אצלך מסלול חדש.</p>
+      <p class="share-copy" id="share-copy">צברת 0 מפתחות והגעת לשער האחרון.</p>
+      <div class="start-actions">
+        <button id="share-btn" class="btn-share" type="button">העתק טקסט לשיתוף</button>
+      </div>
     </div>
     </div>
   </div>
@@ -491,6 +533,9 @@
       feedback: document.getElementById("feedback"),
       hintBox: document.getElementById("hint-box"),
       replayBtn: document.getElementById("replay-btn"),
+      sharePanel: document.getElementById("share-panel"),
+      shareCopy: document.getElementById("share-copy"),
+      shareBtn: document.getElementById("share-btn"),
       truthBtn: document.getElementById("truth-btn"),
       lieBtn: document.getElementById("lie-btn")
     };
@@ -537,6 +582,10 @@
 
     function setReplayVisible(visible) {
       elements.replayBtn.hidden = !visible;
+    }
+
+    function setShareVisible(visible) {
+      elements.sharePanel.classList.toggle("is-visible", visible);
     }
 
     function showHint(message, fresh = false) {
@@ -660,8 +709,10 @@
       elements.questionBox.textContent = `המסלול נסגר. צברת ${state.score} מפתחות.`;
       showFeedback("המסע נגמר. אפשר להתחיל שוב.", "end-state");
       showHint("רמז אחרון: אפשר להתחיל מחדש מתי שרוצים.", false);
+      elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות את שער הסיום?`;
       setButtonsEnabled(false);
       setReplayVisible(true);
+      setShareVisible(true);
       state.locked = true;
     }
 
@@ -680,6 +731,7 @@
       updateStats();
       setButtonsEnabled(true);
       setReplayVisible(false);
+      setShareVisible(false);
       showMainUI(true);
       loadFact();
     }
@@ -733,6 +785,15 @@
     elements.truthBtn.addEventListener("click", () => checkAnswer(true));
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
     elements.replayBtn.addEventListener("click", resetGame);
+    elements.shareBtn.addEventListener("click", async () => {
+      const text = elements.shareCopy.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        showFeedback("הטקסט הועתק לשיתוף.", "success");
+      } catch {
+        showFeedback("ההעתקה לא עבדה כאן, אבל אפשר לסמן ידנית.", "error");
+      }
+    });
     elements.startBtn.addEventListener("click", () => {
       state.started = true;
       resetGame();
