@@ -97,6 +97,41 @@
       padding: 10px 14px;
     }
 
+    .progress-wrap {
+      position: relative;
+      z-index: 1;
+      margin: 8px 0 16px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .progress-head strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .progress-meter {
+      height: 12px;
+      background: rgba(15, 52, 96, 0.95);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      border-radius: inherit;
+      transition: width 0.45s ease;
+    }
+
     .is-hidden {
       display: none !important;
     }
@@ -575,9 +610,16 @@
         <div class="stage-pill">שלב <strong id="stage-label">1</strong> מתוך <strong>3</strong> · <span id="stage-name">המסדרון</span></div>
       </div>
 
-      <div class="luck-meter" aria-hidden="true">
-        <div id="luck-bar"></div>
+      <div class="progress-wrap">
+        <div class="progress-head">
+          <span>התקדמות במסלול</span>
+          <strong id="progress-text">0/30</strong>
+        </div>
+        <div class="progress-meter" aria-hidden="true">
+          <div id="progress-bar"></div>
+        </div>
       </div>
+
       <p class="story-line">הדלת נפתחת רק אם תפענח את הסימן.</p>
       <p class="hint">המזל עוזר, אבל לא פותר לבדו.</p>
 
@@ -602,9 +644,9 @@
       </div>
       <div id="transition-panel" class="transition-panel">
         <div class="transition-orbit" aria-hidden="true"></div>
-        <p class="transition-kicker">New route unlocked</p>
-        <p class="transition-title">מסלול חדש נפתח.</p>
-        <p class="transition-copy" id="transition-copy">המסע ממשיך עם אותם שערים, אבל עם סדר חדש.</p>
+        <p class="transition-kicker">The route is complete</p>
+        <p class="transition-title">המסלול הושלם.</p>
+        <p class="transition-copy" id="transition-copy">הגענו לסוף. אפשר לפתוח שוב מההתחלה.</p>
       </div>
     </div>
   </div>
@@ -660,7 +702,8 @@
       stats: document.getElementById("stats"),
       score: document.getElementById("score"),
       luckLevel: document.getElementById("luck-level"),
-      luckBar: document.getElementById("luck-bar"),
+      progressText: document.getElementById("progress-text"),
+      progressBar: document.getElementById("progress-bar"),
       stageLabel: document.getElementById("stage-label"),
       stageName: document.getElementById("stage-name"),
       stageRow: document.getElementById("stage-row"),
@@ -683,7 +726,6 @@
       score: 500,
       index: 0,
       stage: 0,
-      cycle: 1,
       streak: 0,
       locked: false,
       timerId: null,
@@ -812,28 +854,27 @@
     function updateStats() {
       elements.score.textContent = state.score;
       elements.stageLabel.textContent = `${state.stage + 1}`;
-      elements.stageName.textContent = `${stages[state.stage].name} · מחזור ${state.cycle}`;
+      elements.stageName.textContent = stages[state.stage].name;
+      elements.progressText.textContent = `${Math.min(state.index, state.deck.length)}/${state.deck.length}`;
+      elements.progressBar.style.width = `${Math.min((state.index / state.deck.length) * 100, 100)}%`;
 
       if (state.score > 700) {
-        elements.luckBar.style.width = "90%";
         elements.luckLevel.textContent = "גבוהה מאוד";
       } else if (state.score < 400) {
-        elements.luckBar.style.width = "20%";
         elements.luckLevel.textContent = "חלשה כרגע";
       } else {
-        elements.luckBar.style.width = "50%";
         elements.luckLevel.textContent = "בינונית";
       }
     }
 
     function getHint(isCorrect) {
       const bank = isCorrect ? answerHints.success : answerHints.miss;
-      return bank[(state.index + state.cycle) % bank.length];
+      return bank[(state.index + state.streak) % bank.length];
     }
 
     function getEncouragement(kind) {
       const bank = encouragements[kind];
-      return bank[(state.index + state.cycle + state.streak) % bank.length];
+      return bank[(state.index + state.streak) % bank.length];
     }
 
     function enterStage(stageIndex) {
@@ -841,7 +882,7 @@
       const stage = stages[stageIndex];
 
       elements.stageLabel.textContent = String(stageIndex + 1);
-      elements.stageName.textContent = `${stage.name} · מחזור ${state.cycle}`;
+      elements.stageName.textContent = stage.name;
       elements.questionBox.textContent = stage.intro;
       showFeedback("", "neutral");
       showHint(stage.hint, true);
@@ -866,7 +907,7 @@
       const nextStage = stages.findIndex((stage) => state.index >= stage.start && state.index <= stage.end);
       if (nextStage !== -1) {
         elements.stageLabel.textContent = String(nextStage + 1);
-        elements.stageName.textContent = `${stages[nextStage].name} · מחזור ${state.cycle}`;
+        elements.stageName.textContent = stages[nextStage].name;
       }
 
       if (nextStage !== -1 && nextStage !== state.stage) {
@@ -882,29 +923,23 @@
     }
 
     function finishGame() {
-      elements.questionBox.textContent = `מחזור ${state.cycle} הושלם. צברת ${state.score} מפתחות.`;
-      showFeedback("שער חדש נפתח. אפשר להמשיך למחזור הבא.", "end-state");
-      showHint("רמז אחרון: המחזור הבא מתחיל אחרת.", false);
-      elements.shareCopy.textContent = `סיימתי את LuckyFact במחזור ${state.cycle} עם ${state.score} מפתחות. מי רוצה לנסות?`;
-      elements.transitionCopy.textContent = `מחזור ${state.cycle} מאחוריך. מחזור ${state.cycle + 1} ייפתח עם סדר חדש.`;
+      elements.questionBox.textContent = `המסלול הושלם. צברת ${state.score} מפתחות.`;
+      showFeedback("שער אחרון נפתח. אפשר לנסות שוב מהתחלה.", "end-state");
+      showHint("רמז אחרון: בכל ניסיון רואים יותר.", false);
+      elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות?`;
+      elements.transitionCopy.textContent = `המסלול נגמר. עכשיו אפשר לפתוח אותו שוב מההתחלה.`;
       setButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
       setTransitionVisible(true);
-      speakGuide("הצלחת לפתוח מסלול חדש. ממשיכים הלאה.", false);
+      speakGuide("המסלול הושלם. אפשר להתחיל מחדש.", false);
       state.locked = true;
-      elements.replayBtn.textContent = "המשך למחזור הבא";
+      elements.replayBtn.textContent = "שחק שוב מהתחלה";
     }
 
-    function resetGame(nextCycle = false) {
+    function resetGame() {
       clearTimeout(state.timerId);
-      if (!nextCycle) {
-        state.score = 500;
-        state.cycle = 1;
-      } else {
-        state.cycle += 1;
-        state.score += 150;
-      }
+      state.score = 500;
       state.index = 0;
       state.stage = 0;
       state.streak = 0;
@@ -913,11 +948,11 @@
       setTransitionVisible(false);
 
       elements.stageLabel.textContent = "1";
-      elements.stageName.textContent = `${stages[0].name} · מחזור ${state.cycle}`;
-      elements.questionBox.textContent = nextCycle ? "פותח את המחזור הבא..." : "מכין את הקלף הראשון...";
+      elements.stageName.textContent = stages[0].name;
+      elements.questionBox.textContent = "מכין את הקלף הראשון...";
       showFeedback("", "neutral");
-      showHint(nextCycle ? "רמז קטן: המחזור הבא קצת יותר מהיר." : "רמז קטן: לפעמים סימן אחד משנה הכול.", true);
-      speakGuide(nextCycle ? "מחזור חדש. אתה כבר מכיר את הדרך." : "בוא נראה כמה רחוק תגיע.", false);
+      showHint("רמז קטן: לפעמים סימן אחד משנה הכול.", true);
+      speakGuide("בוא נראה כמה רחוק תגיע.", false);
       updateStats();
       setButtonsEnabled(true);
       setReplayVisible(false);
@@ -981,13 +1016,12 @@
       }
       updateStats();
       state.index += 1;
-      const delay = Math.max(1150, 1850 - ((state.cycle - 1) * 120));
-      state.timerId = setTimeout(loadFact, delay);
+      state.timerId = setTimeout(loadFact, 1550);
     }
 
     elements.truthBtn.addEventListener("click", () => checkAnswer(true));
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
-    elements.replayBtn.addEventListener("click", () => resetGame(true));
+    elements.replayBtn.addEventListener("click", resetGame);
     elements.shareBtn.addEventListener("click", async () => {
       const text = elements.shareCopy.textContent;
       try {
@@ -999,7 +1033,7 @@
     });
     elements.startBtn.addEventListener("click", () => {
       state.started = true;
-      resetGame(false);
+      resetGame();
     });
 
     updateStats();
