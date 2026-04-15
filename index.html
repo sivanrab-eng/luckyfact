@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2bc0">
   <title>Score Dash</title>
+  <link rel="manifest" href="manifest.webmanifest">
   <style>
     :root {
       --bg-1: #061a68;
@@ -207,9 +209,50 @@
     }
 
     .start-actions {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      gap: 10px;
+      width: min(100%, 360px);
       margin-top: 8px;
+    }
+
+    .resume-panel {
+      width: min(100%, 420px);
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      box-shadow: 0 16px 0 rgba(0,0,0,0.14);
+      display: grid;
+      gap: 10px;
+    }
+
+    .resume-panel[hidden] {
+      display: none;
+    }
+
+    .resume-panel p {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+
+    .resume-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .install-note {
+      min-height: 22px;
+      margin: 0;
+      color: rgba(240, 247, 255, 0.72);
+      font-size: 0.82rem;
+      line-height: 1.4;
     }
 
     .btn-start {
@@ -608,9 +651,19 @@
       <p class="start-kicker">Fast arcade challenge</p>
       <h1 class="start-title">Score Dash</h1>
       <p class="start-copy">ענה מהר, אסוף בונוסים וקפוץ במיקום.</p>
+      <div id="resume-panel" class="resume-panel" hidden>
+        <p id="resume-copy">להמשיך מהשלב שבו הפסקת?</p>
+        <div class="resume-actions">
+          <button id="resume-btn" class="btn-start" type="button">המשך</button>
+          <button id="restart-btn" class="btn-secondary" type="button">התחל מחדש</button>
+        </div>
+      </div>
       <div class="start-actions">
         <button id="start-btn" class="btn-start" type="button">התחל</button>
+        <button id="install-btn" class="btn-secondary" type="button">הורד אפליקציה</button>
+        <button id="start-share-btn" class="btn-share" type="button">שתף משחק</button>
       </div>
+      <p id="install-note" class="install-note"></p>
     </section>
 
     <div id="main-ui" class="main-ui is-hidden">
@@ -667,7 +720,9 @@
     const PERFECT_STAGE_BONUS = 400;
     const HOT_STREAK_STAGE_BONUS = 325;
     const SHARE_URL = "https://sivanrab-eng.github.io/luckyfact/";
+    const GAME_SAVE_KEY = "scoreDashSaveV2";
     const scoreFormatter = new Intl.NumberFormat("en-US");
+    let deferredInstallPrompt = null;
     const stageNames = [
       "התחלה",
       "קצב",
@@ -1537,6 +1592,13 @@
       gameContainer: document.getElementById("game-container"),
       startScreen: document.getElementById("start-screen"),
       startBtn: document.getElementById("start-btn"),
+      resumePanel: document.getElementById("resume-panel"),
+      resumeCopy: document.getElementById("resume-copy"),
+      resumeBtn: document.getElementById("resume-btn"),
+      restartBtn: document.getElementById("restart-btn"),
+      installBtn: document.getElementById("install-btn"),
+      startShareBtn: document.getElementById("start-share-btn"),
+      installNote: document.getElementById("install-note"),
       mainUI: document.getElementById("main-ui"),
       stats: document.getElementById("stats"),
       score: document.getElementById("score"),
@@ -1578,6 +1640,7 @@
       audioContext: null,
       started: false,
       awaitingStageContinue: false,
+      lastTransition: null,
       deck: buildDeck()
     };
 
@@ -1648,9 +1711,89 @@
       elements.shareCopy.textContent = `${copy} ${SHARE_URL}`;
     }
 
+    function getStartShareText() {
+      return `Score Dash - תצליחו לעקוף אותי? ${SHARE_URL}`;
+    }
+
     function openWhatsAppShare(text) {
       const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
       window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    async function shareGame(text) {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Score Dash",
+            text,
+            url: SHARE_URL
+          });
+          return;
+        } catch (error) {
+          if (error && error.name === "AbortError") {
+            return;
+          }
+        }
+      }
+
+      openWhatsAppShare(text);
+    }
+
+    function getSavedGame() {
+      try {
+        const rawSave = localStorage.getItem(GAME_SAVE_KEY);
+        if (!rawSave) {
+          return null;
+        }
+
+        const saved = JSON.parse(rawSave);
+        if (!saved || saved.index <= 0 || saved.index >= TOTAL_STAGES * QUESTIONS_PER_STAGE) {
+          return null;
+        }
+
+        return saved;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function clearSavedGame() {
+      try {
+        localStorage.removeItem(GAME_SAVE_KEY);
+      } catch (error) {}
+    }
+
+    function saveGame() {
+      if (!state.started || state.index <= 0 || state.index >= state.deck.length) {
+        return;
+      }
+
+      try {
+        localStorage.setItem(GAME_SAVE_KEY, JSON.stringify({
+          score: state.score,
+          index: state.index,
+          stage: state.stage,
+          streak: state.streak,
+          stageMistakes: state.stageMistakes,
+          finalRewardClaimed: state.finalRewardClaimed,
+          awaitingStageContinue: state.awaitingStageContinue,
+          lastTransition: state.lastTransition
+        }));
+      } catch (error) {}
+    }
+
+    function setResumePrompt() {
+      const saved = getSavedGame();
+      if (!saved) {
+        elements.resumePanel.hidden = true;
+        elements.startBtn.hidden = false;
+        return;
+      }
+
+      const stageNumber = Math.min(Math.floor(saved.index / QUESTIONS_PER_STAGE) + 1, TOTAL_STAGES);
+      elements.resumeCopy.textContent = `להמשיך משלב ${stageNumber}/${TOTAL_STAGES} או להתחיל מחדש?`;
+      elements.resumePanel.hidden = false;
+      elements.startBtn.hidden = true;
     }
 
     function restartAnimation(element, className) {
@@ -1818,6 +1961,66 @@
       };
     }
 
+    function applySavedGame(saved) {
+      state.score = Number(saved.score) || 500;
+      state.index = Math.min(Math.max(Number(saved.index) || 0, 0), state.deck.length - 1);
+      state.stage = Number(saved.stage) || 0;
+      state.streak = Number(saved.streak) || 0;
+      state.stageMistakes = Number(saved.stageMistakes) || 0;
+      state.finalRewardClaimed = Boolean(saved.finalRewardClaimed);
+      state.awaitingStageContinue = Boolean(saved.awaitingStageContinue);
+      state.lastTransition = saved.lastTransition || null;
+      state.locked = state.awaitingStageContinue;
+    }
+
+    function renderSavedStageTransition() {
+      const transition = state.lastTransition;
+      if (!transition) {
+        state.awaitingStageContinue = false;
+        state.locked = false;
+        renderQuestion();
+        return;
+      }
+
+      updateStats();
+      setButtonsEnabled(false);
+      setTransitionMode(true);
+      setTransitionVisible(true);
+      setNextStageVisible(true);
+      setTransitionShareVisible(true);
+      setReplayVisible(false);
+      setShareVisible(false);
+      elements.transitionKicker.textContent = transition.label;
+      elements.transitionTitle.textContent = transition.title;
+      elements.transitionCopy.textContent = transition.copy;
+      setShareMessage(
+        `שלב ${transition.completedStageIndex + 1} נפתח`,
+        `עברתי את שלב ${transition.completedStageIndex + 1} ב-Score Dash עם ${formatScore(state.score)} נקודות. תצליחו לעקוף אותי?`
+      );
+      elements.questionBox.textContent = `שלב ${transition.completedStageIndex + 1} הושלם`;
+      showFeedback("", "neutral");
+    }
+
+    function continueSavedGame() {
+      const saved = getSavedGame();
+      if (!saved) {
+        resetGame();
+        return;
+      }
+
+      clearTimeout(state.timerId);
+      state.started = true;
+      state.deck = buildDeck();
+      applySavedGame(saved);
+      showMainUI(true);
+
+      if (state.awaitingStageContinue) {
+        renderSavedStageTransition();
+      } else {
+        renderQuestion();
+      }
+    }
+
     function renderQuestion() {
       clearTimeout(state.timerId);
 
@@ -1827,6 +2030,8 @@
       }
 
       state.locked = false;
+      state.awaitingStageContinue = false;
+      state.lastTransition = null;
       setTransitionMode(false);
       setTransitionVisible(false);
       setReplayVisible(false);
@@ -1837,6 +2042,7 @@
       elements.questionBox.textContent = formatQuestion(state.deck[state.index]);
       showFeedback("", "neutral");
       setButtonsEnabled(true);
+      saveGame();
     }
 
     function showStageTransition(completedStageIndex) {
@@ -1847,6 +2053,12 @@
       setButtonsEnabled(false);
       state.locked = true;
       state.awaitingStageContinue = true;
+      state.lastTransition = {
+        completedStageIndex,
+        title: reward.title,
+        label: reward.label,
+        copy: `${reward.copy} · הבא: ${nextStageName}`
+      };
       setTransitionMode(true);
       setTransitionVisible(true);
       setNextStageVisible(true);
@@ -1868,6 +2080,7 @@
       playStageTone();
 
       clearTimeout(state.timerId);
+      saveGame();
     }
 
     function showFeedback(message, kind) {
@@ -1901,6 +2114,8 @@
       setShareVisible(true);
       state.locked = true;
       state.awaitingStageContinue = false;
+      state.lastTransition = null;
+      clearSavedGame();
       elements.replayBtn.textContent = "שחק שוב מהתחלה";
     }
 
@@ -1914,8 +2129,10 @@
       state.finalRewardClaimed = false;
       state.locked = false;
       state.awaitingStageContinue = false;
+      state.lastTransition = null;
       setTransitionMode(false);
       state.deck = buildDeck();
+      clearSavedGame();
       setTransitionVisible(false);
 
       elements.stageLabel.textContent = "1";
@@ -1960,16 +2177,19 @@
       updateStats();
       state.index += 1;
       if (state.index >= state.deck.length) {
+        saveGame();
         state.timerId = setTimeout(finishGame, 900);
         return;
       }
 
       if (state.index % QUESTIONS_PER_STAGE === 0) {
+        saveGame();
         const completedStageIndex = Math.max(Math.floor((state.index - 1) / QUESTIONS_PER_STAGE), 0);
         state.timerId = setTimeout(() => showStageTransition(completedStageIndex), 700);
         return;
       }
 
+      saveGame();
       state.timerId = setTimeout(renderQuestion, 950);
     }
 
@@ -1984,6 +2204,28 @@
     elements.transitionShareBtn.addEventListener("click", async () => {
       openWhatsAppShare(getShareText());
     });
+    elements.startShareBtn.addEventListener("click", async () => {
+      await shareGame(getStartShareText());
+    });
+    elements.installBtn.addEventListener("click", async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice.catch(() => {});
+        deferredInstallPrompt = null;
+        elements.installNote.textContent = "";
+        return;
+      }
+
+      elements.installNote.textContent = "אם לא נפתח חלון התקנה: בתפריט הדפדפן בחר הוסף למסך הבית.";
+    });
+    elements.resumeBtn.addEventListener("click", continueSavedGame);
+    elements.restartBtn.addEventListener("click", () => {
+      clearSavedGame();
+      elements.resumePanel.hidden = true;
+      elements.startBtn.hidden = false;
+      state.started = true;
+      resetGame();
+    });
     elements.nextStageBtn.addEventListener("click", () => {
       if (!state.awaitingStageContinue) {
         return;
@@ -1992,6 +2234,7 @@
       state.awaitingStageContinue = false;
       state.locked = false;
       state.stageMistakes = 0;
+      state.lastTransition = null;
       setNextStageVisible(false);
       renderQuestion();
     });
@@ -2000,7 +2243,22 @@
       resetGame();
     });
 
+    if (typeof window !== "undefined" && window.addEventListener) {
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        elements.installNote.textContent = "";
+      });
+    }
+
+    if (typeof window !== "undefined" && window.addEventListener && typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+
     updateStats();
+    setResumePrompt();
     showMainUI(false);
     setReplayVisible(false);
   </script>

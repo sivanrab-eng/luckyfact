@@ -1,0 +1,20 @@
+{
+  "name": "Score Dash",
+  "short_name": "Score Dash",
+  "description": "Score Dash arcade true/false challenge",
+  "start_url": "./?app=1",
+  "scope": "./",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "he",
+  "theme_color": "#0f2bc0",
+  "background_color": "#061a68",
+  "icons": [
+    {
+      "src": "score-dash-hero.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
