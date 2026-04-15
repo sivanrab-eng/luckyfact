@@ -1,0 +1,84 @@
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b67ff"/>
+      <stop offset="54%" stop-color="#4169ff"/>
+      <stop offset="100%" stop-color="#d878ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="33%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.48"/>
+      <stop offset="52%" stop-color="#7efcff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#7efcff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+    <linearGradient id="panelBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2e35d0"/><stop offset="100%" stop-color="#1c247f"/></linearGradient>
+    <linearGradient id="btnBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2e91ff"/><stop offset="100%" stop-color="#1560ff"/></linearGradient>
+    <linearGradient id="btnPink" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff7ea8"/><stop offset="100%" stop-color="#ff386a"/></linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e9efff"/></linearGradient>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#glow)"/>
+
+  <!-- floating blocks -->
+  <g opacity="0.98">
+    <g transform="translate(40 210) rotate(-15)"><rect width="210" height="110" rx="30" fill="#ff335d"/><circle cx="40" cy="28" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="84" cy="28" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="128" cy="28" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="40" cy="72" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="84" cy="72" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="128" cy="72" r="16" fill="#ffd0d9" opacity="0.35"/></g>
+    <g transform="translate(382 110)"><rect width="300" height="120" rx="34" fill="#b14fff"/><circle cx="46" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="96" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="146" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="196" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="246" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="46" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="96" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="146" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="196" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="246" cy="78" r="18" fill="#edd2ff" opacity="0.3"/></g>
+    <g transform="translate(816 240) rotate(16)"><rect width="198" height="110" rx="30" fill="#49f2ff"/><circle cx="36" cy="26" r="16" fill="#d6ffff" opacity="0.35"/><circle cx="80" cy="26" r="16" fill="#d6ffff" opacity="0.35"/><circle cx="124" cy="26" r="16" fill="#d6ffff" opacity="0.35"/><circle cx="36" cy="68" r="16" fill="#d6ffff" opacity="0.35"/><circle cx="80" cy="68" r="16" fill="#d6ffff" opacity="0.35"/><circle cx="124" cy="68" r="16" fill="#d6ffff" opacity="0.35"/></g>
+    <g transform="translate(782 610) rotate(-8)"><rect width="230" height="106" rx="30" fill="#62ff1b"/><circle cx="40" cy="26" r="15" fill="#eaffd8" opacity="0.35"/><circle cx="90" cy="26" r="15" fill="#eaffd8" opacity="0.35"/><circle cx="140" cy="26" r="15" fill="#eaffd8" opacity="0.35"/><circle cx="40" cy="66" r="15" fill="#eaffd8" opacity="0.35"/><circle cx="90" cy="66" r="15" fill="#eaffd8" opacity="0.35"/><circle cx="140" cy="66" r="15" fill="#eaffd8" opacity="0.35"/></g>
+  </g>
+
+  <!-- top bar -->
+  <rect x="88" y="112" width="904" height="126" rx="44" fill="#162a95" opacity="0.92" filter="url(#shadow)"/>
+  <rect x="88" y="112" width="904" height="126" rx="44" fill="url(#panelBlue)" stroke="rgba(255,255,255,0.18)" stroke-width="4"/>
+  <text x="146" y="187" fill="#ffffff" font-size="54" font-family="Arial, sans-serif" font-weight="700">מפתחות: 1,420</text>
+  <rect x="742" y="146" width="198" height="74" rx="34" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.18)"/>
+  <text x="841" y="194" text-anchor="middle" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">במקום 8</text>
+
+  <!-- stage / progress -->
+  <rect x="94" y="270" width="892" height="124" rx="36" fill="#2a33c8" opacity="0.96" filter="url(#shadow)"/>
+  <rect x="94" y="270" width="892" height="124" rx="36" fill="#2a33c8" stroke="rgba(255,255,255,0.18)" stroke-width="4"/>
+  <text x="138" y="318" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">שלב 6 מתוך 10</text>
+  <text x="940" y="318" text-anchor="end" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">9/15</text>
+  <rect x="138" y="338" width="806" height="34" rx="17" fill="#12205f"/>
+  <rect x="138" y="338" width="482" height="34" rx="17" fill="#67f47d"/>
+
+  <!-- main title -->
+  <ellipse cx="542" cy="705" rx="275" ry="275" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.8"/>
+  <ellipse cx="542" cy="705" rx="288" ry="288" fill="none" stroke="#54ffff" stroke-width="10" opacity="0.45" filter="url(#soft)"/>
+  <text x="542" y="635" text-anchor="middle" fill="#ffffff" font-size="72" font-family="Arial, sans-serif" font-weight="900">שאלה 9</text>
+  <text x="542" y="730" text-anchor="middle" fill="#ffffff" font-size="92" font-family="Arial, sans-serif" font-weight="900">תפוס את הרגע</text>
+  <text x="542" y="800" text-anchor="middle" fill="#edf7ff" font-size="32" font-family="Arial, sans-serif">כל תשובה מקרבת אותך לשלב הבא</text>
+
+  <!-- question card -->
+  <rect x="94" y="940" width="892" height="318" rx="40" fill="#ffffff" opacity="0.96" filter="url(#shadow)"/>
+  <rect x="94" y="940" width="892" height="318" rx="40" fill="url(#card)" stroke="rgba(255,255,255,0.24)" stroke-width="4"/>
+  <text x="540" y="1018" text-anchor="middle" fill="#182845" font-size="48" font-family="Arial, sans-serif" font-weight="700">האם פינגווין יכול לעוף?</text>
+  <text x="540" y="1078" text-anchor="middle" fill="#5b6f95" font-size="30" font-family="Arial, sans-serif">בחר אמת או שקר</text>
+
+  <rect x="140" y="1130" width="350" height="68" rx="28" fill="url(#btnBlue)" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+  <text x="315" y="1174" text-anchor="middle" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">אמת</text>
+  <rect x="590" y="1130" width="350" height="68" rx="28" fill="url(#btnPink)" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+  <text x="765" y="1174" text-anchor="middle" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">שקר</text>
+
+  <!-- response + streak -->
+  <rect x="140" y="1234" width="800" height="76" rx="28" fill="rgba(255,255,255,0.12)"/>
+  <text x="540" y="1280" text-anchor="middle" fill="#ffffff" font-size="29" font-family="Arial, sans-serif" font-weight="700">טוב. 3 ברצף. +25</text>
+
+  <!-- leaderboard -->
+  <rect x="94" y="1388" width="892" height="250" rx="40" fill="#172560" opacity="0.96" filter="url(#shadow)"/>
+  <rect x="94" y="1388" width="892" height="250" rx="40" fill="#19297b" stroke="rgba(255,255,255,0.18)" stroke-width="4"/>
+  <text x="140" y="1438" fill="#ffffff" font-size="38" font-family="Arial, sans-serif" font-weight="700">בילבורד חי</text>
+  <text x="942" y="1438" text-anchor="end" fill="#ffe25c" font-size="38" font-family="Arial, sans-serif" font-weight="700">#8</text>
+  <g font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff">
+    <circle cx="152" cy="1497" r="14" fill="#ff5a79"/><text x="192" y="1505">נועה</text><text x="940" y="1505" text-anchor="end">16,980</text>
+    <circle cx="152" cy="1534" r="14" fill="#4ec1ff"/><text x="192" y="1542">דני</text><text x="940" y="1542" text-anchor="end">16,420</text>
+    <rect x="132" y="1556" width="806" height="44" rx="18" fill="rgba(255,255,255,0.12)"/>
+    <circle cx="152" cy="1579" r="14" fill="#62f480"/><text x="192" y="1587">את/ה</text><text x="940" y="1587" text-anchor="end">15,760</text>
+  </g>
+
+  <!-- whatsapp share -->
+  <rect x="180" y="1772" width="720" height="72" rx="24" fill="rgba(0,0,0,0.28)"/>
+  <text x="540" y="1818" text-anchor="middle" fill="#ffffff" font-size="29" font-family="Arial, sans-serif" font-weight="700">שיתוף ל-WhatsApp: תנסה לעקוף אותי</text>
+</svg>

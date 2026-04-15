@@ -1,0 +1,74 @@
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d67ff"/>
+      <stop offset="55%" stop-color="#3e67ff"/>
+      <stop offset="100%" stop-color="#d874ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#7efcff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#7efcff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+    <linearGradient id="panelBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2b35c8"/><stop offset="100%" stop-color="#171f79"/></linearGradient>
+    <linearGradient id="btnBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2e91ff"/><stop offset="100%" stop-color="#1560ff"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff299"/><stop offset="100%" stop-color="#ffcc2f"/></linearGradient>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#glow)"/>
+
+  <!-- floating blocks -->
+  <g opacity="0.98">
+    <g transform="translate(60 180) rotate(-16)"><rect width="190" height="108" rx="30" fill="#ff335d"/><circle cx="36" cy="28" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="80" cy="28" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="124" cy="28" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="36" cy="70" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="80" cy="70" r="16" fill="#ffd0d9" opacity="0.35"/><circle cx="124" cy="70" r="16" fill="#ffd0d9" opacity="0.35"/></g>
+    <g transform="translate(380 120)"><rect width="310" height="122" rx="34" fill="#b24dff"/><circle cx="50" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="102" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="154" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="206" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="258" cy="30" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="50" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="102" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="154" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="206" cy="78" r="18" fill="#edd2ff" opacity="0.3"/><circle cx="258" cy="78" r="18" fill="#edd2ff" opacity="0.3"/></g>
+    <g transform="translate(836 220) rotate(14)"><rect width="170" height="108" rx="30" fill="#48f0ff"/><circle cx="34" cy="26" r="16" fill="#d7ffff" opacity="0.35"/><circle cx="76" cy="26" r="16" fill="#d7ffff" opacity="0.35"/><circle cx="118" cy="26" r="16" fill="#d7ffff" opacity="0.35"/><circle cx="34" cy="68" r="16" fill="#d7ffff" opacity="0.35"/><circle cx="76" cy="68" r="16" fill="#d7ffff" opacity="0.35"/><circle cx="118" cy="68" r="16" fill="#d7ffff" opacity="0.35"/></g>
+  </g>
+
+  <!-- top bar -->
+  <rect x="88" y="112" width="904" height="126" rx="44" fill="#162a95" opacity="0.92" filter="url(#shadow)"/>
+  <rect x="88" y="112" width="904" height="126" rx="44" fill="url(#panelBlue)" stroke="rgba(255,255,255,0.18)" stroke-width="4"/>
+  <text x="146" y="187" fill="#ffffff" font-size="54" font-family="Arial, sans-serif" font-weight="700">מפתחות: 1,600</text>
+  <rect x="746" y="146" width="194" height="74" rx="34" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.18)"/>
+  <text x="843" y="194" text-anchor="middle" fill="#ffffff" font-size="30" font-family="Arial, sans-serif" font-weight="700">מקום 5</text>
+
+  <!-- transition ring -->
+  <circle cx="540" cy="750" r="300" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.86"/>
+  <circle cx="540" cy="750" r="316" fill="none" stroke="#54ffff" stroke-width="10" opacity="0.5" filter="url(#soft)"/>
+
+  <text x="540" y="610" text-anchor="middle" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700" opacity="0.95">שלב 6 הושלם</text>
+  <text x="540" y="710" text-anchor="middle" fill="#ffffff" font-size="96" font-family="Arial, sans-serif" font-weight="900">+250</text>
+  <text x="540" y="786" text-anchor="middle" fill="#ffffff" font-size="58" font-family="Arial, sans-serif" font-weight="900">בונוס שלב</text>
+  <text x="540" y="850" text-anchor="middle" fill="#edf7ff" font-size="30" font-family="Arial, sans-serif">עוד 15 שאלות עד לשלב הבא</text>
+
+  <!-- reward panel -->
+  <rect x="120" y="980" width="840" height="286" rx="42" fill="#ffffff" opacity="0.96" filter="url(#shadow)"/>
+  <rect x="120" y="980" width="840" height="286" rx="42" fill="#eaf0ff" stroke="rgba(255,255,255,0.24)" stroke-width="4"/>
+  <text x="540" y="1058" text-anchor="middle" fill="#182845" font-size="44" font-family="Arial, sans-serif" font-weight="700">המסלול הבא נפתח</text>
+  <text x="540" y="1118" text-anchor="middle" fill="#5b6f95" font-size="30" font-family="Arial, sans-serif">הדירוג שלך קפץ, עכשיו אפשר לעלות עוד</text>
+
+  <rect x="170" y="1160" width="740" height="42" rx="21" fill="#12205f"/>
+  <rect x="170" y="1160" width="536" height="42" rx="21" fill="#67f47d"/>
+  <text x="540" y="1220" text-anchor="middle" fill="#182845" font-size="30" font-family="Arial, sans-serif" font-weight="700">מיקום בבילבורד: 5</text>
+
+  <!-- leaderboard snapshot -->
+  <rect x="120" y="1308" width="840" height="250" rx="40" fill="#172560" opacity="0.96" filter="url(#shadow)"/>
+  <rect x="120" y="1308" width="840" height="250" rx="40" fill="#19297b" stroke="rgba(255,255,255,0.18)" stroke-width="4"/>
+  <text x="170" y="1358" fill="#ffffff" font-size="36" font-family="Arial, sans-serif" font-weight="700">הבילבורד זז</text>
+  <text x="905" y="1358" text-anchor="end" fill="url(#gold)" font-size="36" font-family="Arial, sans-serif" font-weight="700">#5</text>
+  <g font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff">
+    <circle cx="172" cy="1418" r="14" fill="#ff5a79"/><text x="210" y="1426">נועה</text><text x="900" y="1426" text-anchor="end">19,120</text>
+    <circle cx="172" cy="1456" r="14" fill="#4ec1ff"/><text x="210" y="1464">דני</text><text x="900" y="1464" text-anchor="end">18,860</text>
+    <circle cx="172" cy="1494" r="14" fill="#62f480"/><text x="210" y="1502">את/ה</text><text x="900" y="1502" text-anchor="end">18,430</text>
+    <circle cx="172" cy="1532" r="14" fill="#ffbd3f"/><text x="210" y="1540">מיה</text><text x="900" y="1540" text-anchor="end">18,210</text>
+  </g>
+
+  <!-- CTA -->
+  <rect x="220" y="1650" width="640" height="78" rx="30" fill="url(#btnBlue)" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+  <text x="540" y="1698" text-anchor="middle" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">המשך לשלב הבא</text>
+
+  <rect x="180" y="1764" width="720" height="60" rx="24" fill="rgba(0,0,0,0.28)"/>
+  <text x="540" y="1802" text-anchor="middle" fill="#ffffff" font-size="28" font-family="Arial, sans-serif" font-weight="700">שיתוף ל-WhatsApp יופיע רק בסוף המסלול</text>
+</svg>
