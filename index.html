@@ -179,54 +179,6 @@
       margin-top: 8px;
     }
 
-    .guide-line {
-      margin: 16px 0 0;
-      min-height: 28px;
-      color: rgba(104, 224, 179, 0.95);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      justify-content: center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .guide-line.is-muted {
-      color: rgba(142, 168, 199, 0.95);
-    }
-
-    .guide-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      flex: 0 0 24px;
-      background:
-        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(255,255,255,0.1) 42%, transparent 44%),
-        radial-gradient(circle at 50% 50%, rgba(77,184,255,0.95), rgba(77,184,255,0.42) 52%, rgba(8,18,34,0.02) 68%),
-        linear-gradient(145deg, rgba(104,224,179,0.9), rgba(77,184,255,0.35));
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 18px rgba(77,184,255,0.22);
-      position: relative;
-    }
-
-    .guide-avatar::after {
-      content: "";
-      position: absolute;
-      inset: 6px;
-      border-radius: inherit;
-      border: 1px solid rgba(255,255,255,0.18);
-      opacity: 0.7;
-    }
-
-    .guide-text {
-      flex: 1 1 auto;
-    }
-
     .btn-start {
       min-width: 180px;
       background: linear-gradient(180deg, #1d4b72, #15334d);
@@ -508,10 +460,6 @@
       font-size: 0.75rem;
     }
 
-    .hint-box.is-fresh {
-      color: rgba(104, 224, 179, 0.95);
-    }
-
     #game-container.stage-flash {
       animation: stageFlash 760ms ease;
     }
@@ -591,15 +539,10 @@
       <div>אנרגיית מזל: <span id="luck-level">בינונית</span></div>
     </div>
 
-    <p id="guide-line" class="guide-line is-muted">
-      <span class="guide-avatar" aria-hidden="true"></span>
-      <span class="guide-text">אני כאן אם תרצה רמז. מתחילים בקטן.</span>
-    </p>
-
     <section id="start-screen" class="start-screen">
       <p class="start-kicker">LuckyFact</p>
       <h1 class="start-title">החדר הסודי</h1>
-      <p class="start-copy">שלושה שערים, רמזים קצרים, והרבה מזל שמתחזה ליד הגורל.</p>
+      <p class="start-copy">שלושה שערים, הרבה מזל, והרבה הפתעות.</p>
       <div class="start-actions">
         <button id="start-btn" class="btn-start" type="button">התחל מסע</button>
       </div>
@@ -621,7 +564,6 @@
       </div>
 
       <p class="story-line">הדלת נפתחת רק אם תפענח את הסימן.</p>
-      <p class="hint">המזל עוזר, אבל לא פותר לבדו.</p>
 
       <p id="question-box" class="question">מכין את הקלף הראשון...</p>
 
@@ -631,7 +573,6 @@
       </div>
 
       <div id="feedback" class="neutral"></div>
-      <div id="hint-box" class="hint-box"></div>
       <div class="replay-row">
         <button id="replay-btn" class="btn-replay" type="button" hidden>שחק שוב</button>
       </div>
@@ -709,9 +650,6 @@
       stageRow: document.getElementById("stage-row"),
       questionBox: document.getElementById("question-box"),
       feedback: document.getElementById("feedback"),
-      hintBox: document.getElementById("hint-box"),
-      guideLine: document.getElementById("guide-line"),
-      guideText: document.querySelector("#guide-line .guide-text"),
       replayBtn: document.getElementById("replay-btn"),
       sharePanel: document.getElementById("share-panel"),
       shareCopy: document.getElementById("share-copy"),
@@ -735,23 +673,10 @@
     };
 
     const stages = [
-      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה.", hint: "בדוק קודם את המילה הקצרה ביותר." },
-      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר.", hint: "בדוק אם יש מילה שלא מתאימה לשאר." },
-      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עוד מבט קטן לפני הבחירה.", hint: "אם יש ספק, קרא שוב את המשפט מההתחלה." }
+      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה." },
+      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר." },
+      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עוד מבט קטן לפני הבחירה." }
     ];
-
-    const answerHints = {
-      success: [
-        "חפש משפט קצר ופשוט.",
-        "בדוק אם משהו נשמע חריג.",
-        "קרא שוב את השורה האחרונה."
-      ],
-      miss: [
-        "נסה שוב, אבל לאט יותר.",
-        "בדוק אם היסחת את עצמך ממילה אחת.",
-        "קרא את המשפט עוד פעם אחת."
-      ]
-    };
 
     const encouragements = {
       correct: [
@@ -792,16 +717,6 @@
 
     function setTransitionVisible(visible) {
       elements.transitionPanel.classList.toggle("is-visible", visible);
-    }
-
-    function showHint(message, fresh = false) {
-      elements.hintBox.textContent = message;
-      elements.hintBox.classList.toggle("is-fresh", fresh);
-    }
-
-    function speakGuide(message, muted = false) {
-      elements.guideText.textContent = message;
-      elements.guideLine.classList.toggle("is-muted", muted);
     }
 
     function restartAnimation(element, className) {
@@ -867,11 +782,6 @@
       }
     }
 
-    function getHint(isCorrect) {
-      const bank = isCorrect ? answerHints.success : answerHints.miss;
-      return bank[(state.index + state.streak) % bank.length];
-    }
-
     function getEncouragement(kind) {
       const bank = encouragements[kind];
       return bank[(state.index + state.streak) % bank.length];
@@ -885,7 +795,6 @@
       elements.stageName.textContent = stage.name;
       elements.questionBox.textContent = stage.intro;
       showFeedback("", "neutral");
-      showHint(stage.hint, true);
       setButtonsEnabled(false);
       state.locked = true;
 
@@ -925,14 +834,12 @@
     function finishGame() {
       elements.questionBox.textContent = `המסלול הושלם. צברת ${state.score} מפתחות.`;
       showFeedback("שער אחרון נפתח. אפשר לנסות שוב מהתחלה.", "end-state");
-      showHint("המסלול הושלם. אפשר להתחיל שוב.", false);
       elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות?`;
       elements.transitionCopy.textContent = `המסלול נגמר. עכשיו אפשר לפתוח אותו שוב מההתחלה.`;
       setButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
       setTransitionVisible(true);
-      speakGuide("המסלול הושלם. אפשר להתחיל מחדש.", false);
       state.locked = true;
       elements.replayBtn.textContent = "שחק שוב מהתחלה";
     }
@@ -951,8 +858,6 @@
       elements.stageName.textContent = stages[0].name;
       elements.questionBox.textContent = "מכין את הקלף הראשון...";
       showFeedback("", "neutral");
-      showHint("התחל מהמשפט הראשון.", true);
-      speakGuide("בוא נראה כמה רחוק תגיע.", false);
       updateStats();
       setButtonsEnabled(true);
       setReplayVisible(false);
@@ -976,9 +881,6 @@
 
       elements.questionBox.textContent = state.deck[state.index].text;
       showFeedback("", "neutral");
-      if (!elements.hintBox.textContent) {
-        showHint(stages[state.stage].hint, false);
-      }
       setButtonsEnabled(true);
     }
 
@@ -1001,18 +903,10 @@
           state.score += boost;
         }
         showFeedback(getEncouragement("correct"), "success");
-        if (boost > 0) {
-          showHint(`בונוס ${boost}. ${getHint(true)}`, true);
-        } else {
-          showHint(getHint(true), true);
-        }
-        speakGuide(getEncouragement("correct"), false);
       } else {
         state.score -= 50;
         state.streak = 0;
         showFeedback(getEncouragement("gentle"), "error");
-        showHint("בדוק את המשפט עוד פעם.", true);
-        speakGuide(getEncouragement("gentle"), true);
       }
       updateStats();
       state.index += 1;
@@ -1037,8 +931,6 @@
     });
 
     updateStats();
-    showHint("התחל מהמשפט הראשון.", true);
-    speakGuide("אני כאן אם תרצה רמז. מתחילים בקטן.", true);
     showMainUI(false);
     setReplayVisible(false);
   </script>
