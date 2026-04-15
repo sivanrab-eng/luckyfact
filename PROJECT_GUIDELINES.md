@@ -20,28 +20,30 @@
 - Less text, stronger visual hierarchy.
 
 ## Game Structure
-- 10 stages.
-- 15 questions per stage.
+- 15 stages.
+- 10 questions per stage.
 - 150 questions per run.
 - True/false only.
 - The first real question must count as question 1.
 - A stage intro is a visual transition only, not a question.
 
 ## Progression
-- Always show clear progress: stage X/10 and Y/15.
-- Every 15 questions ends with a clear stage transition.
+- Always show clear progress: stage X/15 and Y/10.
+- Every 10 questions ends with a clear stage transition.
 - Stage end gives a points bonus.
 - Game end includes finish screen, share, and play again.
+- Do not auto-advance between stages; wait for the continue button.
 
 ## Question Screen
 - Include only essentials: stage, progress, question, two answer buttons, short feedback.
 - Do not show live billboard, side colored circles, "rank 8", large ring around question, or "catch the moment".
 - Ranking/billboard belongs in stage transition, not inside the question screen.
-- From stage 2 onward, add one extra short factual line above the true/false statement to increase reading volume.
-- The extra line must be factual, game-neutral, and not called reading, practice, hint, or intro.
-- Do not split the existing statement into two lines just to create length.
-- Do not reuse true/false question statements as the extra factual line.
-- If a stage has a dedicated two-line question set, use it as-is and do not add another context line.
+- Stage 1 stays short and fast.
+- Stages 2-6 use dedicated two-line statements.
+- Stages 7-11 use three-line statements.
+- Stages 12-15 use four-line statements.
+- Do not split an existing statement just to create length.
+- If a stage has a dedicated multi-line question set, use it as-is and do not add another context line.
 
 ## Stage Transition
 - Must feel like a reward.
