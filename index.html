@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>צופן המזל - החדר הסודי</title>
+  <title>Score Dash - החדר הסודי</title>
   <style>
     :root {
-      --bg-1: #07111f;
-      --bg-2: #0d1b31;
-      --panel: rgba(10, 20, 38, 0.82);
-      --panel-border: rgba(120, 181, 255, 0.18);
-      --text: #f4f7fb;
-      --muted: #8ea8c7;
-      --accent: #4db8ff;
-      --danger: #ff5c7a;
-      --success: #68e0b3;
-      --shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
+      --bg-1: #0b63ff;
+      --bg-2: #4167ff;
+      --bg-3: #c86bff;
+      --panel: rgba(13, 20, 70, 0.62);
+      --panel-strong: rgba(20, 24, 110, 0.78);
+      --panel-border: rgba(255, 255, 255, 0.2);
+      --text: #f7fbff;
+      --muted: rgba(240, 247, 255, 0.8);
+      --accent: #53f1ff;
+      --danger: #ff6d92;
+      --success: #63f49d;
+      --gold: #ffe16a;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      --shadow-deep: 0 18px 0 rgba(0, 0, 0, 0.18), 0 30px 60px rgba(0, 0, 0, 0.22);
     }
 
     * {
@@ -32,12 +36,15 @@
       color: var(--text);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(77, 184, 255, 0.18), transparent 32%),
-        radial-gradient(circle at bottom left, rgba(233, 69, 96, 0.15), transparent 30%),
-        linear-gradient(160deg, var(--bg-1), var(--bg-2));
+        radial-gradient(circle at 50% 24%, rgba(255,255,255,0.36), transparent 22%),
+        radial-gradient(circle at 16% 14%, rgba(82, 255, 236, 0.24), transparent 18%),
+        radial-gradient(circle at 88% 30%, rgba(255, 122, 201, 0.26), transparent 20%),
+        radial-gradient(circle at 50% 94%, rgba(252, 145, 255, 0.36), transparent 24%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 52%, var(--bg-3) 100%);
       display: grid;
       place-items: center;
-      padding: 24px;
+      padding: 18px;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -46,21 +53,37 @@
       inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 85%);
-      opacity: 0.45;
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,0.22) 0 16px, transparent 17px),
+        radial-gradient(circle at 72% 16%, rgba(255,255,255,0.12) 0 14px, transparent 15px),
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 220px 220px, 260px 260px, 72px 72px, 72px 72px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 92%);
+      opacity: 0.38;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto 0 -20vh 0;
+      height: 42vh;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.18), transparent 35%),
+                  linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0));
+      filter: blur(20px);
+      opacity: 0.75;
     }
 
     #game-container {
       width: min(100%, 560px);
-      padding: 28px;
-      border-radius: 24px;
-      background: var(--panel);
+      padding: 24px;
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05)),
+        var(--panel);
       border: 1px solid var(--panel-border);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-deep);
+      backdrop-filter: blur(14px);
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -72,8 +95,11 @@
       inset: -1px;
       border-radius: inherit;
       pointer-events: none;
-      background: linear-gradient(135deg, rgba(77,184,255,0.12), transparent 45%, rgba(233,69,96,0.12));
-      opacity: 0.9;
+      background:
+        radial-gradient(circle at 20% 16%, rgba(255,255,255,0.2), transparent 14%),
+        radial-gradient(circle at 80% 18%, rgba(83,241,255,0.2), transparent 18%),
+        linear-gradient(135deg, rgba(83,241,255,0.18), transparent 34%, rgba(255,111,179,0.16));
+      opacity: 0.95;
       mix-blend-mode: screen;
     }
 
@@ -91,10 +117,12 @@
     }
 
     .stats > div {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 999px;
       padding: 10px 14px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+      color: #f8fbff;
     }
 
     .progress-wrap {
@@ -110,6 +138,7 @@
       margin-bottom: 8px;
       color: var(--muted);
       font-size: 0.88rem;
+      flex-wrap: wrap;
     }
 
     .progress-head strong {
@@ -118,18 +147,20 @@
     }
 
     .progress-meter {
-      height: 12px;
-      background: rgba(15, 52, 96, 0.95);
+      height: 14px;
+      background: rgba(7, 20, 74, 0.82);
       border-radius: 999px;
       overflow: hidden;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.12);
     }
 
     #progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--success));
+      background: linear-gradient(90deg, #53f1ff 0%, #7bffcb 52%, #ffe16a 100%);
       border-radius: inherit;
       transition: width 0.45s ease;
+      box-shadow: 0 0 18px rgba(83, 241, 255, 0.55);
     }
 
     .is-hidden {
@@ -143,7 +174,7 @@
       display: grid;
       place-items: center;
       gap: 14px;
-      padding: 20px 8px 10px;
+      padding: 24px 10px 18px;
       text-align: center;
     }
 
@@ -153,22 +184,25 @@
 
     .start-kicker {
       color: var(--accent);
-      letter-spacing: 0.12em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       font-size: 0.78rem;
       margin: 0;
+      opacity: 0.95;
     }
 
     .start-title {
       margin: 0;
-      font-size: clamp(2rem, 6vw, 3rem);
-      line-height: 1.05;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      line-height: 0.95;
+      font-weight: 900;
+      text-shadow: 0 10px 0 rgba(0,0,0,0.18), 0 0 30px rgba(83,241,255,0.32);
     }
 
     .start-copy {
       margin: 0;
-      color: var(--muted);
-      line-height: 1.7;
+      color: rgba(246, 250, 255, 0.9);
+      line-height: 1.65;
       font-size: 1rem;
       max-width: 30ch;
     }
@@ -181,8 +215,9 @@
 
     .btn-start {
       min-width: 180px;
-      background: linear-gradient(180deg, #1d4b72, #15334d);
-      border: 1px solid rgba(77, 184, 255, 0.45);
+      background: linear-gradient(180deg, #2b9aff, #1560ff);
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      box-shadow: 0 16px 30px rgba(18, 77, 255, 0.34);
     }
 
     .main-ui {
@@ -210,12 +245,13 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 14px;
+      padding: 10px 15px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--muted);
+      background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(248, 251, 255, 0.82);
       font-size: 0.9rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.16);
     }
 
     .stage-pill strong {
@@ -224,28 +260,30 @@
     }
 
     .luck-meter {
-      height: 12px;
-      background: rgba(15, 52, 96, 0.95);
+      height: 14px;
+      background: rgba(7, 20, 74, 0.82);
       border-radius: 999px;
       overflow: hidden;
       margin: 8px 0 12px;
       position: relative;
       z-index: 1;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.12);
     }
 
     #luck-bar {
       height: 100%;
       width: 50%;
-      background: linear-gradient(90deg, var(--danger), var(--accent), var(--success));
+      background: linear-gradient(90deg, #ff6d92 0%, #53f1ff 48%, #63f49d 100%);
       border-radius: inherit;
       transition: width 0.45s ease;
+      box-shadow: 0 0 18px rgba(83, 241, 255, 0.55);
     }
 
     .story-line {
       margin: 0 0 8px;
       font-size: 0.98rem;
       letter-spacing: 0.01em;
-      color: rgba(244, 247, 251, 0.9);
+      color: rgba(244, 247, 251, 0.92);
       position: relative;
       z-index: 1;
     }
@@ -257,6 +295,7 @@
       margin: 0 0 20px;
       position: relative;
       z-index: 1;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.2);
     }
 
     #question-box.question-swap {
@@ -275,19 +314,21 @@
     button {
       appearance: none;
       border: none;
-      border-radius: 12px;
+      border-radius: 18px;
       min-width: 138px;
       padding: 14px 24px;
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       color: white;
       cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
+      box-shadow: 0 16px 0 rgba(0,0,0,0.18), 0 18px 26px rgba(0, 0, 0, 0.22);
+      filter: saturate(1.05);
     }
 
     button:hover:not(:disabled) {
       transform: translateY(-2px);
+      filter: brightness(1.05) saturate(1.08);
     }
 
     button:disabled {
@@ -297,13 +338,13 @@
     }
 
     .btn-truth {
-      background: linear-gradient(180deg, #123a67, #0f3460);
-      border: 1px solid rgba(77, 184, 255, 0.7);
+      background: linear-gradient(180deg, #31a4ff, #145eff);
+      border: 1px solid rgba(255, 255, 255, 0.28);
     }
 
     .btn-lie {
-      background: linear-gradient(180deg, #482036, #34101f);
-      border: 1px solid rgba(233, 69, 96, 0.7);
+      background: linear-gradient(180deg, #ff7ea8, #ff406f);
+      border: 1px solid rgba(255, 255, 255, 0.24);
     }
 
     #feedback {
@@ -316,19 +357,19 @@
     }
 
     #feedback.success {
-      color: var(--success);
+      color: #8afcba;
     }
 
     #feedback.error {
-      color: var(--danger);
+      color: #ff8eb0;
     }
 
     #feedback.neutral {
-      color: var(--muted);
+      color: rgba(240, 247, 255, 0.78);
     }
 
     .end-state {
-      color: var(--accent);
+      color: var(--gold);
       font-size: 1.15rem;
     }
 
@@ -341,21 +382,22 @@
     }
 
     .btn-replay {
-      background: linear-gradient(180deg, #1d4b72, #163b58);
-      border: 1px solid rgba(104, 224, 179, 0.4);
+      background: linear-gradient(180deg, #2a8dff, #163bfe);
+      border: 1px solid rgba(255, 255, 255, 0.24);
       min-width: 168px;
     }
 
     .share-panel {
       margin-top: 18px;
       padding: 16px 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05));
       position: relative;
       z-index: 1;
       display: none;
       gap: 10px;
+      box-shadow: 0 16px 0 rgba(0,0,0,0.14);
     }
 
     .share-panel.is-visible {
@@ -376,25 +418,26 @@
     }
 
     .btn-share {
-      background: linear-gradient(180deg, #224f74, #19354d);
-      border: 1px solid rgba(77, 184, 255, 0.45);
+      background: linear-gradient(180deg, #2a8dff, #1560ff);
+      border: 1px solid rgba(255, 255, 255, 0.28);
       min-width: 180px;
     }
 
     .transition-panel {
       margin-top: 18px;
       padding: 18px 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(77, 184, 255, 0.2);
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
       background:
-        radial-gradient(circle at top left, rgba(77,184,255,0.18), transparent 40%),
-        radial-gradient(circle at bottom right, rgba(104,224,179,0.12), transparent 35%),
-        rgba(8, 18, 34, 0.84);
+        radial-gradient(circle at top left, rgba(83,241,255,0.26), transparent 36%),
+        radial-gradient(circle at bottom right, rgba(255, 111, 179, 0.2), transparent 35%),
+        rgba(12, 18, 82, 0.74);
       position: relative;
       z-index: 1;
       display: none;
       gap: 10px;
       overflow: hidden;
+      box-shadow: 0 16px 0 rgba(0,0,0,0.14);
     }
 
     .transition-panel.is-visible {
@@ -405,24 +448,25 @@
       margin: 0;
       font-size: 1.12rem;
       color: var(--text);
+      font-weight: 800;
     }
 
     .transition-copy {
       margin: 0;
-      color: var(--muted);
+      color: rgba(240,247,255,0.8);
       line-height: 1.5;
       font-size: 0.95rem;
     }
 
     .transition-orbit {
       position: absolute;
-      inset: -30% -10% auto auto;
+      inset: -28% -8% auto auto;
       width: 180px;
       height: 180px;
       border-radius: 50%;
-      border: 1px solid rgba(77,184,255,0.18);
-      box-shadow: inset 0 0 24px rgba(77,184,255,0.1);
-      opacity: 0.8;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: inset 0 0 24px rgba(83,241,255,0.12);
+      opacity: 0.85;
       pointer-events: none;
     }
 
@@ -431,16 +475,17 @@
       position: absolute;
       inset: 26px;
       border-radius: 50%;
-      border: 1px dashed rgba(104,224,179,0.2);
+      border: 1px dashed rgba(83,241,255,0.34);
       animation: slowSpin 9s linear infinite;
     }
 
     .transition-kicker {
       margin: 0;
       color: var(--accent);
-      letter-spacing: 0.11em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       font-size: 0.75rem;
+      font-weight: 700;
     }
 
     #game-container.stage-flash {
@@ -486,6 +531,10 @@
         margin-bottom: 14px;
       }
 
+      .stats > div {
+        width: 100%;
+      }
+
       .stage-row {
         margin-bottom: 8px;
       }
@@ -493,6 +542,14 @@
       .stage-pill {
         padding: 8px 12px;
         font-size: 0.82rem;
+      }
+
+      .start-screen {
+        min-height: 380px;
+      }
+
+      .start-title {
+        font-size: clamp(2.4rem, 13vw, 3.5rem);
       }
 
       .luck-meter {
@@ -506,6 +563,11 @@
       .question {
         min-height: 92px;
         margin-bottom: 16px;
+      }
+
+      .share-panel,
+      .transition-panel {
+        border-radius: 18px;
       }
 
       button {
@@ -523,11 +585,11 @@
     </div>
 
     <section id="start-screen" class="start-screen">
-      <p class="start-kicker">LuckyFact</p>
-      <h1 class="start-title">החדר הסודי</h1>
-      <p class="start-copy">30 קלפים. כל בחירה מקרבת אותך לשער האחרון.</p>
+      <p class="start-kicker">משחק מהיר</p>
+      <h1 class="start-title">Score Dash</h1>
+      <p class="start-copy">המזל ישחק לך היום?</p>
       <div class="start-actions">
-        <button id="start-btn" class="btn-start" type="button">התחל מסע</button>
+        <button id="start-btn" class="btn-start" type="button">התחל</button>
       </div>
     </section>
 
@@ -547,7 +609,7 @@
         </div>
       </div>
 
-      <p class="story-line">כל תשובה מזיזה את המסלול קדימה.</p>
+      <p class="story-line">כל תשובה מזיזה אותך קדימה.</p>
 
       <p id="question-box" class="question">מכין את הקלף הראשון...</p>
 
@@ -569,7 +631,7 @@
       </div>
       <div id="transition-panel" class="transition-panel">
         <div class="transition-orbit" aria-hidden="true"></div>
-        <p class="transition-kicker">The route is complete</p>
+        <p class="transition-kicker">Stage clear</p>
         <p class="transition-title">המסלול הושלם.</p>
         <p class="transition-copy" id="transition-copy">הגענו לסוף. אפשר לפתוח שוב מההתחלה.</p>
       </div>
@@ -658,9 +720,9 @@
     };
 
     const stages = [
-      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון פתוח. מתחילים לצבור מפתחות." },
-      { name: "חדר הצל", start: 10, end: 19, intro: "המסלול מתהדק. כל בחירה חשובה." },
-      { name: "שער הסיום", start: 20, end: 29, intro: "הסוף קרוב. שומרים על הקצב." }
+      { name: "המסדרון", start: 0, end: 9, intro: "המסלול מתחיל. נכנסים לקצב." },
+      { name: "חדר הצל", start: 10, end: 19, intro: "מהירות וקצב. כל בחירה נראית." },
+      { name: "שער הסיום", start: 20, end: 29, intro: "הסיום מתקרב. שומרים על המקום." }
     ];
 
     const encouragements = {
@@ -822,7 +884,7 @@
     function finishGame() {
       elements.questionBox.textContent = `המסלול הושלם. צברת ${state.score} מפתחות.`;
       showFeedback("שער אחרון נפתח. אפשר לנסות שוב מהתחלה.", "end-state");
-      elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות?`;
+      elements.shareCopy.textContent = `סיימתי את Score Dash עם ${state.score} מפתחות. מי רוצה לנסות?`;
       elements.transitionCopy.textContent = `המסלול נגמר. עכשיו אפשר לפתוח אותו שוב מההתחלה.`;
       setButtonsEnabled(false);
       setReplayVisible(true);

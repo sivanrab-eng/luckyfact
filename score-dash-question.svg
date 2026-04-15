@@ -1,0 +1,83 @@
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b63ff"/>
+      <stop offset="52%" stop-color="#4568ff"/>
+      <stop offset="100%" stop-color="#d96dff"/>
+    </linearGradient>
+    <radialGradient id="glowTop" cx="50%" cy="24%" r="54%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.54"/>
+      <stop offset="65%" stop-color="#7cf4ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9fcff"/>
+      <stop offset="100%" stop-color="#dfe9ff"/>
+    </linearGradient>
+    <linearGradient id="btnBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#33a9ff"/>
+      <stop offset="100%" stop-color="#1560ff"/>
+    </linearGradient>
+    <linearGradient id="btnPink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff86b2"/>
+      <stop offset="100%" stop-color="#ff4372"/>
+    </linearGradient>
+    <linearGradient id="good" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#66f7ff"/>
+      <stop offset="100%" stop-color="#70ffb5"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#glowTop)"/>
+
+  <g opacity="0.95">
+    <circle cx="94" cy="180" r="18" fill="#7cf4ff"/>
+    <circle cx="180" cy="150" r="12" fill="#ff86b2"/>
+    <circle cx="880" cy="170" r="20" fill="#70ffb5"/>
+    <circle cx="930" cy="210" r="12" fill="#ffe16a"/>
+  </g>
+
+  <rect x="88" y="104" width="904" height="126" rx="44" fill="rgba(18,27,95,0.78)" stroke="rgba(255,255,255,0.2)" stroke-width="2" filter="url(#shadow)"/>
+  <text x="150" y="182" font-family="Arial, sans-serif" font-size="52" font-weight="800" fill="#ffffff">מפתחות: 1,420</text>
+  <text x="932" y="182" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#ffffff" text-anchor="end">במקום 8</text>
+
+  <rect x="88" y="260" width="904" height="118" rx="38" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.16)" stroke-width="2"/>
+  <text x="150" y="315" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff">שלב 6 מתוך 10</text>
+  <text x="932" y="315" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" text-anchor="end">9/15</text>
+  <rect x="138" y="338" width="804" height="18" rx="9" fill="#0c1a64"/>
+  <rect x="138" y="338" width="474" height="18" rx="9" fill="url(#good)"/>
+
+  <circle cx="540" cy="690" r="270" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.86"/>
+  <circle cx="540" cy="690" r="286" fill="none" stroke="#7cf4ff" stroke-width="12" opacity="0.36" filter="url(#soft)"/>
+
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="540" y="628" font-size="58" font-weight="800" fill="#ffffff">שאלה 9</text>
+    <text x="540" y="724" font-size="74" font-weight="900" fill="#ffffff">תפוס את הרגע</text>
+    <text x="540" y="784" font-size="24" font-weight="700" fill="#e7f3ff">כל תשובה מזיזה אותך קדימה בבילבורד</text>
+  </g>
+
+  <rect x="86" y="940" width="908" height="356" rx="42" fill="url(#panel)" filter="url(#shadow)"/>
+  <text x="540" y="1040" font-family="Arial, sans-serif" font-size="50" font-weight="800" fill="#1b2845" text-anchor="middle">האם פינגווין יכול לעוף?</text>
+  <text x="540" y="1108" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#5c6c92" text-anchor="middle">בחר אמת או שקר כדי להמשיך</text>
+
+  <rect x="144" y="1180" width="330" height="72" rx="28" fill="url(#btnBlue)" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+  <rect x="606" y="1180" width="330" height="72" rx="28" fill="url(#btnPink)" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+  <text x="309" y="1226" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" text-anchor="middle">אמת</text>
+  <text x="771" y="1226" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" text-anchor="middle">שקר</text>
+
+  <rect x="144" y="1298" width="792" height="80" rx="30" fill="rgba(255,255,255,0.12)"/>
+  <text x="540" y="1349" font-family="Arial, sans-serif" font-size="30" font-weight="800" fill="#ffffff" text-anchor="middle">טוב. 3 ברצף. +25</text>
+
+  <rect x="86" y="1440" width="908" height="282" rx="42" fill="rgba(18,27,95,0.8)" stroke="rgba(255,255,255,0.16)" stroke-width="2"/>
+  <text x="138" y="1494" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#ffffff">בילבורד חי</text>
+  <text x="940" y="1494" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#ffe16a" text-anchor="end">#8</text>
+  <g font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#ffffff">
+    <text x="138" y="1560">נועה</text><text x="946" y="1560" text-anchor="end">16,980</text>
+    <text x="138" y="1610">דני</text><text x="946" y="1610" text-anchor="end">16,420</text>
+    <rect x="124" y="1630" width="832" height="48" rx="18" fill="rgba(255,255,255,0.12)"/>
+    <text x="138" y="1662">את/ה</text><text x="946" y="1662" text-anchor="end">15,760</text>
+  </g>
+</svg>

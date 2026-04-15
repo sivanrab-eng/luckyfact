@@ -1,0 +1,68 @@
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b63ff"/>
+      <stop offset="52%" stop-color="#4568ff"/>
+      <stop offset="100%" stop-color="#d96dff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="64%" stop-color="#7cf4ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9fcff"/>
+      <stop offset="100%" stop-color="#dfe9ff"/>
+    </linearGradient>
+    <linearGradient id="btnBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#33a9ff"/>
+      <stop offset="100%" stop-color="#1560ff"/>
+    </linearGradient>
+    <linearGradient id="good" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#66f7ff"/>
+      <stop offset="100%" stop-color="#70ffb5"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#glow)"/>
+  <circle cx="150" cy="190" r="18" fill="#7cf4ff" opacity="0.95"/>
+  <circle cx="920" cy="190" r="20" fill="#70ffb5" opacity="0.95"/>
+  <circle cx="888" cy="238" r="12" fill="#ffe16a" opacity="0.95"/>
+
+  <rect x="88" y="104" width="904" height="126" rx="44" fill="rgba(18,27,95,0.78)" stroke="rgba(255,255,255,0.2)" stroke-width="2" filter="url(#shadow)"/>
+  <text x="150" y="182" font-family="Arial, sans-serif" font-size="52" font-weight="800" fill="#ffffff">מפתחות: 1,600</text>
+  <text x="932" y="182" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" text-anchor="end">מקום 5</text>
+
+  <circle cx="540" cy="660" r="270" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.86"/>
+  <circle cx="540" cy="660" r="286" fill="none" stroke="#7cf4ff" stroke-width="12" opacity="0.38" filter="url(#soft)"/>
+
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="540" y="582" font-size="34" font-weight="800" fill="#ffffff">Stage clear</text>
+    <text x="540" y="688" font-size="100" font-weight="900" fill="#ffffff">+250</text>
+    <text x="540" y="760" font-size="54" font-weight="900" fill="#ffffff">בונוס שלב</text>
+    <text x="540" y="818" font-size="24" font-weight="700" fill="#e7f3ff">המסלול הבא נפתח עכשיו</text>
+  </g>
+
+  <rect x="116" y="980" width="848" height="300" rx="42" fill="url(#panel)" filter="url(#shadow)"/>
+  <text x="540" y="1060" font-family="Arial, sans-serif" font-size="48" font-weight="800" fill="#1b2845" text-anchor="middle">המסלול הושלם</text>
+  <text x="540" y="1128" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#5c6c92" text-anchor="middle">הדירוג שלך קפץ לשלב הבא</text>
+  <rect x="170" y="1172" width="740" height="18" rx="9" fill="#0c1a64"/>
+  <rect x="170" y="1172" width="560" height="18" rx="9" fill="url(#good)"/>
+  <text x="540" y="1232" font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#1b2845" text-anchor="middle">מיקום בבילבורד: 5</text>
+
+  <rect x="138" y="1322" width="804" height="320" rx="42" fill="rgba(18,27,95,0.8)" stroke="rgba(255,255,255,0.16)" stroke-width="2"/>
+  <text x="178" y="1380" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#ffffff">הבילבורד זז</text>
+  <text x="914" y="1380" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#ffe16a" text-anchor="end">#5</text>
+  <g font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#ffffff">
+    <text x="176" y="1450">נועה</text><text x="906" y="1450" text-anchor="end">19,120</text>
+    <text x="176" y="1502">דני</text><text x="906" y="1502" text-anchor="end">18,860</text>
+    <text x="176" y="1554">את/ה</text><text x="906" y="1554" text-anchor="end">18,430</text>
+    <text x="176" y="1606">מיה</text><text x="906" y="1606" text-anchor="end">18,210</text>
+  </g>
+
+  <rect x="220" y="1714" width="640" height="82" rx="30" fill="url(#btnBlue)" stroke="rgba(255,255,255,0.28)" stroke-width="3"/>
+  <text x="540" y="1766" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" text-anchor="middle">המשך לשלב הבא</text>
+</svg>
