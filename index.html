@@ -735,39 +735,39 @@
     };
 
     const stages = [
-      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה.", hint: "רמז שלב: עקוב אחרי הסימן הראשון." },
-      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר.", hint: "רמז שלב: חפש מה משנה את התמונה." },
-      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עוד מבט קטן לפני הבחירה.", hint: "רמז שלב: לפעמים סימן קטן פותח הכול." }
+      { name: "המסדרון", start: 0, end: 9, intro: "השער הראשון נפתח. עכשיו נכנסים פנימה.", hint: "בדוק קודם את המילה הקצרה ביותר." },
+      { name: "חדר הצל", start: 10, end: 19, intro: "האור חלש יותר. צריך לשים לב יותר.", hint: "בדוק אם יש מילה שלא מתאימה לשאר." },
+      { name: "שער הסיום", start: 20, end: 29, intro: "כמעט שם. עוד מבט קטן לפני הבחירה.", hint: "אם יש ספק, קרא שוב את המשפט מההתחלה." }
     ];
 
     const answerHints = {
       success: [
-        "רמז קטן: תזמון טוב פותח דלתות.",
-        "רמז קטן: סימן חד מוביל קדימה.",
-        "רמז קטן: לפעמים הקוד קצר אבל עמוק."
+        "חפש משפט קצר ופשוט.",
+        "בדוק אם משהו נשמע חריג.",
+        "קרא שוב את השורה האחרונה."
       ],
       miss: [
-        "רמז קטן: נסה מבט נוסף לפני הבחירה.",
-        "רמז קטן: הפעם המערכת הסיטה אותך. בסיבוב הבא חפש אחר סימן.",
-        "רמז קטן: פרט אחד יכול לשנות הכול."
+        "נסה שוב, אבל לאט יותר.",
+        "בדוק אם היסחת את עצמך ממילה אחת.",
+        "קרא את המשפט עוד פעם אחת."
       ]
     };
 
     const encouragements = {
       correct: [
-        "יפה. פתחת עוד צעד במסלול.",
-        "טוב מאוד. סימון מדויק.",
-        "מצוין. תפסת את הרגע הנכון."
+        "טוב.",
+        "יפה.",
+        "נכון."
       ],
       streak: [
-        "רצף יפה. המומנטום איתך.",
-        "עוד צעד קטן והדלת נפתחת.",
-        "הקצב שלך טוב. המסלול אוהב את זה."
+        "מצוין, יש רצף.",
+        "עוד תשובה טובה.",
+        "אתה מתקדם יפה."
       ],
       gentle: [
-        "לא נורא. המסלול עדיין פתוח.",
-        "בסדר גמור. ממשיכים קדימה.",
-        "המערכת ניסתה לבלבל. בפעם הבאה אתה מחזיר לה."
+        "לא נורא.",
+        "תמשיך.",
+        "נסה שוב."
       ]
     };
 
@@ -925,7 +925,7 @@
     function finishGame() {
       elements.questionBox.textContent = `המסלול הושלם. צברת ${state.score} מפתחות.`;
       showFeedback("שער אחרון נפתח. אפשר לנסות שוב מהתחלה.", "end-state");
-      showHint("רמז אחרון: בכל ניסיון רואים יותר.", false);
+      showHint("המסלול הושלם. אפשר להתחיל שוב.", false);
       elements.shareCopy.textContent = `סיימתי את LuckyFact עם ${state.score} מפתחות. מי רוצה לנסות?`;
       elements.transitionCopy.textContent = `המסלול נגמר. עכשיו אפשר לפתוח אותו שוב מההתחלה.`;
       setButtonsEnabled(false);
@@ -951,7 +951,7 @@
       elements.stageName.textContent = stages[0].name;
       elements.questionBox.textContent = "מכין את הקלף הראשון...";
       showFeedback("", "neutral");
-      showHint("רמז קטן: לפעמים סימן אחד משנה הכול.", true);
+      showHint("התחל מהמשפט הראשון.", true);
       speakGuide("בוא נראה כמה רחוק תגיע.", false);
       updateStats();
       setButtonsEnabled(true);
@@ -1002,16 +1002,16 @@
         }
         showFeedback(getEncouragement("correct"), "success");
         if (boost > 0) {
-          showHint(`רצף חזק! קיבלת בונוס של ${boost} מפתחות. · ${getHint(true)}`, true);
+          showHint(`בונוס ${boost}. ${getHint(true)}`, true);
         } else {
-          showHint(`${getEncouragement("streak")} · ${getHint(true)}`, true);
+          showHint(getHint(true), true);
         }
         speakGuide(getEncouragement("correct"), false);
       } else {
         state.score -= 50;
         state.streak = 0;
         showFeedback(getEncouragement("gentle"), "error");
-        showHint("רמז קטן: נסה לזהות סימן אחד שלא מסתדר.", true);
+        showHint("בדוק את המשפט עוד פעם.", true);
         speakGuide(getEncouragement("gentle"), true);
       }
       updateStats();
@@ -1037,7 +1037,7 @@
     });
 
     updateStats();
-    showHint("רמז קטן: לפעמים סימן אחד משנה הכול.", true);
+    showHint("התחל מהמשפט הראשון.", true);
     speakGuide("אני כאן אם תרצה רמז. מתחילים בקטן.", true);
     showMainUI(false);
     setReplayVisible(false);
