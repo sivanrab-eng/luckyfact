@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f2bc0">
   <meta name="ga4-measurement-id" content="G-K2JXQXVCEH">
+  <meta name="leaderboard-api-base" content="">
   <title>Score Dash</title>
   <link rel="manifest" href="manifest.webmanifest">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -1259,6 +1260,7 @@
     const GIFTS = ["🐱", "🦄", "🍦", "🌈", "🍭", "🎨", "💎", "🌸", "🍕", "🎬", "🎸", "🐼", "🍓", "👑", "🚀"];
     const scoreFormatter = new Intl.NumberFormat("en-US");
     const GA4_MEASUREMENT_ID = document.querySelector('meta[name="ga4-measurement-id"]')?.content.trim() || "";
+    const LEADERBOARD_API_BASE = document.querySelector('meta[name="leaderboard-api-base"]')?.content.trim().replace(/\/$/, "") || "";
     let deferredInstallPrompt = null;
     const stageNames = [
       "התחלה",
@@ -2434,23 +2436,31 @@
       state.dailyBonusOffer = offer;
       const bonusAmount = getDailyBonusAmount(offer.streak);
       elements.dailyBonusTitle.textContent = "מזל יומי";
-      elements.dailyBonusCopy.textContent = "אסוף 200 נקודות בונוס יומי 🎉";
+      elements.dailyBonusCopy.textContent = `אסוף ${formatScore(bonusAmount)} נקודות בונוס יומי 🎉`;
       renderDailyBonusTrack(offer.streak, false);
-      elements.dailyBonusBtn.textContent = "Collect";
-      elements.dailyBonusBtn.dataset.claimed = "false";
+      elements.dailyBonusBtn.textContent = "אסוף";
       setDailyBonusVisible(true);
       trackEvent("daily_bonus_available", {
         streak_day: offer.streak
       });
     }
 
-    function collectDailyBonus() {
-      if (!state.dailyBonusOffer) {
-        setDailyBonusVisible(false);
+    function celebrateDailyBonus() {
+      if (typeof confetti !== "function") {
         return;
       }
 
-      if (elements.dailyBonusBtn.dataset.claimed === "true") {
+      confetti({
+        particleCount: 180,
+        spread: 85,
+        startVelocity: 42,
+        origin: { y: 0.58 },
+        colors: ["#ffd166", "#ff7eb9", "#7afcff", "#8cff98"]
+      });
+    }
+
+    function collectDailyBonus() {
+      if (!state.dailyBonusOffer) {
         setDailyBonusVisible(false);
         return;
       }
@@ -2464,11 +2474,8 @@
       updateStats();
       const bestStreak = Math.max(state.dailyBonusOffer.bestStreak || 1, state.dailyBonusOffer.streak);
       saveDailyBonusClaim(state.dailyBonusOffer.streak, bestStreak);
-      elements.dailyBonusTitle.textContent = "כל הכבוד";
-      elements.dailyBonusCopy.textContent = "נאספו 200 נקודות בונוס יומי 🎉";
-      renderDailyBonusTrack(state.dailyBonusOffer.streak, true);
-      elements.dailyBonusBtn.textContent = "סגור";
-      elements.dailyBonusBtn.dataset.claimed = "true";
+      celebrateDailyBonus();
+      setDailyBonusVisible(false);
       showFeedback(`כל הכבוד. ${getDailyBonusLabel(state.dailyBonusOffer.streak)} · +${formatScore(bonusAmount)}`, "success");
       trackEvent("daily_bonus_claim", {
         streak_day: state.dailyBonusOffer.streak,
@@ -2583,22 +2590,29 @@
       elements.highScore.textContent = formatScore(Math.max(getPersonalHighScore(), state.score));
     }
 
+    function normalizeLeaderboardEntries(entries) {
+      if (!Array.isArray(entries)) {
+        return [];
+      }
+
+      return entries
+        .filter((entry) => entry && typeof entry.name === "string" && Number.isFinite(Number(entry.score)))
+        .map((entry) => ({
+          id: String(entry.id || createRunId()),
+          name: entry.name.slice(0, 18),
+          score: Number(entry.score),
+          combo: Number(entry.combo) || 0,
+          stage: Number(entry.stage) || 1,
+          completedAt: Number(entry.completedAt) || Date.now()
+        }))
+        .sort((a, b) => b.score - a.score || a.completedAt - b.completedAt)
+        .slice(0, 5);
+    }
+
     function getLeaderboardScores() {
       try {
         const saved = JSON.parse(localStorage.getItem(LEADERBOARD_KEY) || "[]");
-        if (!Array.isArray(saved)) {
-          return [];
-        }
-
-        return saved
-          .filter((entry) => entry && typeof entry.name === "string" && Number.isFinite(Number(entry.score)))
-          .map((entry) => ({
-            id: String(entry.id || createRunId()),
-            name: entry.name.slice(0, 18),
-            score: Number(entry.score),
-            stage: Number(entry.stage) || 1,
-            completedAt: Number(entry.completedAt) || Date.now()
-          }));
+        return normalizeLeaderboardEntries(saved);
       } catch (error) {
         return [];
       }
@@ -2606,7 +2620,7 @@
 
     function saveLeaderboardScores(scores) {
       try {
-        localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(scores));
+        localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(normalizeLeaderboardEntries(scores)));
       } catch (error) {}
     }
 
@@ -2624,7 +2638,7 @@
       return getLeaderboardScores().some((entry) => entry.id === id);
     }
 
-    function updateLeaderboard(name, score, context = {}) {
+    function updateLocalLeaderboard(name, score, context = {}) {
       const entryId = context.id || createRunId();
       const cleanName = sanitizePlayerName(name);
       const scores = getLeaderboardScores()
@@ -2633,22 +2647,84 @@
           id: entryId,
           name: cleanName,
           score,
+          combo: context.combo || 0,
           stage: context.stage || state.stage + 1,
           completedAt: Date.now()
         })
-        .sort((a, b) => b.score - a.score || a.completedAt - b.completedAt)
-        .slice(0, 5);
+        ;
 
       saveLeaderboardScores(scores);
       try {
         localStorage.setItem(PLAYER_NAME_KEY, cleanName);
       } catch (error) {}
+      return cleanName;
+    }
+
+    async function fetchRemoteLeaderboard(limit = 5) {
+      if (!LEADERBOARD_API_BASE) {
+        return null;
+      }
+
+      try {
+        const response = await fetch(`${LEADERBOARD_API_BASE}/leaderboard?limit=${encodeURIComponent(limit)}`);
+        if (!response.ok) {
+          throw new Error(`Leaderboard fetch failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const scores = normalizeLeaderboardEntries(data.entries || data);
+        if (scores.length > 0) {
+          saveLeaderboardScores(scores);
+        }
+        return scores;
+      } catch (error) {
+        console.error("שגיאה בטעינת לידרבורד:", error);
+        return null;
+      }
+    }
+
+    async function updateLeaderboard(name, score, context = {}) {
+      const cleanName = updateLocalLeaderboard(name, score, context);
+
+      if (!LEADERBOARD_API_BASE) {
+        renderLeaderboard();
+        return cleanName;
+      }
+
+      try {
+        const response = await fetch(`${LEADERBOARD_API_BASE}/leaderboard`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            id: context.id || createRunId(),
+            name: cleanName,
+            score,
+            combo: context.combo || state.streak,
+            stage: context.stage || state.stage + 1,
+            completedAt: Date.now()
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Leaderboard update failed: ${response.status}`);
+        }
+
+        const data = await response.json().catch(() => ({}));
+        const scores = normalizeLeaderboardEntries(data.entries || []);
+        if (scores.length > 0) {
+          saveLeaderboardScores(scores);
+        }
+      } catch (error) {
+        console.error("שגיאה בעדכון הלידרבורד:", error);
+      }
+
       renderLeaderboard();
       return cleanName;
     }
 
-    function renderLeaderboard() {
-      const scores = getLeaderboardScores();
+    function renderLeaderboard(scores = getLeaderboardScores()) {
       elements.leaderboardList.innerHTML = "";
 
       if (scores.length === 0) {
@@ -2734,6 +2810,14 @@
         : `תוצאה: ${formatScore(context.score)} נק׳ · שלב ${context.stage}/${TOTAL_STAGES}`;
       renderLeaderboard();
       setLeaderboardVisible(true);
+
+      if (LEADERBOARD_API_BASE) {
+        fetchRemoteLeaderboard().then((scores) => {
+          if (scores) {
+            renderLeaderboard(scores);
+          }
+        });
+      }
     }
 
     function getSavedInventory() {
@@ -3222,6 +3306,7 @@
         updateStats();
       }
 
+      setTransitionMode(true);
       setTransitionVisible(true);
       setNextStageVisible(false);
       setTransitionShareVisible(false);
@@ -3382,16 +3467,19 @@
     elements.truthBtn.addEventListener("click", () => checkAnswer(true));
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
     elements.replayBtn.addEventListener("click", resetGame);
-    elements.leaderboardForm.addEventListener("submit", (event) => {
+    elements.leaderboardForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!state.leaderboardContext) {
         return;
       }
 
-      const savedName = updateLeaderboard(
+      const savedName = await updateLeaderboard(
         elements.playerName.value,
         state.leaderboardContext.score,
-        state.leaderboardContext
+        {
+          ...state.leaderboardContext,
+          combo: state.streak
+        }
       );
       elements.playerName.value = savedName;
       elements.saveScoreBtn.textContent = "נשמר";
@@ -3436,13 +3524,17 @@
       elements.installNote.textContent = "אם לא נפתח חלון התקנה: בתפריט הדפדפן בחר הוסף למסך הבית.";
       trackEvent("pwa_install_help");
     });
-    elements.resumeBtn.addEventListener("click", continueSavedGame);
+    elements.resumeBtn.addEventListener("click", () => {
+      continueSavedGame();
+      window.setTimeout(showDailyBonus, 250);
+    });
     elements.restartBtn.addEventListener("click", () => {
       clearSavedGame();
       elements.resumePanel.hidden = true;
       elements.startBtn.hidden = false;
       state.started = true;
       resetGame();
+      window.setTimeout(showDailyBonus, 250);
     });
     elements.nextStageBtn.addEventListener("click", () => {
       if (!state.awaitingStageContinue) {
@@ -3465,6 +3557,7 @@
         start_source: "start_button"
       });
       resetGame();
+      window.setTimeout(showDailyBonus, 250);
     });
 
     if (typeof window !== "undefined" && window.addEventListener) {
@@ -3488,7 +3581,6 @@
     setResumePrompt();
     showMainUI(false);
     setReplayVisible(false);
-    showDailyBonus();
   </script>
 </body>
 </html>
