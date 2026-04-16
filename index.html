@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f2bc0">
+  <meta name="ga4-measurement-id" content="G-K2JXQXVCEH">
   <title>Score Dash</title>
   <link rel="manifest" href="manifest.webmanifest">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -121,6 +122,16 @@
       padding: 10px 14px;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
       color: #f8fbff;
+    }
+
+    #combo-pill.is-hot {
+      color: #ffe16a;
+      border-color: rgba(255, 225, 106, 0.72);
+      box-shadow: 0 0 22px rgba(255, 225, 106, 0.3), 0 10px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    #combo-pill.combo-pulse {
+      animation: comboPulse 820ms ease;
     }
 
     .stats.is-transition-hidden {
@@ -248,6 +259,179 @@
       border: 1px solid rgba(255, 255, 255, 0.22);
     }
 
+    .daily-bonus {
+      position: absolute;
+      inset: 16px;
+      display: none;
+      place-items: center;
+      z-index: 20;
+      padding: 12px;
+      background: rgba(4, 10, 42, 0.68);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+    }
+
+    .daily-bonus.is-visible {
+      display: grid;
+    }
+
+    .daily-bonus-panel {
+      width: min(100%, 520px);
+      padding: 22px 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background:
+        radial-gradient(circle at top center, rgba(255,225,106,0.22), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07)),
+        rgba(8, 15, 70, 0.92);
+      box-shadow: 0 18px 0 rgba(0,0,0,0.16), 0 28px 42px rgba(0,0,0,0.22);
+      text-align: center;
+      display: grid;
+      gap: 12px;
+    }
+
+    .daily-bonus-kicker {
+      margin: 0;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .daily-bonus-title {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.8rem, 5vw, 2.35rem);
+      line-height: 1;
+      font-weight: 900;
+      text-shadow: 0 8px 18px rgba(255, 225, 106, 0.24);
+    }
+
+    .daily-bonus-copy {
+      margin: 0;
+      color: rgba(246, 250, 255, 0.92);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .daily-bonus-track {
+      display: grid;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .daily-bonus-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .daily-bonus-day {
+      display: grid;
+      gap: 4px;
+      align-content: start;
+    }
+
+    .daily-bonus-token {
+      min-height: 48px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      display: grid;
+      place-items: center;
+      gap: 1px;
+      padding: 5px 3px;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.08);
+    }
+
+    .daily-bonus-day.is-complete .daily-bonus-token {
+      background: linear-gradient(180deg, rgba(255,225,106,0.24), rgba(255,225,106,0.1));
+      border-color: rgba(255, 225, 106, 0.4);
+    }
+
+    .daily-bonus-day.is-active .daily-bonus-token {
+      border-color: rgba(255, 84, 174, 0.88);
+      border-width: 3px;
+      box-shadow: 0 0 0 4px rgba(255,84,174,0.22), inset 0 2px 0 rgba(255,255,255,0.12), 0 0 24px rgba(255,84,174,0.22);
+      transform: translateY(-2px);
+    }
+
+    .daily-bonus-day.is-claimed .daily-bonus-token {
+      background: linear-gradient(180deg, rgba(83,241,255,0.24), rgba(83,241,255,0.1));
+      border-color: rgba(83, 241, 255, 0.52);
+    }
+
+    .daily-bonus-icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: #7a5200;
+      font-size: 0.54rem;
+      background: radial-gradient(circle at 35% 35%, #fff2a8, #ffd14b 55%, #e6a900);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 3px 6px rgba(0,0,0,0.18);
+    }
+
+    .daily-bonus-amount {
+      color: var(--text);
+      font-size: 0.62rem;
+      font-weight: 900;
+      direction: ltr;
+      line-height: 1;
+    }
+
+    .daily-bonus-day-label {
+      color: rgba(240, 247, 255, 0.74);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .daily-bonus-progress {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: center;
+      gap: 8px;
+      padding-inline: 10px;
+    }
+
+    .daily-bonus-progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      justify-self: center;
+      position: relative;
+    }
+
+    .daily-bonus-progress-dot::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: calc(-100% - 4px);
+      width: calc(100% + 8px);
+      height: 2px;
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-50%);
+    }
+
+    .daily-bonus-progress-dot:last-child::after {
+      display: none;
+    }
+
+    .daily-bonus-progress-dot.is-complete,
+    .daily-bonus-progress-dot.is-active,
+    .daily-bonus-progress-dot.is-claimed {
+      background: #ff54ae;
+      box-shadow: 0 0 0 6px rgba(255,84,174,0.12);
+    }
+
+    .daily-bonus-progress-dot.is-complete::after,
+    .daily-bonus-progress-dot.is-claimed::after {
+      background: rgba(255,84,174,0.42);
+    }
+
     .install-note {
       min-height: 22px;
       margin: 0;
@@ -278,6 +462,10 @@
       gap: 8px;
       overflow-x: auto;
       min-height: 50px;
+    }
+
+    .collection-shelf[hidden] {
+      display: none;
     }
 
     .sticker-grid {
@@ -315,6 +503,7 @@
     .main-ui.is-transition-mode .stage-row,
     .main-ui.is-transition-mode .progress-wrap,
     .main-ui.is-transition-mode .question,
+    .main-ui.is-transition-mode .stake-zone,
     .main-ui.is-transition-mode .buttons,
     .main-ui.is-transition-mode #feedback,
     .main-ui.is-transition-mode .replay-row,
@@ -371,14 +560,62 @@
     }
 
     .question {
-      min-height: 112px;
+      min-height: 72px;
       font-size: clamp(1.2rem, 3vw, 1.45rem);
       line-height: 1.6;
-      margin: 0 0 20px;
+      margin: 0;
       position: relative;
       z-index: 1;
       text-shadow: 0 1px 0 rgba(255,255,255,0.2);
       white-space: pre-line;
+    }
+
+    .stake-zone {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 18px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .stake-label {
+      margin: 0;
+      color: rgba(240, 247, 255, 0.82);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .stake-options {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .stake-btn {
+      min-width: 0;
+      width: 100%;
+      padding: 10px 8px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(180deg, #101f78, #081047);
+      border: 2px solid rgba(83, 241, 255, 0.74);
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.08), 0 10px 0 rgba(0,0,0,0.16), 0 14px 24px rgba(0,0,0,0.2);
+    }
+
+    .stake-btn.is-selected {
+      color: #07144a;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.5), transparent 32%),
+        linear-gradient(180deg, #7bffcb, #53f1ff);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.24), 0 0 22px rgba(83,241,255,0.48), 0 12px 0 rgba(0,0,0,0.16);
+    }
+
+    .stake-btn:disabled {
+      opacity: 0.35;
+      filter: grayscale(0.8);
     }
 
     #question-box.question-swap {
@@ -490,6 +727,150 @@
 
     .share-panel.is-visible {
       display: grid;
+    }
+
+    .leaderboard-panel {
+      margin-top: 18px;
+      padding: 16px 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06)),
+        rgba(7, 15, 64, 0.68);
+      position: relative;
+      z-index: 1;
+      display: none;
+      gap: 12px;
+      box-shadow: 0 16px 0 rgba(0,0,0,0.14);
+      text-align: right;
+    }
+
+    .leaderboard-panel.is-visible {
+      display: grid;
+    }
+
+    .leaderboard-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .leaderboard-kicker,
+    .leaderboard-title,
+    .leaderboard-note {
+      margin: 0;
+    }
+
+    .leaderboard-kicker {
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .leaderboard-title {
+      color: var(--text);
+      font-size: 1.15rem;
+      line-height: 1.25;
+    }
+
+    .leaderboard-note {
+      color: rgba(240,247,255,0.78);
+      font-size: 0.9rem;
+      line-height: 1.45;
+      min-height: 20px;
+    }
+
+    .leaderboard-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .leaderboard-form input {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      background: rgba(5, 12, 54, 0.72);
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+      font-weight: 700;
+      outline: none;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.08);
+    }
+
+    .leaderboard-form input::placeholder {
+      color: rgba(240,247,255,0.58);
+    }
+
+    .leaderboard-form input:focus {
+      border-color: rgba(83, 241, 255, 0.72);
+      box-shadow: 0 0 0 3px rgba(83, 241, 255, 0.16), inset 0 2px 0 rgba(255,255,255,0.08);
+    }
+
+    .btn-leaderboard {
+      min-width: 112px;
+      padding-inline: 18px;
+      background: linear-gradient(180deg, #2b9aff, #1560ff);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .leaderboard-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(247,251,255,0.9);
+      min-height: 46px;
+    }
+
+    .leaderboard-row.is-top {
+      background: linear-gradient(90deg, rgba(255, 225, 106, 0.28), rgba(83, 241, 255, 0.11));
+      border-color: rgba(255, 225, 106, 0.38);
+      color: var(--text);
+      font-weight: 900;
+    }
+
+    .leaderboard-rank {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      color: var(--gold);
+      font-weight: 900;
+      direction: ltr;
+    }
+
+    .leaderboard-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .leaderboard-score {
+      color: var(--accent);
+      font-weight: 900;
+      direction: ltr;
+      white-space: nowrap;
     }
 
     .share-title {
@@ -617,6 +998,12 @@
       100% { transform: scale(1); }
     }
 
+    @keyframes comboPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 225, 106, 0.66); }
+      55% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(255, 225, 106, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 225, 106, 0); }
+    }
+
     @keyframes slowSpin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -632,10 +1019,13 @@
         justify-content: center;
         gap: 10px;
         margin-bottom: 14px;
+        font-size: 0.9rem;
       }
 
       .stats > div {
         width: 100%;
+        padding: 10px 8px;
+        margin-inline: auto;
       }
 
       .stage-row {
@@ -648,11 +1038,50 @@
       }
 
       .start-screen {
-        min-height: 380px;
+        min-height: 340px;
+        gap: 10px;
+        padding: 18px 8px 12px;
       }
 
       .start-title {
         font-size: clamp(2.4rem, 13vw, 3.5rem);
+      }
+
+      .start-copy {
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .start-actions,
+      .resume-actions,
+      .transition-actions {
+        gap: 8px;
+      }
+
+      .resume-panel {
+        width: 100%;
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .daily-bonus {
+        inset: 10px;
+        border-radius: 20px;
+      }
+
+      .daily-bonus-panel {
+        border-radius: 20px;
+        padding: 18px 14px;
+      }
+
+      .daily-bonus-days {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 4px;
+      }
+
+      .daily-bonus-progress {
+        gap: 4px;
+        padding-inline: 2px;
       }
 
       .luck-meter {
@@ -660,13 +1089,34 @@
       }
 
       .question {
-        min-height: 92px;
+        min-height: 48px;
         margin-bottom: 16px;
       }
 
+      .stake-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .share-panel,
+      .leaderboard-panel,
       .transition-panel {
         border-radius: 18px;
+        padding: 14px 12px;
+      }
+
+      .leaderboard-head {
+        display: grid;
+        gap: 4px;
+      }
+
+      .leaderboard-form {
+        grid-template-columns: 1fr;
+      }
+
+      .share-copy,
+      .transition-copy,
+      .leaderboard-note {
+        font-size: 0.88rem;
       }
 
       button {
@@ -678,9 +1128,23 @@
 </head>
 <body>
   <div id="game-container">
+    <div id="daily-bonus" class="daily-bonus" hidden>
+      <div class="daily-bonus-panel">
+        <p class="daily-bonus-kicker">Daily luck</p>
+        <h2 id="daily-bonus-title" class="daily-bonus-title">מזל יומי</h2>
+        <p id="daily-bonus-copy" class="daily-bonus-copy">יום 1 ברצף מחכה לך.</p>
+        <div class="daily-bonus-track">
+          <div id="daily-bonus-days" class="daily-bonus-days"></div>
+          <div id="daily-bonus-progress" class="daily-bonus-progress"></div>
+        </div>
+        <button id="daily-bonus-btn" class="btn-start" type="button">Collect</button>
+      </div>
+    </div>
+
     <div id="stats" class="stats">
       <div>נקודות: <span id="score">500</span></div>
-      <div>Combo x<span id="luck-level">0</span></div>
+      <div id="combo-pill">Combo x<span id="luck-level">1</span></div>
+      <div>שיא: <span id="high-score">500</span></div>
     </div>
 
     <section id="start-screen" class="start-screen">
@@ -724,6 +1188,16 @@
 
       <p id="question-box" class="question">מכין את השאלה הראשונה...</p>
 
+      <div id="stake-zone" class="stake-zone">
+        <p id="stake-label" class="stake-label">כמה אתה בטוח בעצמך?</p>
+        <div class="stake-options" aria-label="בחירת סיכון נקודות">
+          <button class="stake-btn" type="button" data-stake="50">50</button>
+          <button class="stake-btn" type="button" data-stake="100">100</button>
+          <button class="stake-btn" type="button" data-stake="250">250</button>
+          <button class="stake-btn" type="button" data-stake="max">מקסימום</button>
+        </div>
+      </div>
+
       <div class="buttons">
         <button id="truth-btn" class="btn-truth" type="button">אמת</button>
         <button id="lie-btn" class="btn-lie" type="button">שקר</button>
@@ -739,6 +1213,20 @@
         <div class="start-actions">
           <button id="share-btn" class="btn-share" type="button">שתף ב-WhatsApp</button>
         </div>
+      </div>
+      <div id="leaderboard" class="leaderboard-panel">
+        <div class="leaderboard-head">
+          <div>
+            <p class="leaderboard-kicker">Top 5</p>
+            <h3 class="leaderboard-title">🏆 טבלת האלופים</h3>
+          </div>
+          <p id="leaderboard-note" class="leaderboard-note">הכניסו שם כדי לשמור מקום בטבלה.</p>
+        </div>
+        <form id="leaderboard-form" class="leaderboard-form">
+          <input id="player-name" type="text" maxlength="18" autocomplete="nickname" placeholder="שם שחקן">
+          <button id="save-score-btn" class="btn-leaderboard" type="submit">שמור</button>
+        </form>
+        <ul id="leaderboard-list" class="leaderboard-list"></ul>
       </div>
       <div id="transition-panel" class="transition-panel">
         <div class="transition-orbit" aria-hidden="true"></div>
@@ -759,11 +1247,18 @@
     const STAGE_BONUS = 250;
     const PERFECT_STAGE_BONUS = 400;
     const HOT_STREAK_STAGE_BONUS = 325;
+    const DAILY_BONUS_BASE_AMOUNT = 200;
+    const DAILY_BONUS_STEP_AMOUNT = 50;
+    const DAILY_BONUS_KEY = "scoreDashDailyBonus";
     const SHARE_URL = "https://sivanrab-eng.github.io/luckyfact/";
     const GAME_SAVE_KEY = "scoreDashSaveV2";
     const INVENTORY_KEY = "luckyfact_inventory";
+    const HIGH_SCORE_KEY = "scoreDashHighScore";
+    const LEADERBOARD_KEY = "scoreDashLeaderboard";
+    const PLAYER_NAME_KEY = "scoreDashPlayerName";
     const GIFTS = ["🐱", "🦄", "🍦", "🌈", "🍭", "🎨", "💎", "🌸", "🍕", "🎬", "🎸", "🐼", "🍓", "👑", "🚀"];
     const scoreFormatter = new Intl.NumberFormat("en-US");
+    const GA4_MEASUREMENT_ID = document.querySelector('meta[name="ga4-measurement-id"]')?.content.trim() || "";
     let deferredInstallPrompt = null;
     const stageNames = [
       "התחלה",
@@ -1692,6 +2187,12 @@
 
     const elements = {
       gameContainer: document.getElementById("game-container"),
+      dailyBonus: document.getElementById("daily-bonus"),
+      dailyBonusTitle: document.getElementById("daily-bonus-title"),
+      dailyBonusCopy: document.getElementById("daily-bonus-copy"),
+      dailyBonusDays: document.getElementById("daily-bonus-days"),
+      dailyBonusProgress: document.getElementById("daily-bonus-progress"),
+      dailyBonusBtn: document.getElementById("daily-bonus-btn"),
       startScreen: document.getElementById("start-screen"),
       startBtn: document.getElementById("start-btn"),
       resumePanel: document.getElementById("resume-panel"),
@@ -1705,7 +2206,9 @@
       mainUI: document.getElementById("main-ui"),
       stats: document.getElementById("stats"),
       score: document.getElementById("score"),
+      comboPill: document.getElementById("combo-pill"),
       luckLevel: document.getElementById("luck-level"),
+      highScore: document.getElementById("high-score"),
       progressText: document.getElementById("progress-text"),
       remainingText: document.getElementById("remaining-text"),
       remainingCopy: document.getElementById("remaining-copy"),
@@ -1715,12 +2218,21 @@
       stageName: document.getElementById("stage-name"),
       stageRow: document.getElementById("stage-row"),
       questionBox: document.getElementById("question-box"),
+      stakeZone: document.getElementById("stake-zone"),
+      stakeLabel: document.getElementById("stake-label"),
+      stakeButtons: Array.from(document.querySelectorAll(".stake-btn")),
       feedback: document.getElementById("feedback"),
       replayBtn: document.getElementById("replay-btn"),
       sharePanel: document.getElementById("share-panel"),
       shareTitle: document.getElementById("share-title"),
       shareCopy: document.getElementById("share-copy"),
       shareBtn: document.getElementById("share-btn"),
+      leaderboard: document.getElementById("leaderboard"),
+      leaderboardForm: document.getElementById("leaderboard-form"),
+      playerName: document.getElementById("player-name"),
+      saveScoreBtn: document.getElementById("save-score-btn"),
+      leaderboardNote: document.getElementById("leaderboard-note"),
+      leaderboardList: document.getElementById("leaderboard-list"),
       transitionShareBtn: document.getElementById("transition-share-btn"),
       nextStageBtn: document.getElementById("next-stage-btn"),
       transitionPanel: document.getElementById("transition-panel"),
@@ -1736,14 +2248,18 @@
       index: 0,
       stage: 0,
       streak: 0,
+      currentStake: 0,
       stageMistakes: 0,
       finalRewardClaimed: false,
       locked: false,
       timerId: null,
       audioContext: null,
+      runId: createRunId(),
       started: false,
       awaitingStageContinue: false,
       lastTransition: null,
+      leaderboardContext: null,
+      dailyBonusOffer: null,
       inventory: getSavedInventory(),
       deck: buildDeck()
     };
@@ -1766,9 +2282,251 @@
       ]
     };
 
+    function initAnalytics() {
+      if (!/^G-[A-Z0-9]+$/i.test(GA4_MEASUREMENT_ID)) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function noopGtag() {};
+        return;
+      }
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() {
+        window.dataLayer.push(arguments);
+      };
+
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_MEASUREMENT_ID)}`;
+      document.head.appendChild(script);
+
+      window.gtag("js", new Date());
+      window.gtag("config", GA4_MEASUREMENT_ID, {
+        send_page_view: true
+      });
+    }
+
+    function trackEvent(name, params = {}) {
+      if (typeof window.gtag !== "function") {
+        return;
+      }
+
+      window.gtag("event", name, {
+        app_name: "Score Dash",
+        stage: state.stage + 1,
+        score: state.score,
+        ...params
+      });
+    }
+
+    function getLocalDateStamp(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function shiftDateStamp(dateStamp, days) {
+      const [year, month, day] = dateStamp.split("-").map(Number);
+      const shifted = new Date(year, month - 1, day);
+      shifted.setDate(shifted.getDate() + days);
+      return getLocalDateStamp(shifted);
+    }
+
+    function getDailyBonusState() {
+      const today = getLocalDateStamp();
+      try {
+        const saved = JSON.parse(localStorage.getItem(DAILY_BONUS_KEY) || "null");
+        if (!saved || !saved.lastClaimDate) {
+          return { available: true, streak: 1, bestStreak: 1, lastClaimDate: null };
+        }
+
+        if (saved.lastClaimDate === today) {
+          return {
+            available: false,
+            streak: Math.max(Number(saved.streak) || 1, 1),
+            bestStreak: Math.max(Number(saved.bestStreak) || Number(saved.streak) || 1, 1),
+            lastClaimDate: saved.lastClaimDate
+          };
+        }
+
+        const expectedYesterday = shiftDateStamp(today, -1);
+        return {
+          available: true,
+          streak: saved.lastClaimDate === expectedYesterday ? Math.max((Number(saved.streak) || 0) + 1, 1) : 1,
+          bestStreak: Math.max(Number(saved.bestStreak) || Number(saved.streak) || 1, 1),
+          lastClaimDate: saved.lastClaimDate
+        };
+      } catch (error) {
+        return { available: true, streak: 1, bestStreak: 1, lastClaimDate: null };
+      }
+    }
+
+    function saveDailyBonusClaim(streak, bestStreak) {
+      try {
+        localStorage.setItem(DAILY_BONUS_KEY, JSON.stringify({
+          lastClaimDate: getLocalDateStamp(),
+          streak,
+          bestStreak
+        }));
+      } catch (error) {}
+    }
+
+    function getDailyBonusAmount(streak) {
+      return DAILY_BONUS_BASE_AMOUNT + (Math.max(streak, 1) - 1) * DAILY_BONUS_STEP_AMOUNT;
+    }
+
+    function getDailyBonusLabel(streak) {
+      return streak === 1 ? "יום אחד ברצף" : `${streak} ימים ברצף`;
+    }
+
+    function setDailyBonusVisible(visible) {
+      elements.dailyBonus.hidden = !visible;
+      elements.dailyBonus.classList.toggle("is-visible", visible);
+    }
+
+    function renderDailyBonusTrack(streak, claimed) {
+      const currentDay = ((Math.max(streak, 1) - 1) % 7) + 1;
+
+      elements.dailyBonusDays.innerHTML = "";
+      elements.dailyBonusProgress.innerHTML = "";
+
+      for (let day = 1; day <= 7; day += 1) {
+        const dayCard = document.createElement("div");
+        const isBeforeCurrent = day < currentDay;
+        const isCurrent = day === currentDay;
+        dayCard.className = "daily-bonus-day";
+        if (isBeforeCurrent) {
+          dayCard.classList.add("is-complete");
+        }
+        if (isCurrent) {
+          dayCard.classList.add(claimed ? "is-claimed" : "is-active");
+        }
+
+        const dayAmount = getDailyBonusAmount(day);
+
+        dayCard.innerHTML = `
+          <div class="daily-bonus-token">
+            <div class="daily-bonus-icon">◎</div>
+            <div class="daily-bonus-amount">+${formatScore(dayAmount)}</div>
+          </div>
+          <div class="daily-bonus-day-label">יום ${day}</div>
+        `;
+        elements.dailyBonusDays.appendChild(dayCard);
+
+        const dot = document.createElement("span");
+        dot.className = "daily-bonus-progress-dot";
+        if (isBeforeCurrent) {
+          dot.classList.add("is-complete");
+        }
+        if (isCurrent) {
+          dot.classList.add(claimed ? "is-claimed" : "is-active");
+        }
+        elements.dailyBonusProgress.appendChild(dot);
+      }
+    }
+
+    function showDailyBonus() {
+      const offer = getDailyBonusState();
+      if (!offer.available) {
+        return;
+      }
+
+      state.dailyBonusOffer = offer;
+      const bonusAmount = getDailyBonusAmount(offer.streak);
+      elements.dailyBonusTitle.textContent = "מזל יומי";
+      elements.dailyBonusCopy.textContent = "אסוף 200 נקודות בונוס יומי 🎉";
+      renderDailyBonusTrack(offer.streak, false);
+      elements.dailyBonusBtn.textContent = "Collect";
+      elements.dailyBonusBtn.dataset.claimed = "false";
+      setDailyBonusVisible(true);
+      trackEvent("daily_bonus_available", {
+        streak_day: offer.streak
+      });
+    }
+
+    function collectDailyBonus() {
+      if (!state.dailyBonusOffer) {
+        setDailyBonusVisible(false);
+        return;
+      }
+
+      if (elements.dailyBonusBtn.dataset.claimed === "true") {
+        setDailyBonusVisible(false);
+        return;
+      }
+
+      const bonusAmount = getDailyBonusAmount(state.dailyBonusOffer.streak);
+      state.score += bonusAmount;
+      if (state.score > getPersonalHighScore()) {
+        savePersonalHighScore(state.score);
+      }
+      updateHighScoreUI();
+      updateStats();
+      const bestStreak = Math.max(state.dailyBonusOffer.bestStreak || 1, state.dailyBonusOffer.streak);
+      saveDailyBonusClaim(state.dailyBonusOffer.streak, bestStreak);
+      elements.dailyBonusTitle.textContent = "כל הכבוד";
+      elements.dailyBonusCopy.textContent = "נאספו 200 נקודות בונוס יומי 🎉";
+      renderDailyBonusTrack(state.dailyBonusOffer.streak, true);
+      elements.dailyBonusBtn.textContent = "סגור";
+      elements.dailyBonusBtn.dataset.claimed = "true";
+      showFeedback(`כל הכבוד. ${getDailyBonusLabel(state.dailyBonusOffer.streak)} · +${formatScore(bonusAmount)}`, "success");
+      trackEvent("daily_bonus_claim", {
+        streak_day: state.dailyBonusOffer.streak,
+        bonus_points: bonusAmount
+      });
+      state.dailyBonusOffer = null;
+    }
+
     function setButtonsEnabled(enabled) {
       elements.truthBtn.disabled = !enabled;
       elements.lieBtn.disabled = !enabled;
+    }
+
+    function getAvailableStake(rawStake) {
+      const maxStake = Math.max(state.score, 0);
+      if (rawStake === "max") {
+        return maxStake;
+      }
+
+      return Math.min(Number(rawStake) || 0, maxStake);
+    }
+
+    function getComboMultiplier() {
+      if (state.streak < 2) {
+        return 1;
+      }
+
+      return Math.min(Math.floor(state.streak / 2) + 1, 5);
+    }
+
+    function setStakeButtonsEnabled(enabled) {
+      elements.stakeButtons.forEach((button) => {
+        const stake = getAvailableStake(button.dataset.stake);
+        button.disabled = !enabled || stake <= 0;
+      });
+    }
+
+    function clearStakeSelection() {
+      state.currentStake = 0;
+      elements.stakeButtons.forEach((button) => button.classList.remove("is-selected"));
+      elements.stakeLabel.textContent = "כמה אתה בטוח בעצמך?";
+    }
+
+    function selectStake(button) {
+      const stake = getAvailableStake(button.dataset.stake);
+      if (stake <= 0) {
+        showFeedback("צריך נקודות כדי לבחור סיכון.", "error");
+        return;
+      }
+
+      state.currentStake = stake;
+      elements.stakeButtons.forEach((item) => item.classList.toggle("is-selected", item === button));
+      elements.stakeLabel.textContent = `הימור: ${formatScore(stake)} נקודות`;
+      setButtonsEnabled(true);
+      showFeedback("עכשיו בוחרים אמת או שקר.", "neutral");
+      trackEvent("select_stake", {
+        stake
+      });
     }
 
     function showMainUI(visible) {
@@ -1806,6 +2564,178 @@
       return scoreFormatter.format(value);
     }
 
+    function createRunId() {
+      return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function getPersonalHighScore() {
+      const saved = Number(localStorage.getItem(HIGH_SCORE_KEY));
+      return Number.isFinite(saved) && saved > 0 ? saved : 500;
+    }
+
+    function savePersonalHighScore(score) {
+      try {
+        localStorage.setItem(HIGH_SCORE_KEY, String(score));
+      } catch (error) {}
+    }
+
+    function updateHighScoreUI() {
+      elements.highScore.textContent = formatScore(Math.max(getPersonalHighScore(), state.score));
+    }
+
+    function getLeaderboardScores() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(LEADERBOARD_KEY) || "[]");
+        if (!Array.isArray(saved)) {
+          return [];
+        }
+
+        return saved
+          .filter((entry) => entry && typeof entry.name === "string" && Number.isFinite(Number(entry.score)))
+          .map((entry) => ({
+            id: String(entry.id || createRunId()),
+            name: entry.name.slice(0, 18),
+            score: Number(entry.score),
+            stage: Number(entry.stage) || 1,
+            completedAt: Number(entry.completedAt) || Date.now()
+          }));
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveLeaderboardScores(scores) {
+      try {
+        localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(scores));
+      } catch (error) {}
+    }
+
+    function sanitizePlayerName(name) {
+      const cleaned = String(name || "")
+        .replace(/[<>]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 18);
+
+      return cleaned || "שחקן";
+    }
+
+    function hasLeaderboardEntry(id) {
+      return getLeaderboardScores().some((entry) => entry.id === id);
+    }
+
+    function updateLeaderboard(name, score, context = {}) {
+      const entryId = context.id || createRunId();
+      const cleanName = sanitizePlayerName(name);
+      const scores = getLeaderboardScores()
+        .filter((entry) => entry.id !== entryId)
+        .concat({
+          id: entryId,
+          name: cleanName,
+          score,
+          stage: context.stage || state.stage + 1,
+          completedAt: Date.now()
+        })
+        .sort((a, b) => b.score - a.score || a.completedAt - b.completedAt)
+        .slice(0, 5);
+
+      saveLeaderboardScores(scores);
+      try {
+        localStorage.setItem(PLAYER_NAME_KEY, cleanName);
+      } catch (error) {}
+      renderLeaderboard();
+      return cleanName;
+    }
+
+    function renderLeaderboard() {
+      const scores = getLeaderboardScores();
+      elements.leaderboardList.innerHTML = "";
+
+      if (scores.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "leaderboard-row";
+        empty.textContent = "עוד אין תוצאות. המקום הראשון פתוח.";
+        elements.leaderboardList.appendChild(empty);
+        return;
+      }
+
+      scores.forEach((entry, index) => {
+        const row = document.createElement("li");
+        row.className = `leaderboard-row${index === 0 ? " is-top" : ""}`;
+
+        const rank = document.createElement("span");
+        rank.className = "leaderboard-rank";
+        rank.textContent = String(index + 1);
+
+        const name = document.createElement("span");
+        name.className = "leaderboard-name";
+        name.textContent = entry.name;
+
+        const score = document.createElement("span");
+        score.className = "leaderboard-score";
+        score.textContent = `${formatScore(entry.score)} נק׳`;
+
+        row.append(rank, name, score);
+        elements.leaderboardList.appendChild(row);
+      });
+    }
+
+    function fireHighScoreConfetti() {
+      if (typeof confetti !== "function") {
+        return;
+      }
+
+      confetti({
+        particleCount: 130,
+        spread: 76,
+        origin: { x: 0.28, y: 0.72 },
+        colors: ["#ffe16a", "#53f1ff", "#63f49d"]
+      });
+      window.setTimeout(() => {
+        confetti({
+          particleCount: 130,
+          spread: 86,
+          origin: { x: 0.72, y: 0.68 },
+          colors: ["#ff7eb9", "#7afcff", "#feff9c"]
+        });
+      }, 280);
+    }
+
+    function registerHighScoreIfNeeded(context) {
+      const previousHighScore = getPersonalHighScore();
+      if (context.score <= previousHighScore) {
+        return false;
+      }
+
+      savePersonalHighScore(context.score);
+      updateHighScoreUI();
+      fireHighScoreConfetti();
+      trackEvent("new_high_score", {
+        high_score: context.score,
+        previous_high_score: previousHighScore,
+        completed_stage: context.stage
+      });
+      return true;
+    }
+
+    function setLeaderboardVisible(visible) {
+      elements.leaderboard.classList.toggle("is-visible", visible);
+    }
+
+    function prepareLeaderboard(context) {
+      state.leaderboardContext = context;
+      const isNewHighScore = registerHighScoreIfNeeded(context);
+      const savedName = localStorage.getItem(PLAYER_NAME_KEY) || "";
+      elements.playerName.value = savedName;
+      elements.saveScoreBtn.disabled = false;
+      elements.saveScoreBtn.textContent = hasLeaderboardEntry(context.id) ? "עדכן" : "שמור";
+      elements.leaderboardNote.textContent = isNewHighScore
+        ? `שיא חדש: ${formatScore(context.score)} נק׳ · שמרו מקום בטבלה`
+        : `תוצאה: ${formatScore(context.score)} נק׳ · שלב ${context.stage}/${TOTAL_STAGES}`;
+      renderLeaderboard();
+      setLeaderboardVisible(true);
+    }
+
     function getSavedInventory() {
       try {
         const saved = JSON.parse(localStorage.getItem(INVENTORY_KEY) || "[]");
@@ -1827,6 +2757,8 @@
 
     function updateInventoryUI() {
       elements.stickerGrid.innerHTML = "";
+      const hasInventory = state.inventory.length > 0;
+      document.getElementById("collection-shelf").hidden = !hasInventory;
       state.inventory.forEach((item) => {
         const sticker = document.createElement("span");
         sticker.className = "sticker";
@@ -1936,6 +2868,7 @@
           streak: state.streak,
           stageMistakes: state.stageMistakes,
           finalRewardClaimed: state.finalRewardClaimed,
+          runId: state.runId,
           awaitingStageContinue: state.awaitingStageContinue,
           lastTransition: state.lastTransition
         }));
@@ -2005,6 +2938,7 @@
 
     function updateStats() {
       elements.score.textContent = formatScore(state.score);
+      updateHighScoreUI();
       const stageIndex = Math.min(Math.floor(state.index / QUESTIONS_PER_STAGE), TOTAL_STAGES - 1);
       const questionNumberInStage = state.index >= state.deck.length
         ? QUESTIONS_PER_STAGE
@@ -2030,7 +2964,9 @@
         elements.remainingText = document.getElementById("remaining-text");
       }
 
-      elements.luckLevel.textContent = `${state.streak}`;
+      const multiplier = getComboMultiplier();
+      elements.luckLevel.textContent = `${multiplier}`;
+      elements.comboPill.classList.toggle("is-hot", multiplier > 1);
     }
 
     function getEncouragement(kind) {
@@ -2126,8 +3062,10 @@
       state.index = Math.min(Math.max(Number(saved.index) || 0, 0), state.deck.length - 1);
       state.stage = Number(saved.stage) || 0;
       state.streak = Number(saved.streak) || 0;
+      state.currentStake = 0;
       state.stageMistakes = Number(saved.stageMistakes) || 0;
       state.finalRewardClaimed = Boolean(saved.finalRewardClaimed);
+      state.runId = saved.runId || createRunId();
       state.awaitingStageContinue = Boolean(saved.awaitingStageContinue);
       state.lastTransition = saved.lastTransition || null;
       state.locked = state.awaitingStageContinue;
@@ -2144,10 +3082,16 @@
 
       updateStats();
       setButtonsEnabled(false);
+      setStakeButtonsEnabled(false);
       setTransitionMode(true);
       setTransitionVisible(true);
       setNextStageVisible(true);
       setTransitionShareVisible(true);
+      prepareLeaderboard({
+        id: `${state.runId}:stage:${transition.completedStageIndex + 1}`,
+        score: state.score,
+        stage: transition.completedStageIndex + 1
+      });
       setReplayVisible(false);
       setShareVisible(false);
       elements.transitionKicker.textContent = transition.label;
@@ -2172,6 +3116,10 @@
       state.started = true;
       state.deck = buildDeck();
       applySavedGame(saved);
+      trackEvent("resume_game", {
+        question_index: state.index,
+        streak: state.streak
+      });
       showMainUI(true);
 
       if (state.awaitingStageContinue) {
@@ -2196,12 +3144,16 @@
       setTransitionVisible(false);
       setReplayVisible(false);
       setShareVisible(false);
+      setLeaderboardVisible(false);
       setNextStageVisible(false);
       setTransitionShareVisible(false);
+      clearStakeSelection();
+      setStakeButtonsEnabled(true);
       updateStats();
+      elements.questionBox.style.opacity = "1";
       elements.questionBox.textContent = formatQuestion(state.deck[state.index]);
       showFeedback("", "neutral");
-      setButtonsEnabled(true);
+      setButtonsEnabled(false);
       saveGame();
     }
 
@@ -2211,6 +3163,7 @@
       state.score += reward.points;
       updateStats();
       setButtonsEnabled(false);
+      setStakeButtonsEnabled(false);
       state.locked = true;
       state.awaitingStageContinue = true;
       state.lastTransition = {
@@ -2223,6 +3176,11 @@
       setTransitionVisible(true);
       setNextStageVisible(true);
       setTransitionShareVisible(true);
+      prepareLeaderboard({
+        id: `${state.runId}:stage:${completedStageIndex + 1}`,
+        score: state.score,
+        stage: completedStageIndex + 1
+      });
       elements.transitionKicker.textContent = reward.label;
       elements.transitionTitle.textContent = reward.title;
       elements.transitionCopy.textContent = `${reward.copy} · הבא: ${nextStageName}`;
@@ -2239,6 +3197,12 @@
       restartAnimation(elements.questionBox, "question-swap");
       playStageTone();
       collectStageGift(completedStageIndex);
+      trackEvent("stage_clear", {
+        completed_stage: completedStageIndex + 1,
+        reward_points: reward.points,
+        streak: state.streak,
+        stage_mistakes: state.stageMistakes
+      });
 
       clearTimeout(state.timerId);
       saveGame();
@@ -2261,6 +3225,11 @@
       setTransitionVisible(true);
       setNextStageVisible(false);
       setTransitionShareVisible(false);
+      prepareLeaderboard({
+        id: `${state.runId}:finish`,
+        score: state.score,
+        stage: TOTAL_STAGES
+      });
       elements.questionBox.textContent = `כל השלבים הושלמו. צברת ${formatScore(state.score)} נקודות.`;
       showFeedback("Dash מלא. אפשר להתחיל סיבוב חדש.", "end-state");
       elements.transitionKicker.textContent = finalReward ? finalReward.label : "Stage clear";
@@ -2271,6 +3240,7 @@
         `סיימתי את Score Dash עם ${formatScore(state.score)} נקודות. מי רוצה לנסות לעקוף אותי?`
       );
       setButtonsEnabled(false);
+      setStakeButtonsEnabled(false);
       setReplayVisible(true);
       setShareVisible(true);
       state.locked = true;
@@ -2278,6 +3248,10 @@
       state.lastTransition = null;
       clearSavedGame();
       elements.replayBtn.textContent = "שחק שוב מהתחלה";
+      trackEvent("game_complete", {
+        total_score: state.score,
+        inventory_count: state.inventory.length
+      });
     }
 
     function resetGame() {
@@ -2286,8 +3260,10 @@
       state.index = 0;
       state.stage = 0;
       state.streak = 0;
+      state.currentStake = 0;
       state.stageMistakes = 0;
       state.finalRewardClaimed = false;
+      state.runId = createRunId();
       state.locked = false;
       state.awaitingStageContinue = false;
       state.lastTransition = null;
@@ -2299,48 +3275,64 @@
       elements.stageLabel.textContent = "1";
       showFeedback("", "neutral");
       updateStats();
-      setButtonsEnabled(true);
+      clearStakeSelection();
+      setStakeButtonsEnabled(true);
+      setButtonsEnabled(false);
       setReplayVisible(false);
       setShareVisible(false);
+      setLeaderboardVisible(false);
       showMainUI(true);
       renderQuestion();
     }
 
-    function checkAnswer(userChoice) {
-      if (state.locked || state.index >= state.deck.length) {
-        return;
-      }
-
-      state.locked = true;
-      setButtonsEnabled(false);
-
+    function resolveAnswer(userChoice, stake) {
       const correct = state.deck[state.index].isTrue;
       const isCorrect = userChoice === correct;
+      const answeredStage = state.stage + 1;
+      const answeredQuestion = (state.index % QUESTIONS_PER_STAGE) + 1;
+
+      elements.questionBox.style.opacity = "1";
+      elements.questionBox.textContent = formatQuestion(state.deck[state.index]);
 
       if (isCorrect) {
         if (navigator.vibrate) {
           navigator.vibrate(50);
         }
-        state.score += 100;
         state.streak += 1;
-        const boost = state.streak >= 3 ? 25 : 0;
-        if (boost > 0) {
-          state.score += boost;
-        }
-        if (state.streak >= 3) {
-          showFeedback(`${getEncouragement("streak")} +${100 + boost}`, "hot");
+        const multiplier = getComboMultiplier();
+        const winAmount = stake * multiplier;
+        state.score += winAmount;
+        if (multiplier > 1) {
+          showFeedback(`${getEncouragement("streak")} Combo x${multiplier} · +${formatScore(winAmount)}`, "hot");
+          restartAnimation(elements.comboPill, "combo-pulse");
         } else {
-          showFeedback(`${getEncouragement("correct")} +100`, "success");
+          showFeedback(`${getEncouragement("correct")} +${formatScore(stake)}`, "success");
         }
       } else {
         if (navigator.vibrate) {
           navigator.vibrate([100, 50, 100]);
         }
-        state.score -= 50;
+        state.score -= stake;
         state.streak = 0;
         state.stageMistakes += 1;
-        showFeedback(getEncouragement("gentle"), "error");
+        if (state.score <= 0) {
+          state.score = 50;
+          showFeedback(`${getEncouragement("gentle")} -${formatScore(stake)} · קיבלת 50 נקודות להמשך`, "error");
+        } else {
+          showFeedback(`${getEncouragement("gentle")} -${formatScore(stake)}`, "error");
+        }
       }
+      trackEvent("answer_question", {
+        selected_answer: userChoice ? "true" : "false",
+        correct_answer: correct ? "true" : "false",
+        is_correct: isCorrect,
+        stage: answeredStage,
+        question_number: answeredQuestion,
+        stake,
+        combo_multiplier: getComboMultiplier(),
+        streak_after_answer: state.streak
+      });
+      state.currentStake = 0;
       updateStats();
       state.index += 1;
       if (state.index >= state.deck.length) {
@@ -2360,30 +3352,89 @@
       state.timerId = setTimeout(renderQuestion, 950);
     }
 
+    function checkAnswer(userChoice) {
+      if (state.locked || state.index >= state.deck.length || elements.dailyBonus.classList.contains("is-visible")) {
+        return;
+      }
+
+      if (state.currentStake <= 0) {
+        showFeedback("קודם בוחרים הימור.", "error");
+        setButtonsEnabled(false);
+        return;
+      }
+
+      const stake = state.currentStake;
+      state.locked = true;
+      setButtonsEnabled(false);
+      setStakeButtonsEnabled(false);
+      const originalText = elements.questionBox.textContent;
+      elements.questionBox.dataset.originalText = originalText;
+      elements.questionBox.textContent = "מעבד מזל...";
+      elements.questionBox.style.opacity = "0.5";
+      showFeedback("", "neutral");
+      state.timerId = setTimeout(() => resolveAnswer(userChoice, stake), 1500);
+    }
+
+    elements.stakeButtons.forEach((button) => {
+      button.addEventListener("click", () => selectStake(button));
+    });
+    elements.dailyBonusBtn.addEventListener("click", collectDailyBonus);
     elements.truthBtn.addEventListener("click", () => checkAnswer(true));
     elements.lieBtn.addEventListener("click", () => checkAnswer(false));
     elements.replayBtn.addEventListener("click", resetGame);
+    elements.leaderboardForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!state.leaderboardContext) {
+        return;
+      }
+
+      const savedName = updateLeaderboard(
+        elements.playerName.value,
+        state.leaderboardContext.score,
+        state.leaderboardContext
+      );
+      elements.playerName.value = savedName;
+      elements.saveScoreBtn.textContent = "נשמר";
+      elements.leaderboardNote.textContent = `נשמר בטבלה: ${savedName} · ${formatScore(state.leaderboardContext.score)} נק׳`;
+      trackEvent("leaderboard_submit", {
+        player_rank_score: state.leaderboardContext.score,
+        completed_stage: state.leaderboardContext.stage
+      });
+    });
     elements.shareBtn.addEventListener("click", async () => {
       const text = getShareText();
       openWhatsAppShare(text);
       showFeedback("פותח WhatsApp לשיתוף.", "success");
+      trackEvent("share_game", {
+        share_source: "finish_panel"
+      });
     });
     elements.transitionShareBtn.addEventListener("click", async () => {
       openWhatsAppShare(getShareText());
+      trackEvent("share_game", {
+        share_source: "stage_transition"
+      });
     });
     elements.startShareBtn.addEventListener("click", async () => {
       await shareGame(getStartShareText());
+      trackEvent("share_game", {
+        share_source: "start_screen"
+      });
     });
     elements.installBtn.addEventListener("click", async () => {
       if (deferredInstallPrompt) {
         deferredInstallPrompt.prompt();
-        await deferredInstallPrompt.userChoice.catch(() => {});
+        const choice = await deferredInstallPrompt.userChoice.catch(() => null);
         deferredInstallPrompt = null;
         elements.installNote.textContent = "";
+        trackEvent("pwa_install_prompt", {
+          outcome: choice?.outcome || "unknown"
+        });
         return;
       }
 
       elements.installNote.textContent = "אם לא נפתח חלון התקנה: בתפריט הדפדפן בחר הוסף למסך הבית.";
+      trackEvent("pwa_install_help");
     });
     elements.resumeBtn.addEventListener("click", continueSavedGame);
     elements.restartBtn.addEventListener("click", () => {
@@ -2403,10 +3454,16 @@
       state.stageMistakes = 0;
       state.lastTransition = null;
       setNextStageVisible(false);
+      trackEvent("continue_stage", {
+        next_stage: state.stage + 1
+      });
       renderQuestion();
     });
     elements.startBtn.addEventListener("click", () => {
       state.started = true;
+      trackEvent("start_game", {
+        start_source: "start_button"
+      });
       resetGame();
     });
 
@@ -2415,6 +3472,7 @@
         event.preventDefault();
         deferredInstallPrompt = event;
         elements.installNote.textContent = "";
+        trackEvent("pwa_install_available");
       });
     }
 
@@ -2424,11 +3482,13 @@
       });
     }
 
+    initAnalytics();
     updateStats();
     updateInventoryUI();
     setResumePrompt();
     showMainUI(false);
     setReplayVisible(false);
+    showDailyBonus();
   </script>
 </body>
 </html>
