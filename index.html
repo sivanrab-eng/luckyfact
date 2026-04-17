@@ -104,69 +104,25 @@
     }
 
     .stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
+      display: flex;
+      gap: 14px;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 18px;
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: var(--accent);
       position: relative;
       z-index: 1;
     }
 
     .stats > div {
-      min-height: 64px;
-      display: grid;
-      align-content: center;
-      justify-items: center;
-      text-align: center;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.05)),
-        linear-gradient(180deg, rgba(8, 16, 36, 0.96), rgba(11, 20, 40, 0.98));
-      border: 1px solid rgba(194, 220, 255, 0.18);
-      border-radius: 18px;
-      padding: 8px 10px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
       color: #f8fbff;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stats > div::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-      border-radius: inherit;
-    }
-
-    .stats > div:first-child::before {
-      content: "";
-      width: 28px;
-      height: 28px;
-      display: block;
-      margin-bottom: 4px;
-      background: center/contain no-repeat url("./assets/casino-ui/active_badge_icon_decoder.png");
-      filter: drop-shadow(0 0 10px rgba(76, 214, 255, 0.25));
-    }
-
-    .stats > div:nth-child(2) {
-      color: #85f7ff;
-      text-shadow: 0 0 16px rgba(121, 245, 255, 0.35);
-    }
-
-    .stats > div:nth-child(3)::before {
-      content: "";
-      width: 24px;
-      height: 24px;
-      display: block;
-      margin-bottom: 4px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #f5d060, #c8940a 68%, #7b5600);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
     }
 
     #combo-pill.is-hot {
@@ -557,7 +513,7 @@
     }
 
     .stage-row {
-      display: none;
+      display: flex;
       justify-content: center;
       margin-bottom: 10px;
       position: relative;
@@ -604,102 +560,15 @@
       box-shadow: 0 0 18px rgba(83, 241, 255, 0.55);
     }
 
-    .fact-card-live {
-      position: relative;
-      min-height: 258px;
-      margin-bottom: 18px;
-      border-radius: 26px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(197, 235, 255, 0.18), transparent 34%),
-        linear-gradient(160deg, #43556d 0%, #243349 18%, #152235 56%, #0c1628 100%);
-      box-shadow:
-        0 0 24px rgba(0, 240, 255, 0.12),
-        inset 0 0 22px rgba(0, 240, 255, 0.08),
-        inset 0 1px 0 rgba(255,255,255,0.18);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .fact-card-live::before {
-      content: "";
-      position: absolute;
-      inset: 14px;
-      border-radius: 18px;
-      border: 3px solid rgba(92, 233, 255, 0.92);
-      box-shadow:
-        0 0 10px rgba(92, 233, 255, 0.9),
-        0 0 24px rgba(92, 233, 255, 0.45),
-        inset 0 0 22px rgba(92, 233, 255, 0.16);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .fact-card-live::after {
-      content: "";
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 118px;
-      height: 22px;
-      border-radius: 0 0 16px 16px;
-      background:
-        linear-gradient(180deg, rgba(215,235,255,0.92), rgba(120,146,170,0.88));
-      box-shadow:
-        0 2px 10px rgba(0,0,0,0.22),
-        inset 0 -2px 0 rgba(0,0,0,0.18),
-        inset 0 1px 0 rgba(255,255,255,0.32);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .fact-card-live .fact-card-grid {
-      position: relative;
-      min-height: inherit;
-      z-index: 1;
-    }
-
-    .fact-card-live .fact-card-grid::before {
-      content: "";
-      position: absolute;
-      inset: 14px;
-      border-radius: 18px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(178, 231, 255, 0.12), transparent 34%),
-        linear-gradient(180deg, rgba(255,255,255,0.04), transparent 22%);
-      opacity: 0.5;
-      pointer-events: none;
-      z-index: 0;
-    }
-
     .question {
-      min-height: 128px;
-      font-size: clamp(1.55rem, 4vw, 2.05rem);
-      line-height: 1.45;
+      min-height: 72px;
+      font-size: clamp(1.2rem, 3vw, 1.45rem);
+      line-height: 1.6;
       margin: 0;
-      padding: 96px 42px 18px;
       position: relative;
-      z-index: 2;
-      color: #f7fbff;
-      text-align: center;
-      font-weight: 800;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.42);
+      z-index: 1;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.2);
       white-space: pre-line;
-      display: block;
-      transform: none !important;
-      animation: none !important;
-    }
-
-    .progress-wrap {
-      position: absolute;
-      inset-inline: 54px;
-      bottom: 24px;
-      margin: 0;
-      z-index: 2;
-    }
-
-    .progress-head {
-      display: none;
     }
 
     .stake-zone {
@@ -707,63 +576,42 @@
       z-index: 1;
       margin: 0 0 18px;
       display: grid;
-      gap: 16px;
+      gap: 4px;
     }
 
     .stake-label {
       margin: 0;
-      color: rgba(240, 247, 255, 0.9);
-      font-size: 1rem;
-      font-weight: 500;
-      text-align: center;
+      color: rgba(240, 247, 255, 0.82);
+      font-size: 0.9rem;
+      font-weight: 700;
     }
 
     .stake-options {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: nowrap;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
     }
 
     .stake-btn {
       min-width: 0;
-      width: 84px;
-      height: 84px;
-      padding: 0;
-      border-radius: 50%;
-      font-size: 0;
-      background-color: transparent;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-      border: 0;
-      box-shadow: none;
-      text-indent: -9999px;
-    }
-
-    .stake-btn[data-stake="50"] {
-      background-image: url("./assets/casino-ui/bet_chip_50.png");
-    }
-
-    .stake-btn[data-stake="100"] {
-      background-image: url("./assets/casino-ui/bet_chip_100.png");
-    }
-
-    .stake-btn[data-stake="250"] {
-      background-image: url("./assets/casino-ui/bet_chip_250.png");
-    }
-
-    .stake-btn[data-stake="max"] {
-      width: 94px;
-      height: 94px;
-      background-image: url("./assets/casino-ui/bet_chip_all_in.png");
-      background-size: cover;
+      width: 100%;
+      padding: 10px 8px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(180deg, #101f78, #081047);
+      border: 2px solid rgba(83, 241, 255, 0.74);
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.08), 0 10px 0 rgba(0,0,0,0.16), 0 14px 24px rgba(0,0,0,0.2);
     }
 
     .stake-btn.is-selected {
+      color: #07144a;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.5), transparent 32%),
+        linear-gradient(180deg, #7bffcb, #53f1ff);
       transform: translateY(-2px) scale(1.04);
-      filter: drop-shadow(0 0 20px rgba(83,241,255,0.42));
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.24), 0 0 22px rgba(83,241,255,0.48), 0 12px 0 rgba(0,0,0,0.16);
     }
 
     .stake-btn:disabled {
@@ -779,7 +627,7 @@
       display: flex;
       gap: 12px;
       justify-content: center;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       position: relative;
       z-index: 1;
     }
@@ -811,23 +659,13 @@
     }
 
     .btn-truth {
-      min-height: 82px;
-      padding: 0;
-      background: center/100% 100% no-repeat url("./assets/casino-ui/btn_true.png");
-      background-color: transparent;
-      border: 0;
-      box-shadow: none;
-      text-indent: -9999px;
+      background: linear-gradient(180deg, #31a4ff, #145eff);
+      border: 1px solid rgba(255, 255, 255, 0.28);
     }
 
     .btn-lie {
-      min-height: 82px;
-      padding: 0;
-      background: center/100% 100% no-repeat url("./assets/casino-ui/btn_false.png");
-      background-color: transparent;
-      border: 0;
-      box-shadow: none;
-      text-indent: -9999px;
+      background: linear-gradient(180deg, #b98aff, #4726c9);
+      border: 1px solid rgba(255, 255, 255, 0.24);
     }
 
     #feedback {
@@ -1252,44 +1090,12 @@
       }
 
       .question {
-        min-height: 104px;
-        margin-bottom: 0;
-        padding: 84px 24px 18px;
-        font-size: clamp(1.35rem, 4.8vw, 1.8rem);
+        min-height: 48px;
+        margin-bottom: 16px;
       }
 
       .stake-options {
-        gap: 6px;
-      }
-
-      .stake-btn {
-        width: 72px;
-        height: 72px;
-      }
-
-      .stake-btn[data-stake="max"] {
-        width: 82px;
-        height: 82px;
-      }
-
-      .fact-card-live {
-        min-height: 230px;
-        border-radius: 22px;
-      }
-
-      .fact-card-live::before {
-        inset: 12px;
-        border-radius: 16px;
-      }
-
-      .fact-card-live::after {
-        width: 92px;
-        height: 18px;
-      }
-
-      .progress-wrap {
-        inset-inline: 34px;
-        bottom: 20px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .share-panel,
@@ -1366,22 +1172,22 @@
     </div>
 
     <div id="main-ui" class="main-ui is-hidden">
-      <div class="fact-card-live">
-        <div class="fact-card-grid">
-          <p id="question-box" class="question">מכין את השאלה הראשונה...</p>
+      <div id="stage-row" class="stage-row">
+        <div class="stage-pill"><strong id="stage-question-label">1/10</strong> · שלב <strong id="stage-label">1</strong>/15 · <span id="stage-name">התחלה</span></div>
+      </div>
 
-          <div class="progress-wrap">
-          <div class="progress-head">
-            <span>התקדמות במסלול</span>
-            <strong id="progress-text">שלב 1/15</strong>
-            <span id="remaining-copy">עוד <strong id="remaining-text">10</strong> לשלב הבא</span>
-          </div>
-          <div class="progress-meter" aria-hidden="true">
-            <div id="progress-bar"></div>
-          </div>
+      <div class="progress-wrap">
+        <div class="progress-head">
+          <span>התקדמות במסלול</span>
+          <strong id="progress-text">שלב 1/15</strong>
+          <span id="remaining-copy">עוד <strong id="remaining-text">10</strong> לשלב הבא</span>
         </div>
+        <div class="progress-meter" aria-hidden="true">
+          <div id="progress-bar"></div>
         </div>
       </div>
+
+      <p id="question-box" class="question">מכין את השאלה הראשונה...</p>
 
       <div id="stake-zone" class="stake-zone">
         <p id="stake-label" class="stake-label">כמה אתה בטוח בעצמך?</p>
@@ -1389,7 +1195,7 @@
           <button class="stake-btn" type="button" data-stake="50">50</button>
           <button class="stake-btn" type="button" data-stake="100">100</button>
           <button class="stake-btn" type="button" data-stake="250">250</button>
-          <button class="stake-btn" type="button" data-stake="max">ALL-IN</button>
+          <button class="stake-btn" type="button" data-stake="max">מקסימום</button>
         </div>
       </div>
 
