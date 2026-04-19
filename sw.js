@@ -1,4 +1,4 @@
-const CACHE_NAME = "score-dash-v4";
+const CACHE_NAME = "score-dash-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
