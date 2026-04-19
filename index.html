@@ -2529,6 +2529,8 @@
       state.currentStake = stake;
       elements.stakeButtons.forEach((item) => item.classList.toggle("is-selected", item === button));
       elements.stakeLabel.textContent = `הימור: ${formatScore(stake)} נקודות`;
+      vibrateLight();
+      playClickSound();
       setButtonsEnabled(true);
       showFeedback("עכשיו בוחרים אמת או שקר.", "neutral");
       trackEvent("select_stake", {
@@ -2978,6 +2980,33 @@
       void element.offsetWidth;
       element.classList.add(className);
       window.setTimeout(() => element.classList.remove(className), 820);
+    }
+
+    function vibrateLight() {
+      if (navigator.vibrate) {
+        navigator.vibrate(18);
+      }
+    }
+
+    function playClickSound() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        const audioCtx = new AudioContextClass();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = "triangle";
+        oscillator.frequency.setValueAtTime(720, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.08);
+      } catch (err) {
+        console.warn("Click sound could not play:", err);
+      }
     }
 
     function playStageTone() {
@@ -3450,6 +3479,8 @@
 
       const stake = state.currentStake;
       state.locked = true;
+      vibrateLight();
+      playClickSound();
       setButtonsEnabled(false);
       setStakeButtonsEnabled(false);
       const originalText = elements.questionBox.textContent;
@@ -3457,7 +3488,7 @@
       elements.questionBox.textContent = "מעבד מזל...";
       elements.questionBox.style.opacity = "0.5";
       showFeedback("", "neutral");
-      state.timerId = setTimeout(() => resolveAnswer(userChoice, stake), 1500);
+      state.timerId = setTimeout(() => resolveAnswer(userChoice, stake), 1000);
     }
 
     elements.stakeButtons.forEach((button) => {
