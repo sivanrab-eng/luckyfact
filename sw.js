@@ -1,4 +1,4 @@
-const CACHE_NAME = "score-dash-v5";
+const CACHE_NAME = "luckyfact-v1";
 const APP_SHELL = [
   "./",
   "./index.html",

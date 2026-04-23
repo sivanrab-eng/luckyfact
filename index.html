@@ -45,12 +45,16 @@
     }
 
     html, body {
+      width: 100%;
+      height: 100%;
       min-height: 100%;
+      margin: 0;
+      overflow: hidden;
     }
 
     body {
-      margin: 0;
-      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 0;
       color: var(--text);
       font-family: "Rubik", "Fredoka", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background:
@@ -58,8 +62,6 @@
         linear-gradient(142deg, var(--bg-1) 0%, var(--bg-2) 48%, #7d34df 78%, var(--bg-3) 100%);
       display: grid;
       place-items: center;
-      padding: 18px;
-      overflow-x: hidden;
     }
 
     body::before {
@@ -88,11 +90,12 @@
     }
 
     #game-container {
-      --w: min(100vw - 16px, calc((100dvh - 16px) * 360 / 780), 560px);
-      width: var(--w);
-      aspect-ratio: 360 / 780;
+      width: min(100vw, 560px);
+      height: 100dvh;
+      max-height: 100dvh;
+      aspect-ratio: auto;
       padding: 5.5% 5% 6.5%;
-      border-radius: calc(var(--w) * 0.09);
+      border-radius: 0;
       background:
         linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05)),
         var(--panel);
@@ -1212,6 +1215,18 @@
     @keyframes slowSpin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
+    }
+
+    @media (min-width: 561px) {
+      body {
+        padding: 10px;
+      }
+
+      #game-container {
+        height: calc(100dvh - 20px);
+        max-height: calc(100dvh - 20px);
+        border-radius: 28px;
+      }
     }
 
     @media (max-width: 520px) {
