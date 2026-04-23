@@ -4,10 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f2bc0">
+  <meta name="description" content="אמיתי או פייק? עד כמה את/ה בטוח/ה בתשובה שלך? Score Dash">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Score Dash">
+  <meta property="og:description" content="אמיתי או פייק? עד כמה את/ה בטוח/ה בתשובה שלך?">
+  <meta property="og:url" content="https://sivanrab-eng.github.io/luckyfact/">
+  <meta property="og:image" content="https://sivanrab-eng.github.io/luckyfact/page1-preview-mock.png">
+  <meta property="og:image:alt" content="Score Dash preview">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Score Dash">
+  <meta name="twitter:description" content="אמיתי או פייק? עד כמה את/ה בטוח/ה בתשובה שלך?">
+  <meta name="twitter:image" content="https://sivanrab-eng.github.io/luckyfact/page1-preview-mock.png">
   <meta name="ga4-measurement-id" content="G-K2JXQXVCEH">
   <meta name="leaderboard-api-base" content="">
   <title>Score Dash</title>
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="page1-preview-mock.png" type="image/png">
+  <link rel="apple-touch-icon" href="page1-preview-mock.png">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
@@ -216,7 +229,7 @@
     .start-copy {
       margin: 0;
       color: rgba(246, 250, 255, 0.9);
-      line-height: 1.65;
+      line-height: 1.85;
       font-size: 1rem;
       max-width: 30ch;
     }
@@ -226,6 +239,20 @@
       gap: 10px;
       width: min(100%, 360px);
       margin-top: 8px;
+    }
+
+    .start-actions-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+
+    .start-actions-row button {
+      width: 100%;
+      min-width: 0;
+      padding-inline: 14px;
+      font-size: 0.96rem;
     }
 
     .resume-panel {
@@ -893,6 +920,18 @@
       min-width: 180px;
     }
 
+    .btn-install-inline {
+      background: linear-gradient(180deg, #ffb347, #ff7a18);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 16px 30px rgba(255, 122, 24, 0.28);
+    }
+
+    .btn-share-start {
+      background: linear-gradient(180deg, #2fd6c4, #0f9ccf);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      box-shadow: 0 16px 30px rgba(15, 156, 207, 0.28);
+    }
+
     .transition-panel {
       margin-top: 18px;
       padding: 18px 16px;
@@ -1059,6 +1098,15 @@
         gap: 8px;
       }
 
+      .start-actions-row {
+        gap: 8px;
+      }
+
+      .start-actions-row button {
+        padding-inline: 10px;
+        font-size: 0.9rem;
+      }
+
       .resume-panel {
         width: 100%;
         padding: 14px;
@@ -1142,16 +1190,15 @@
       </div>
     </div>
 
-    <div id="stats" class="stats">
+    <div id="stats" class="stats is-hidden">
       <div>נקודות: <span id="score">500</span></div>
       <div id="combo-pill">Combo x<span id="luck-level">1</span></div>
-      <div>שיא: <span id="high-score">500</span></div>
     </div>
 
     <section id="start-screen" class="start-screen">
       <p class="start-kicker">Fast arcade challenge</p>
       <h1 class="start-title">Score Dash</h1>
-      <p class="start-copy">בניתי משחק שבו אוספים חיות ומתנות. מעניין אם תצליחי להשיג את החד-קרן בשלב 2.</p>
+      <p class="start-copy">אמיתי או פייק?<br>עד כמה את/ה בטוח/ה בתשובה שלך?<br>"Put your money where your mouth is"</p>
       <div id="resume-panel" class="resume-panel" hidden>
         <p id="resume-copy">להמשיך מהשלב שבו הפסקת?</p>
         <div class="resume-actions">
@@ -1161,13 +1208,15 @@
       </div>
       <div class="start-actions">
         <button id="start-btn" class="btn-start" type="button">התחל</button>
-        <button id="install-btn" class="btn-secondary" type="button">הורד אפליקציה</button>
-        <button id="start-share-btn" class="btn-share" type="button">שתף משחק</button>
+        <div class="start-actions-row">
+          <button id="install-btn" class="btn-install-inline" type="button">הורד אפליקציה</button>
+          <button id="start-share-btn" class="btn-share btn-share-start" type="button">שתף משחק</button>
+        </div>
       </div>
       <p id="install-note" class="install-note"></p>
     </section>
 
-    <div id="collection-shelf" class="collection-shelf">
+    <div id="collection-shelf" class="collection-shelf" hidden>
       <div id="sticker-grid" class="sticker-grid"></div>
     </div>
 
@@ -2589,7 +2638,9 @@
     }
 
     function updateHighScoreUI() {
-      elements.highScore.textContent = formatScore(Math.max(getPersonalHighScore(), state.score));
+      if (elements.highScore) {
+        elements.highScore.textContent = formatScore(Math.max(getPersonalHighScore(), state.score));
+      }
     }
 
     function normalizeLeaderboardEntries(entries) {
@@ -2926,6 +2977,12 @@
 
         const saved = JSON.parse(rawSave);
         if (!saved || saved.index <= 0 || saved.index >= TOTAL_STAGES * QUESTIONS_PER_STAGE) {
+          return null;
+        }
+
+        const isStillInFirstStage = !saved.awaitingStageContinue && Number(saved.index) < QUESTIONS_PER_STAGE;
+        if (isStillInFirstStage) {
+          clearSavedGame();
           return null;
         }
 
