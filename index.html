@@ -88,9 +88,11 @@
     }
 
     #game-container {
-      width: min(100%, 560px);
-      padding: 24px;
-      border-radius: 34px;
+      --w: min(100vw - 16px, calc((100dvh - 16px) * 360 / 780), 560px);
+      width: var(--w);
+      aspect-ratio: 360 / 780;
+      padding: 5.5% 5% 6.5%;
+      border-radius: calc(var(--w) * 0.09);
       background:
         linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05)),
         var(--panel);
@@ -100,6 +102,9 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      --glow-color: rgba(83,241,255,0.0);
     }
 
     #game-container::after {
@@ -118,30 +123,41 @@
 
     .stats {
       display: flex;
-      gap: 14px;
-      justify-content: space-between;
+      gap: 10px;
       align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-      font-size: 1.05rem;
-      color: var(--accent);
       position: relative;
       z-index: 1;
     }
 
-    .stats > div {
-      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
-      border: 1px solid rgba(255, 255, 255, 0.14);
+    .combo-pill-wrap {
+      flex: 1;
+      background: linear-gradient(180deg, rgba(255,160,30,0.22), rgba(255,100,0,0.1));
+      border: 1px solid rgba(255,160,30,0.45);
       border-radius: 999px;
-      padding: 10px 14px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-      color: #f8fbff;
+      padding: 9px 14px;
+      color: #ffe16a;
+      font-size: 1rem;
+      font-weight: 800;
+      box-shadow: 0 0 16px rgba(255,140,0,0.2);
+    }
+
+    .score-pill-wrap {
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 7px 12px;
+      color: rgba(248,251,255,0.75);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
     }
 
     #combo-pill.is-hot {
-      color: #ffe16a;
-      border-color: rgba(255, 225, 106, 0.72);
-      box-shadow: 0 0 22px rgba(255, 225, 106, 0.3), 0 10px 24px rgba(0, 0, 0, 0.16);
+      background: linear-gradient(180deg, rgba(255,200,0,0.3), rgba(255,100,0,0.2));
+      border-color: rgba(255,220,50,0.8);
+      box-shadow: 0 0 24px rgba(255,200,0,0.4);
     }
 
     #combo-pill.combo-pulse {
@@ -150,6 +166,21 @@
 
     .stats.is-transition-hidden {
       display: none;
+    }
+
+    /* Question card */
+    .question-card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .progress-wrap {
@@ -476,7 +507,10 @@
     }
 
     .main-ui {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 3%;
       transition: opacity 260ms ease, transform 260ms ease;
     }
 
@@ -587,15 +621,31 @@
       box-shadow: 0 0 18px rgba(83, 241, 255, 0.55);
     }
 
+    .question-card {
+      flex: 1;
+      min-height: 0;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-top: 1px solid rgba(255,255,255,0.35);
+      border-radius: 18px;
+      padding: 5%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15), 0 0 40px var(--glow-color);
+      transition: box-shadow 0.4s ease;
+    }
+
     .question {
-      min-height: 72px;
-      font-size: clamp(1.2rem, 3vw, 1.45rem);
-      line-height: 1.6;
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      line-height: 1.65;
       margin: 0;
       position: relative;
       z-index: 1;
       text-shadow: 0 1px 0 rgba(255,255,255,0.2);
       white-space: pre-line;
+      color: #f8fbff;
+      font-weight: 600;
     }
 
     .stake-zone {
@@ -773,13 +823,41 @@
     }
 
     .btn-truth {
-      background: linear-gradient(180deg, #31a4ff, #145eff);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(30, 180, 80, 0.15);
+      border: 1.5px solid rgba(30, 220, 80, 0.25);
+      color: rgba(100, 255, 130, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .btn-lie {
-      background: linear-gradient(180deg, #b98aff, #4726c9);
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: rgba(220, 40, 40, 0.15);
+      border: 1.5px solid rgba(255, 60, 60, 0.25);
+      color: rgba(255, 120, 120, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    @keyframes litPop {
+      0%   { transform: scale(0.96); }
+      60%  { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .btn-truth.is-lit {
+      background: linear-gradient(180deg, rgba(30,200,80,0.6), rgba(10,140,50,0.5));
+      border: 1.5px solid rgba(50,255,100,0.7);
+      color: #fff;
+      box-shadow: 0 0 24px rgba(30,220,80,0.4), 0 6px 0 rgba(0,0,0,0.2);
+      animation: litPop 0.3s ease forwards;
+    }
+
+    .btn-lie.is-lit {
+      background: linear-gradient(180deg, rgba(220,50,50,0.6), rgba(160,20,20,0.5));
+      border: 1.5px solid rgba(255,80,80,0.7);
+      color: #fff;
+      box-shadow: 0 0 24px rgba(255,50,50,0.4), 0 6px 0 rgba(0,0,0,0.2);
+      animation: litPop 0.3s ease forwards;
     }
 
     #feedback {
@@ -1278,8 +1356,8 @@
     </div>
 
     <div id="stats" class="stats is-hidden">
-      <div class="score-pill-inner"><span class="css-coin"></span><span id="score">500</span></div>
-      <div id="combo-pill">Combo x<span id="luck-level">1</span></div>
+      <div id="combo-pill" class="combo-pill-wrap">🔥 Combo x<span id="luck-level">1</span></div>
+      <div class="score-pill-wrap"><span class="css-coin"></span><span id="score">500</span></div>
     </div>
 
     <section id="start-screen" class="start-screen">
@@ -1323,7 +1401,7 @@
         </div>
       </div>
 
-      <p id="question-box" class="question">מכין את השאלה הראשונה...</p>
+      <div class="question-card" id="question-card"><p id="question-box" class="question">מכין את השאלה הראשונה...</p></div>
 
       <div id="stake-zone" class="stake-zone">
         <p id="stake-label" class="stake-label">כמה אתה בטוח בעצמך?</p>
@@ -1335,8 +1413,8 @@
       </div>
 
       <div class="buttons">
-        <button id="truth-btn" class="btn-truth" type="button">אמת</button>
-        <button id="lie-btn" class="btn-lie" type="button">שקר</button>
+        <button id="truth-btn" class="btn-truth btn-answer" type="button">אמת</button>
+        <button id="lie-btn" class="btn-lie btn-answer" type="button">שקר</button>
       </div>
 
       <div id="feedback" class="neutral"></div>
@@ -2804,6 +2882,9 @@ const facts = [
       state.currentStake = 0;
       elements.stakeButtons.forEach((button) => button.classList.remove("is-selected"));
       elements.stakeOptions.classList.remove("has-selection");
+      elements.truthBtn.classList.remove("is-lit");
+      elements.lieBtn.classList.remove("is-lit");
+      document.getElementById("game-container").style.setProperty("--glow-color", "rgba(83,241,255,0.0)");
       elements.stakeLabel.textContent = "כמה אתה בטוח בעצמך?";
     }
 
@@ -2818,6 +2899,18 @@ const facts = [
       elements.stakeButtons.forEach((item) => item.classList.toggle("is-selected", item === button));
       elements.stakeOptions.classList.add("has-selection");
       elements.stakeLabel.textContent = `הימור: ${formatScore(stake)} נקודות`;
+
+      // הילה דינמית לפי צבע ההימור
+      const glowMap = { "250": "rgba(255,140,0,0.45)", "100": "rgba(83,241,255,0.45)", "50": "rgba(60,100,255,0.45)" };
+      const glowColor = glowMap[String(button.dataset.stake)] || "rgba(83,241,255,0.45)";
+      document.getElementById("game-container").style.setProperty("--glow-color", glowColor);
+
+      // הדלקה עם אנימציה
+      elements.truthBtn.classList.remove("is-lit");
+      elements.lieBtn.classList.remove("is-lit");
+      void elements.truthBtn.offsetWidth;
+      elements.truthBtn.classList.add("is-lit");
+      elements.lieBtn.classList.add("is-lit");
       vibrateLight();
       playClickSound();
       setButtonsEnabled(true);
