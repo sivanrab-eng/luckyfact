@@ -3007,7 +3007,11 @@ const facts = [
       const entryId = context.id || createRunId();
       const cleanName = sanitizePlayerName(name);
       const scores = getLeaderboardScores()
-        .filter((entry) => entry.id !== entryId)
+        .filter((entry) => {
+          if (entry.id === entryId) return false; // same run
+          if (entry.name === cleanName && score > entry.score) return false; // better score for same player
+          return true;
+        })
         .concat({
           id: entryId,
           name: cleanName,
