@@ -3188,7 +3188,7 @@ const facts = [
 
     function getShareText() {
       const stars = "⭐".repeat(Math.min(state.stage + 1, 5));
-      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nחושב שתצליח לעקוף אותי? 👇\n${SHARE_URL}`;
+      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nחושב שתצליח לעקוף אותי? 👇`;
     }
 
     function setShareMessage(title, copy) {
@@ -3197,7 +3197,7 @@ const facts = [
     }
 
     function getStartShareText() {
-      return `Score Dash - חושב שתצליח לעקוף אותי? ${SHARE_URL}`;
+      return `Score Dash - חושב שתצליח לעקוף אותי?`;
     }
 
     function openWhatsAppShare(text) {
