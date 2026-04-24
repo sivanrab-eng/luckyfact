@@ -3831,15 +3831,9 @@ const facts = [
         if (navigator.vibrate) {
           navigator.vibrate([100, 50, 100]);
         }
-        state.score -= stake;
         state.streak = 0;
         state.stageMistakes += 1;
-        if (state.score <= 0) {
-          state.score = 50;
-          showFeedback(`${getEncouragement("gentle")} -${formatScore(stake)} · קיבלת 50 נקודות להמשך`, "error");
-        } else {
-          showFeedback(`${getEncouragement("gentle")} -${formatScore(stake)}`, "error");
-        }
+        showFeedback(`${getEncouragement("gentle")} +0 נקודות`, "error");
       }
       trackEvent("answer_question", {
         selected_answer: userChoice ? "true" : "false",
