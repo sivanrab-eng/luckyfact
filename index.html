@@ -517,39 +517,6 @@
       transition: opacity 260ms ease, transform 260ms ease;
     }
 
-    .collection-shelf {
-      margin-bottom: 12px;
-      padding: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      overflow-x: auto;
-      min-height: 50px;
-    }
-
-    .collection-shelf[hidden] {
-      display: none;
-    }
-
-    .sticker-grid {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .sticker {
-      font-size: 1.5rem;
-      background: white;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
 
     .main-ui.is-hidden {
       opacity: 0;
@@ -1396,9 +1363,6 @@
       <p id="install-note" class="install-note"></p>
     </section>
 
-    <div id="collection-shelf" class="collection-shelf" hidden>
-      <div id="sticker-grid" class="sticker-grid"></div>
-    </div>
 
     <div id="main-ui" class="main-ui is-hidden">
       <div id="stage-row" class="stage-row" style="display:none" aria-hidden="true">
@@ -1481,11 +1445,11 @@
     const DAILY_BONUS_KEY = "scoreDashDailyBonus";
     const SHARE_URL = "https://sivanrab-eng.github.io/luckyfact/";
     const GAME_SAVE_KEY = "scoreDashSaveV2";
-    const INVENTORY_KEY = "luckyfact_inventory";
+
     const HIGH_SCORE_KEY = "scoreDashHighScore";
     const LEADERBOARD_KEY = "scoreDashLeaderboard";
     const PLAYER_NAME_KEY = "scoreDashPlayerName";
-    const GIFTS = ["🐱", "🦄", "🍦", "🌈", "🍭", "🎨", "💎", "🌸", "🍕", "🎬", "🎸", "🐼", "🍓", "👑", "🚀"];
+
     const scoreFormatter = new Intl.NumberFormat("en-US");
     const GA4_MEASUREMENT_ID = document.querySelector('meta[name="ga4-measurement-id"]')?.content.trim() || "";
     const LEADERBOARD_API_BASE = document.querySelector('meta[name="leaderboard-api-base"]')?.content.trim().replace(/\/$/, "") || "";
@@ -2583,7 +2547,7 @@ const facts = [
       installBtn: document.getElementById("install-btn"),
       startShareBtn: document.getElementById("start-share-btn"),
       installNote: document.getElementById("install-note"),
-      stickerGrid: document.getElementById("sticker-grid"),
+
       mainUI: document.getElementById("main-ui"),
       stats: document.getElementById("stats"),
       score: document.getElementById("score"),
@@ -2642,7 +2606,7 @@ const facts = [
       lastTransition: null,
       leaderboardContext: null,
       dailyBonusOffer: null,
-      inventory: getSavedInventory(),
+
       deck: buildDeck()
     };
 
@@ -3221,66 +3185,10 @@ const facts = [
       }
     }
 
-    function getSavedInventory() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(INVENTORY_KEY) || "[]");
-        if (!Array.isArray(saved)) {
-          return [];
-        }
-
-        return saved.filter((item) => GIFTS.includes(item));
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function saveInventory() {
-      try {
-        localStorage.setItem(INVENTORY_KEY, JSON.stringify(state.inventory));
-      } catch (error) {}
-    }
-
-    function updateInventoryUI() {
-      elements.stickerGrid.innerHTML = "";
-      const hasInventory = state.inventory.length > 0;
-      document.getElementById("collection-shelf").hidden = !hasInventory;
-      state.inventory.forEach((item) => {
-        const sticker = document.createElement("span");
-        sticker.className = "sticker";
-        sticker.textContent = item;
-        elements.stickerGrid.appendChild(sticker);
-      });
-    }
-
-    function celebrateGiftUnlock() {
-      if (typeof confetti !== "function") {
-        return;
-      }
-
-      confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#ff7eb9", "#7afcff", "#feff9c"]
-      });
-    }
-
-    function collectStageGift(completedStageIndex) {
-      const newGift = GIFTS[completedStageIndex];
-      if (!newGift || state.inventory.includes(newGift)) {
-        return;
-      }
-
-      state.inventory.push(newGift);
-      saveInventory();
-      updateInventoryUI();
-      celebrateGiftUnlock();
-    }
 
     function getShareText() {
-      const stickerCount = state.inventory.length;
       const stars = "⭐".repeat(Math.min(state.stage + 1, 5));
-      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nאספתי כבר ${stickerCount} מדבקות נדירות! 🏆\nמי מצליח לעקוף אותי? 👇\n${SHARE_URL}`;
+      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nמי מצליח לעקוף אותי? 👇\n${SHARE_URL}`;
     }
 
     function setShareMessage(title, copy) {
@@ -3714,7 +3622,7 @@ const facts = [
       restartAnimation(elements.stageRow.firstElementChild, "stage-bump");
       restartAnimation(elements.questionBox, "question-swap");
       playStageTone();
-      collectStageGift(completedStageIndex);
+
       trackEvent("stage_clear", {
         completed_stage: completedStageIndex + 1,
         reward_points: reward.points,
@@ -3768,8 +3676,7 @@ const facts = [
       clearSavedGame();
       elements.replayBtn.textContent = "שחק שוב מהתחלה";
       trackEvent("game_complete", {
-        total_score: state.score,
-        inventory_count: state.inventory.length
+        total_score: state.score
       });
     }
 
@@ -4007,7 +3914,7 @@ const facts = [
 
     initAnalytics();
     updateStats();
-    updateInventoryUI();
+
     setResumePrompt();
     showMainUI(false);
     setReplayVisible(false);
