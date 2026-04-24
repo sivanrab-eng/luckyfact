@@ -3188,7 +3188,7 @@ const facts = [
 
     function getShareText() {
       const stars = "⭐".repeat(Math.min(state.stage + 1, 5));
-      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nמי מצליח לעקוף אותי? 👇\n${SHARE_URL}`;
+      return `הגעתי לשלב ${state.stage + 1} ב-Score Dash! ${stars}\nחושב שתצליח לעקוף אותי? 👇\n${SHARE_URL}`;
     }
 
     function setShareMessage(title, copy) {
@@ -3197,7 +3197,7 @@ const facts = [
     }
 
     function getStartShareText() {
-      return `Score Dash - תצליחו לעקוף אותי? ${SHARE_URL}`;
+      return `Score Dash - חושב שתצליח לעקוף אותי? ${SHARE_URL}`;
     }
 
     function openWhatsAppShare(text) {
@@ -3525,7 +3525,7 @@ const facts = [
       elements.transitionCopy.textContent = transition.copy;
       setShareMessage(
         `שלב ${transition.completedStageIndex + 1} נפתח`,
-        `עברתי את שלב ${transition.completedStageIndex + 1} ב-Score Dash עם ${formatScore(state.score)} נקודות. תצליחו לעקוף אותי?`
+        `עברתי את שלב ${transition.completedStageIndex + 1} ב-Score Dash עם ${formatScore(state.score)} נקודות. חושב שתצליח לעקוף אותי?`
       );
       elements.questionBox.textContent = `שלב ${transition.completedStageIndex + 1} הושלם`;
       showFeedback("", "neutral");
@@ -3612,7 +3612,7 @@ const facts = [
       elements.transitionCopy.textContent = `${reward.copy} · הבא: ${nextStageName}`;
       setShareMessage(
         `שלב ${completedStageIndex + 1} נפתח`,
-        `עברתי את שלב ${completedStageIndex + 1} ב-Score Dash עם ${formatScore(state.score)} נקודות. תצליחו לעקוף אותי?`
+        `עברתי את שלב ${completedStageIndex + 1} ב-Score Dash עם ${formatScore(state.score)} נקודות. חושב שתצליח לעקוף אותי?`
       );
       elements.questionBox.textContent = `שלב ${completedStageIndex + 1} הושלם`;
       showFeedback(reward.copy, "hot");
@@ -3664,7 +3664,7 @@ const facts = [
       elements.transitionCopy.textContent = `כל 15 השלבים הושלמו · ${formatScore(state.score)} נקודות`;
       setShareMessage(
         "סיימת Dash מלא.",
-        `סיימתי את Score Dash עם ${formatScore(state.score)} נקודות. מי רוצה לנסות לעקוף אותי?`
+        `סיימתי את Score Dash עם ${formatScore(state.score)} נקודות. חושב שתצליח לעקוף אותי?`
       );
       setButtonsEnabled(false);
       setStakeButtonsEnabled(false);
