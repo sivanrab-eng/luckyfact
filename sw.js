@@ -1,4 +1,4 @@
-// v3 - nuclear cache reset
+// v4 - nuclear cache reset
 self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil(
