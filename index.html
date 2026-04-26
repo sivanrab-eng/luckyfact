@@ -1435,6 +1435,14 @@
   </div>
 
   <script>
+    window.onerror = function(msg, src, line, col, err) {
+      document.body.style.background = '#061a68';
+      document.body.style.color = '#fff';
+      document.body.style.padding = '20px';
+      document.body.style.fontFamily = 'monospace';
+      document.body.style.fontSize = '14px';
+      document.body.innerHTML = '<h2>JS Error</h2><pre>' + msg + '\nLine: ' + line + '\n' + (err && err.stack ? err.stack : '') + '</pre>';
+    };
     const TOTAL_STAGES = 15;
     const QUESTIONS_PER_STAGE = 10;
     const STAGE_BONUS = 250;
